@@ -14,6 +14,7 @@ CREATE TABLE `blog`
     `id`          bigint unsigned NOT NULL AUTO_INCREMENT ,
     `title`       varchar(45) NOT NULL ,
     `description` varchar(100) NOT NULL ,
+    `created_time` datetime NOT NULL ,
     `owner_id`    bigint unsigned NOT NULL ,
 
     PRIMARY KEY (`id`),
@@ -37,8 +38,8 @@ CREATE TABLE `post`
     `id`           bigint unsigned NOT NULL AUTO_INCREMENT ,
     `title`        varchar(100) NOT NULL ,
     `content`      longtext NOT NULL ,
-    `created_date` datetime NOT NULL ,
-    `updated_date` datetime NOT NULL ,
+    `created_time` datetime NOT NULL ,
+    `updated_time` datetime NOT NULL ,
     `blog_id`      bigint unsigned NOT NULL ,
     `category_id`  bigint unsigned NOT NULL ,
 
@@ -53,8 +54,8 @@ CREATE TABLE `comment`
 (
     `id`           bigint unsigned NOT NULL AUTO_INCREMENT ,
     `content`      longtext NOT NULL ,
-    `created_date` datetime NOT NULL ,
-    `updated_date` datetime NOT NULL ,
+    `created_time` datetime NOT NULL ,
+    `updated_time` datetime NOT NULL ,
     `post_id`      bigint unsigned NOT NULL ,
     `author_id`    bigint unsigned NOT NULL ,
 
