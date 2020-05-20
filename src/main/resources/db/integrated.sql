@@ -4,7 +4,7 @@ CREATE TABLE `user`
     `nickname` varchar(20) NOT NULL ,
     `user_id`  varchar(20) NOT NULL ,
     `password` binary(60) NOT NULL ,
-    `status`   enum('normal', 'deleted') NOT NULL DEFAULT 'normal' ,
+    `deleted`   boolean NOT NULL DEFAULT false ,
 
     PRIMARY KEY (`id`)
 );
