@@ -21,9 +21,4 @@ public class MySqlConfig {
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
-
-    @Bean
-    public SimpleJdbcInsert simpleJdbcInsert(DataSource dataSource) {
-        return new SimpleJdbcInsert(dataSource);
-    }
 }
