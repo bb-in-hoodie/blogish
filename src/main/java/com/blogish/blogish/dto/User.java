@@ -6,6 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @Builder
+@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class User {
     @NonNull
