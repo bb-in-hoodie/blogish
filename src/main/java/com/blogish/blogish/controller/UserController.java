@@ -42,6 +42,21 @@ public class UserController {
         }
     }
 
+    @PostMapping("/logout")
+    public boolean logout(@RequestBody Map<String, String> body, HttpServletRequest request) {
+        // returns true if the user has been logged in
+        try {
+            removeSessionValue(request, SESSION_KEY_USER);
+            return true;
+        } catch (NullPointerException e) {
+            // todo
+            return false;
+        } catch (IllegalStateException e) {
+            // todo
+            return false;
+        }
+    }
+
     @GetMapping("/test")
     public String test(HttpServletRequest request) {
         Object result = getSessionValue(request, SESSION_KEY_USER);
