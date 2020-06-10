@@ -13,8 +13,19 @@ public class SessionManager {
         return valueExist;
     }
 
-    public static Object getSessionValue(HttpServletRequest request, String sessionKey) throws IllegalStateException {
+    public static Object getSessionValue(HttpServletRequest request, String sessionKey) throws NullPointerException, IllegalStateException {
         HttpSession session = request.getSession();
+        if (session.getAttribute(sessionKey) == null) {
+            throw new NullPointerException();
+        }
         return session.getAttribute(sessionKey);
+    }
+
+    public static void removeSessionValue(HttpServletRequest request, String sessionKey) throws NullPointerException, IllegalStateException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute(sessionKey) == null) {
+            throw new NullPointerException();
+        }
+        session.removeAttribute(sessionKey);
     }
 }
