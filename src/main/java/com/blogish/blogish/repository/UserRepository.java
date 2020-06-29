@@ -2,26 +2,26 @@ package com.blogish.blogish.repository;
 
 import com.blogish.blogish.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Collections;
-import java.util.Map;
+
+import static com.blogish.blogish.util.Queries.*;
 
 @Repository
 public class UserRepository {
     private String tableName = "user";
     private String generatedKeyColumn = "id";
     private SimpleJdbcInsert simpleJdbcInsert;
-    private RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
+    private RowMapper<User> userMapper = BeanPropertyRowMapper.newInstance(User.class);
 
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -33,19 +33,23 @@ public class UserRepository {
                                 .usingGeneratedKeyColumns(generatedKeyColumn);
     }
 
-    public String addUser(User user) {
-        SqlParameterSource sqlParameterSource = new BeanPropertySqlParameterSource(user);
-        simpleJdbcInsert.execute(sqlParameterSource);
-
-        return user.getUserId();
+    public int countById(String userId) throws DataAccessException, NullPointerException {
+        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_USER_COUNT, params, Integer.class);
     }
 
-    public User getUser(String userId) {
-        try {
-            Map<String, ?> params = Collections.singletonMap("userId", userId);
-            return namedParameterJdbcTemplate.queryForObject("SELECT * FROM " + tableName + " where user_id = :userId", params, rowMapper);
-        } catch (EmptyResultDataAccessException emptyException) { // todo: IncorrectResultSizeDataAccessException handling
-            return null;
-        }
+    public int insert(User user) {
+        SqlParameterSource sqlParameterSource = new BeanPropertySqlParameterSource(user);
+        return simpleJdbcInsert.execute(sqlParameterSource);
+    }
+
+    public User selectById(String userId) throws DataAccessException, NullPointerException {
+        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_USER, params, userMapper);
+    }
+
+    public String selectPasswordById(String userId) throws DataAccessException, NullPointerException {
+        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_USER_PASSWORD, params, String.class);
     }
 }
