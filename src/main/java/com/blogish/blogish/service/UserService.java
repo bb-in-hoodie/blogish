@@ -61,4 +61,13 @@ public class UserService {
             throw new InternalServerException(e.getMessage());
         }
     }
+
+    @Transactional
+    public int deleteUser(String userId) throws BadRequestException, InternalServerException{
+        try {
+            return userRepository.setDeleted(userId, true);
+        } catch (DataAccessException e) {
+            throw new InternalServerException(e.getMessage());
+        }
+    }
 }
