@@ -52,4 +52,11 @@ public class UserRepository {
         MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
         return namedParameterJdbcTemplate.queryForObject(SELECT_USER_PASSWORD, params, String.class);
     }
+
+    public int setDeleted(String userId, boolean deleted) throws DataAccessException {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("deleted", deleted);
+        return namedParameterJdbcTemplate.update(UPDATE_USER_DELETED, params);
+    }
 }

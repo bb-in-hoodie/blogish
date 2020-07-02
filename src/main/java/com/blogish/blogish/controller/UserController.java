@@ -46,6 +46,10 @@ public class UserController {
             // check if the user exist in the first place
             UserBody userBody = userService.getUser(body.get("userId"));
             if (userBody != null) {
+                // if the user is deleted, return an error
+                if (userBody.isDeleted())
+                    return new ResponseEntity("It is a deleted user.", HttpStatus.BAD_REQUEST);
+
                 // if the user exists, get password of the user and match it with the input
                 String password = userService.getPassword(body.get("userId"));
                 if (bcryptEncoder.matches(body.get("password"), password)) {
@@ -73,6 +77,31 @@ public class UserController {
         } catch (Exception e) {
             // todo: handling exception in more accurate ways
             return new ResponseEntity(false, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> delete(@RequestBody Map<String, String> body, HttpServletRequest request) {
+        try {
+            // validate password before deleting a user
+            String userId = body.get("userId");
+            if (bcryptEncoder.matches(body.get("password"), userService.getPassword(userId))) {
+                if (userService.deleteUser(userId) == 1) {
+                    return new ResponseEntity(true, HttpStatus.OK);
+                } else if (userService.deleteUser(userId) > 1){
+                    // in case of multiple rows updated
+                    return new ResponseEntity("There were duplicated users with same userId.", HttpStatus.INTERNAL_SERVER_ERROR);
+                } else {
+                    // in case of no row updated
+                    return new ResponseEntity("There is no such user with the userId.", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return new ResponseEntity(false, HttpStatus.OK);
+            }
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
