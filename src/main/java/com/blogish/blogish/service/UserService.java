@@ -45,7 +45,7 @@ public class UserService {
                     .deleted(user.isDeleted())
                     .build();
         } catch (IncorrectResultSizeDataAccessException e) {
-            throw new InternalServerException("There are more rows than a single row in the result.");
+            throw new InternalServerException(e.getMessage());
         } catch (NullPointerException e) {
             throw new InternalServerException(e.getMessage());
         }
@@ -56,7 +56,7 @@ public class UserService {
         try {
             return userRepository.selectPasswordById(userId);
         } catch (IncorrectResultSizeDataAccessException e) {
-            throw new InternalServerException("There are more rows than a single row in the result.");
+            throw new InternalServerException(e.getMessage());
         } catch (NullPointerException e) {
             throw new InternalServerException(e.getMessage());
         }
