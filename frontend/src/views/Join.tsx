@@ -3,7 +3,7 @@ import {
   Form, FormGroup, Label, Input, Button,
 } from 'reactstrap';
 import '../css/join.css';
-import { userJoin } from '../api/UserAPI';
+import { userJoin, userValidate } from '../api/UserAPI';
 import User from '../types/User';
 
 export default function Join(): JSX.Element {
@@ -32,6 +32,23 @@ export default function Join(): JSX.Element {
       });
   };
 
+  const onCheckClick = async () => {
+    if (waitingAPI) return;
+
+    // TODO: userId 비어있는 경우 처리
+    waitingAPI = true;
+
+    await userValidate(userId)
+      .then((resp: boolean) => {
+      // TODO: resp 대응
+        console.log(resp);
+      }).catch(() => {
+        alert('ID 검증 과정에서 에러가 발생했습니다.');
+      }).finally(() => {
+        waitingAPI = false;
+      });
+  };
+
   return (
     <div className="join">
       <div className="header">
@@ -42,7 +59,7 @@ export default function Join(): JSX.Element {
           <Label for="input_id">ID</Label>
           <div className="input_with_button">
             <Input id="input_id" type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
-            <Button color="warning">check</Button>
+            <Button color="warning" onClick={onCheckClick}>check</Button>
           </div>
         </FormGroup>
         <FormGroup>

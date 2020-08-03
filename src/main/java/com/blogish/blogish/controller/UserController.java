@@ -40,6 +40,16 @@ public class UserController {
         }
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<?> validate(@RequestParam(defaultValue = "") String userId) {
+        try {
+            if (userId.equals("")) return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(userService.getUserCount(userId) == 0, HttpStatus.OK);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body, HttpServletRequest request) {
         try {
