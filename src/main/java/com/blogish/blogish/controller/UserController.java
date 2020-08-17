@@ -27,6 +27,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> join(@RequestBody User user) {
+        // input validation
+        if (user.getUserId().length() == 0)
+            return new ResponseEntity("UserId is empty.", HttpStatus.BAD_REQUEST);
+        else if (user.getPassword().length() == 0)
+            return new ResponseEntity("Password is empty.", HttpStatus.BAD_REQUEST);
+        else if (user.getNickname().length() == 0)
+            return new ResponseEntity("Nickname is empty.", HttpStatus.BAD_REQUEST);
+
         try {
             // encrypt the password and add it to DB
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
