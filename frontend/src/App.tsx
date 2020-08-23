@@ -6,7 +6,7 @@ import Browse from './views/Browse';
 import Blog from './views/Blog';
 import Editor from './views/Editor';
 
-export default function App() {
+export default function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Switch>

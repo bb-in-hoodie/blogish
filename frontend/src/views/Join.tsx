@@ -4,11 +4,11 @@ import React, {
 import {
   Form, FormGroup, Label, Input, Button,
 } from 'reactstrap';
-import '../css/join.css';
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
-import { userJoin, userValidate } from '../api/UserAPI';
+import { joinAPI, idValidateAPI } from '../api/UserAPI';
 import User from '../types/User';
+import '../css/join.css';
 
 async function onJoinClick(
   waitingAPI: ComponentState,
@@ -22,7 +22,7 @@ async function onJoinClick(
   setWaitingAPI(true);
 
   try {
-    user = await userJoin(newUser) as User;
+    user = await joinAPI(newUser) as User;
     alert(`${user.nickname}님의 회원가입을 성공하였습니다.
 메인 페이지로 돌아갑니다.`);
   } catch {
@@ -48,7 +48,7 @@ async function onCheckClick(
   setWaitingAPI(true);
 
   try {
-    const isValid = await userValidate(userId);
+    const isValid = await idValidateAPI(userId);
     setIsValidId(isValid);
   } catch {
     alert('ID 검증 과정에서 에러가 발생했습니다.');
@@ -66,7 +66,7 @@ function onCancelClick(history: History) {
 export default function Join(): JSX.Element {
   // user info
   const [userId, setUserId] = useState('');
-  const [isValidId, setIsValidId] = useState(null as boolean | null);
+  const [isValidId, setIsValidId] = useState<boolean | null>(null);
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
@@ -94,7 +94,8 @@ export default function Join(): JSX.Element {
               onChange={(e) => setUserId(e.target.value)}
             />
             <Button
-              color="secondary"
+              color="info"
+              outline
               disabled={!userId || isValidId !== null || waitingAPI}
               onClick={() => onCheckClick(waitingAPI, setWaitingAPI, userId, setIsValidId)}
             >
@@ -126,7 +127,7 @@ export default function Join(): JSX.Element {
         </FormGroup>
         <div className="submit_btn_area">
           <Button
-            color="warning"
+            color="secondary"
             onClick={() => onCancelClick(history)}
           >
             Cancel

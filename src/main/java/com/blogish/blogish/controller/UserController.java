@@ -77,7 +77,7 @@ public class UserController {
                     return new ResponseEntity(false, HttpStatus.OK);
                 }
             } else {
-                return new ResponseEntity("There is no user with such userId.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(false, HttpStatus.OK);
             }
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);

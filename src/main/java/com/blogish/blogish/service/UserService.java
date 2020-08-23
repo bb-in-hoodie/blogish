@@ -54,7 +54,7 @@ public class UserService {
                     .deleted(user.isDeleted())
                     .build();
         } catch (IncorrectResultSizeDataAccessException e) {
-            throw new InternalServerException(e.getMessage());
+            return null;
         } catch (NullPointerException e) {
             throw new InternalServerException(e.getMessage());
         }
