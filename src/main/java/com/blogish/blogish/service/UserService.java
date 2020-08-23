@@ -36,6 +36,15 @@ public class UserService {
     }
 
     @Transactional
+    public int getUserCount(String userId) throws InternalServerException {
+        try {
+            return userRepository.countById(userId);
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
+        }
+    }
+
+    @Transactional
     public UserBody getUser(String userId) throws InternalServerException{
         try {
             User user = userRepository.selectById(userId);

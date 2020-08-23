@@ -5,7 +5,10 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -25,7 +28,15 @@
     ],
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
-        "import/extensions": "off"
+        "react/jsx-max-props-per-line": [1, { "maximum": 1, "when": "multiline" }],
+        "import/extensions": "off",
+        "semi": "off",
+        "@typescript-eslint/semi": ["error"],
+        "import/prefer-default-export": "off",
+        "no-console": "off",
+        "no-alert": "off",
+        "no-param-reassign": "off",
+        "function-paren-newline": ["error", "multiline-arguments"]
     },
     "settings": {
         "import/resolver": {

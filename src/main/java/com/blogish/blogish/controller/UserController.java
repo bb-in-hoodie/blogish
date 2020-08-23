@@ -27,6 +27,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> join(@RequestBody User user) {
+        // input validation
+        if (user.getUserId().length() == 0)
+            return new ResponseEntity("UserId is empty.", HttpStatus.BAD_REQUEST);
+        else if (user.getPassword().length() == 0)
+            return new ResponseEntity("Password is empty.", HttpStatus.BAD_REQUEST);
+        else if (user.getNickname().length() == 0)
+            return new ResponseEntity("Nickname is empty.", HttpStatus.BAD_REQUEST);
+
         try {
             // encrypt the password and add it to DB
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
@@ -35,6 +43,16 @@ public class UserController {
             return new ResponseEntity(userBody, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validate(@RequestParam(defaultValue = "") String userId) {
+        try {
+            if (userId.equals("")) return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(userService.getUserCount(userId) == 0, HttpStatus.OK);
         } catch (InternalServerException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
