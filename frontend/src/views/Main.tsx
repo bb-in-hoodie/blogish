@@ -4,7 +4,10 @@ import {
 } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
+import { useDispatch } from 'react-redux';
+import { assignUser } from '../redux/userSlice';
 import { loginAPI } from '../api/UserAPI';
+import { LoginResult } from '../types/User';
 import '../css/main.css';
 
 async function onLoginClick(
@@ -12,14 +15,15 @@ async function onLoginClick(
   password: string,
   setWaitingAPI: Dispatch<SetStateAction<boolean>>,
   history: History,
+  dispatch: Dispatch<any>,
 ) {
-  let result = false;
+  let result: LoginResult | undefined;
 
   try {
     setWaitingAPI(true);
-    result = await loginAPI(userId, password);
+    result = await loginAPI(userId, password); // response [succeded: userBody] [failed: false]
 
-    if (!result) {
+    if (!result?.succeeded) {
       alert('ID 혹은 Password가 유효하지 않습니다.');
     }
   } catch (e) {
@@ -28,9 +32,9 @@ async function onLoginClick(
     setWaitingAPI(false);
 
     // 로그인 성공 시 browse로 이동
-    if (result) {
+    if (result?.succeeded) {
+      dispatch(assignUser(result.user));
       history.push('/browse');
-      // TODO: 상태관리
     }
   }
 }
@@ -41,6 +45,10 @@ export default function Main(): JSX.Element {
   const [password, setPassword] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
 
+  // redux
+  const dispatch = useDispatch();
+
+  // routing
   const history = useHistory();
 
   return (
@@ -79,7 +87,7 @@ export default function Main(): JSX.Element {
             color="primary"
             className="login_btn"
             disabled={!userId || !password || waitingAPI}
-            onClick={() => onLoginClick(userId, password, setWaitingAPI, history)}
+            onClick={() => onLoginClick(userId, password, setWaitingAPI, history, dispatch)}
           >
             Login
           </Button>

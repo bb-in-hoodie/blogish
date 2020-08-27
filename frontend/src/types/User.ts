@@ -4,3 +4,8 @@ export default interface User {
     password?: string;
     deleted?: boolean;
 }
+
+export interface LoginResult {
+    succeeded: boolean;
+    user?: User;
+}

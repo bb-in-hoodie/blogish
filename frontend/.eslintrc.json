@@ -36,7 +36,8 @@
         "no-console": "off",
         "no-alert": "off",
         "no-param-reassign": "off",
-        "function-paren-newline": ["error", "multiline-arguments"]
+        "function-paren-newline": ["error", "multiline-arguments"],
+        "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
     },
     "settings": {
         "import/resolver": {

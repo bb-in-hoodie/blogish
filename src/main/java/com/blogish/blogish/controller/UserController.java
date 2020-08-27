@@ -1,5 +1,6 @@
 package com.blogish.blogish.controller;
 
+import com.blogish.blogish.body.LoginResultBody;
 import com.blogish.blogish.body.UserBody;
 import com.blogish.blogish.dto.User;
 import com.blogish.blogish.exception.BadRequestException;
@@ -72,12 +73,12 @@ public class UserController {
                 String password = userService.getPassword(body.get("userId"));
                 if (bcryptEncoder.matches(body.get("password"), password)) {
                     setSessionValue(request, SESSION_KEY_USER, userBody);
-                    return new ResponseEntity(true, HttpStatus.OK);
+                    return new ResponseEntity(new LoginResultBody(true, userBody), HttpStatus.OK);
                 } else {
-                    return new ResponseEntity(false, HttpStatus.OK);
+                    return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
                 }
             } else {
-                return new ResponseEntity(false, HttpStatus.OK);
+                return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
             }
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
