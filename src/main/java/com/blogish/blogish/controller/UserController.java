@@ -59,6 +59,20 @@ public class UserController {
         }
     }
 
+    @GetMapping("/session")
+    public ResponseEntity<?> session(HttpServletRequest request) {
+        try {
+            // look for a user stored in session
+            UserBody userBody = (UserBody)getSessionValue(request, SESSION_KEY_USER);
+            return new ResponseEntity(new LoginResultBody(true, userBody), HttpStatus.OK);
+        } catch (NullPointerException e) {
+            // if there is no user found on session, return false wrapped in LoginResultBody
+            return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body, HttpServletRequest request) {
         try {
@@ -121,16 +135,6 @@ public class UserController {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/test")
-    public String test(HttpServletRequest request) {
-        try {
-            Object result = getSessionValue(request, SESSION_KEY_USER);
-            return ((UserBody)result).getNickname();
-        } catch (NullPointerException e) {
-            return "There is no available session.";
         }
     }
 }

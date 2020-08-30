@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter, Route, Switch,
+} from 'react-router-dom';
 import Main from './views/Main';
 import Join from './views/Join';
 import Browse from './views/Browse';

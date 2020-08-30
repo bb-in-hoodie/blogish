@@ -11,6 +11,10 @@ export function idValidateAPI(userId: string): Promise<boolean> {
   return axios.get(`${url}/users/validate`, { params: { userId } }).then((resp) => resp.data);
 }
 
+export function sessionAPI(): Promise<LoginResult> {
+  return axios.get(`${url}/users/session`).then((resp) => resp.data);
+}
+
 export function loginAPI(userId: string, password: string): Promise<LoginResult> {
   return axios.post(`${url}/users/login`, { userId, password }).then((resp) => resp.data);
 }
