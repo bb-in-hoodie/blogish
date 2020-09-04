@@ -53,46 +53,48 @@ export default function Main(): JSX.Element {
 
   return (
     <div className="main">
-      <div className="header">
+      <header>
         LOGIN
-      </div>
-      <Form>
-        <FormGroup className="formgroup_id">
-          <Label for="input_id">ID</Label>
-          <Input
-            id="input_id"
-            type="text"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup className="formgroup_password">
-          <Label for="input_password">Password</Label>
-          <Input
-            id="input_password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </FormGroup>
-        <div className="login_btn_area">
-          <Button
-            color="secondary"
-            className="join_btn"
-            onClick={() => { history.push('/join'); }}
-          >
-            Join
-          </Button>
-          <Button
-            color="primary"
-            className="login_btn"
-            disabled={!userId || !password || waitingAPI}
-            onClick={() => onLoginClick(userId, password, setWaitingAPI, history, dispatch)}
-          >
-            Login
-          </Button>
-        </div>
-      </Form>
+      </header>
+      <main>
+        <Form>
+          <FormGroup className="formgroup_id">
+            <Label for="input_id">ID</Label>
+            <Input
+              id="input_id"
+              type="text"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup className="formgroup_password">
+            <Label for="input_password">Password</Label>
+            <Input
+              id="input_password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormGroup>
+          <div className="login_btn_area">
+            <Button
+              color="secondary"
+              className="join_btn"
+              onClick={() => { history.push('/join'); }}
+            >
+              Join
+            </Button>
+            <Button
+              color="primary"
+              className="login_btn"
+              disabled={!userId || !password || waitingAPI}
+              onClick={() => onLoginClick(userId, password, setWaitingAPI, history, dispatch)}
+            >
+              Login
+            </Button>
+          </div>
+        </Form>
+      </main>
     </div>
   );
 }
