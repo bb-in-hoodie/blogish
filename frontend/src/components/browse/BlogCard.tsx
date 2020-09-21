@@ -1,18 +1,11 @@
 import React from 'react';
 import { Card } from 'reactstrap';
 import '../../css/components/blogcard.css';
-import User from '../../types/User';
-
-type BlogCardProp = {
-  title: string;
-  description: string;
-  blogId: string;
-  user?: User;
-};
+import Blog from '../../types/Blog';
 
 export default function BlogCard({
   title, description, user,
-}: BlogCardProp): JSX.Element {
+}: Blog): JSX.Element {
   return (
     <Card>
       <h4>{title}</h4>
