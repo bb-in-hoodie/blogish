@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Blog {
+    private Long id;
+
     @NonNull
     private String title;
 
