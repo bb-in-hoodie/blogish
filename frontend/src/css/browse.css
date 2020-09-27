@@ -1,0 +1,16 @@
+.browse {
+  padding: 0px 6rem;
+  min-width: 480px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+header {
+  padding: 4rem 0;
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+section {
+  padding-top: 2rem;
+}

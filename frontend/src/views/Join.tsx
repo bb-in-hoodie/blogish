@@ -80,68 +80,70 @@ export default function Join(): JSX.Element {
 
   return (
     <div className="join">
-      <div className="header">
+      <header>
         JOIN
-      </div>
-      <Form>
-        <FormGroup className="formgroup_id">
-          <Label for="input_id">ID</Label>
-          <div className="input_with_button">
+      </header>
+      <main>
+        <Form>
+          <FormGroup className="formgroup_id">
+            <Label for="input_id">ID</Label>
+            <div className="input_with_button">
+              <Input
+                id="input_id"
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+              />
+              <Button
+                color="info"
+                outline
+                disabled={!userId || isValidId !== null || waitingAPI}
+                onClick={() => onCheckClick(waitingAPI, setWaitingAPI, userId, setIsValidId)}
+              >
+                check
+              </Button>
+            </div>
+            {isValidId === false
+            && <span className="invalid">이미 사용 중인 ID입니다.</span>}
+            {isValidId === true
+            && <span className="valid">사용할 수 있는 ID입니다.</span>}
+          </FormGroup>
+          <FormGroup className="formgroup_password">
+            <Label for="input_password">Password</Label>
             <Input
-              id="input_id"
-              type="text"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
+              id="input_password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+          </FormGroup>
+          <FormGroup className="formgroup_nickname">
+            <Label for="input_nickname">Nickname</Label>
+            <Input
+              id="input_nickname"
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </FormGroup>
+          <div className="submit_btn_area">
             <Button
-              color="info"
-              outline
-              disabled={!userId || isValidId !== null || waitingAPI}
-              onClick={() => onCheckClick(waitingAPI, setWaitingAPI, userId, setIsValidId)}
+              color="secondary"
+              onClick={() => onCancelClick(history)}
             >
-              check
+              Cancel
+            </Button>
+            <Button
+              color="success"
+              disabled={!userId || !isValidId || !password || !nickname || waitingAPI}
+              className="join_btn"
+              onClick={() => onJoinClick(waitingAPI, setWaitingAPI, { userId, password, nickname }, history)}
+            >
+              Join
             </Button>
           </div>
-          {isValidId === false
-            && <span className="invalid">이미 사용 중인 ID입니다.</span>}
-          {isValidId === true
-            && <span className="valid">사용할 수 있는 ID입니다.</span>}
-        </FormGroup>
-        <FormGroup className="formgroup_password">
-          <Label for="input_password">Password</Label>
-          <Input
-            id="input_password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup className="formgroup_nickname">
-          <Label for="input_nickname">Nickname</Label>
-          <Input
-            id="input_nickname"
-            type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-          />
-        </FormGroup>
-        <div className="submit_btn_area">
-          <Button
-            color="secondary"
-            onClick={() => onCancelClick(history)}
-          >
-            Cancel
-          </Button>
-          <Button
-            color="success"
-            disabled={!userId || !isValidId || !password || !nickname || waitingAPI}
-            className="join_btn"
-            onClick={() => onJoinClick(waitingAPI, setWaitingAPI, { userId, password, nickname }, history)}
-          >
-            Join
-          </Button>
-        </div>
-      </Form>
+        </Form>
+      </main>
     </div>
   );
 }

@@ -1,0 +1,21 @@
+.card {
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.card:first-child {
+  margin-top: 0;
+}
+
+.card p {
+  margin-bottom: 0;
+}
+
+.user_info {
+  margin-top: -1.2rem;
+  text-align: right;
+  font-size: 0.8rem;
+  color: rgb(146, 146, 146);
+}
