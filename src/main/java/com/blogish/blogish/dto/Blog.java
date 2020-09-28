@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Blog {
-    private Long id;
+    @Builder.Default
+    private Long id = -1L;
 
     @NonNull
     private String title;

@@ -33,9 +33,10 @@ public class BlogRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
-    public int insert(Blog blog) {
+    public Long insert(Blog blog) {
         SqlParameterSource sqlParameterSource = new BeanPropertySqlParameterSource(blog);
-        return simpleJdbcInsert.execute(sqlParameterSource);
+        Number returnedId = simpleJdbcInsert.executeAndReturnKey(sqlParameterSource);
+        return returnedId.longValue();
     }
 
     public int countByBlogId(Long blogId) {
@@ -48,9 +49,16 @@ public class BlogRepository {
         return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG, param, blogMapper);
     }
 
+    public int countByTitleAndOwnerId(Long ownerId, String title) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("ownerId", ownerId)
+                .addValue("title", title);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG_COUNT_BY_TITLE_AND_OWNER_ID, params, Integer.class);
+    }
+
     public List<Blog> selectAllByUserId(Long ownerId) {
         MapSqlParameterSource param = new MapSqlParameterSource("ownerId", ownerId);
-        return namedParameterJdbcTemplate.queryForList(SELECT_BLOGS_BY_USER_ID, param, Blog.class);
+        return namedParameterJdbcTemplate.queryForList(SELECT_BLOGS_BY_OWNER_ID, param, Blog.class);
     }
 
     public int delete(Long blogId) {
@@ -58,5 +66,11 @@ public class BlogRepository {
         return namedParameterJdbcTemplate.update(DELETE_BLOG, param);
     }
 
-    // TODO: implement update
+    public int update(Blog blog) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("blogId", blog.getId())
+                .addValue("title", blog.getTitle())
+                .addValue("description", blog.getDescription());
+        return namedParameterJdbcTemplate.update(UPDATE_BLOG, params);
+    }
 }
