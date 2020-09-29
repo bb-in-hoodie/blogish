@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Blog {

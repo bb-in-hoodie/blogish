@@ -7,6 +7,9 @@ import lombok.NonNull;
 @Data
 @Builder
 public class UserBody {
+    @Builder.Default
+    private Long id = -1L;
+
     @NonNull
     private String nickname;
 

@@ -5,6 +5,7 @@ import com.blogish.blogish.exception.BadRequestException;
 import com.blogish.blogish.exception.InternalServerException;
 import com.blogish.blogish.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,8 @@ public class BlogService {
             Long blogId = blogRepository.insert(blog);
             blog.setId(blogId);
             return blog;
+        } catch (BadRequestException e) {
+            throw e;
         } catch (Exception e) {
             throw new InternalServerException();
         }
@@ -38,6 +41,8 @@ public class BlogService {
             return blogRepository.selectByBlogId(blogId);
         } catch (NullPointerException e) {
             throw new BadRequestException(e.getMessage());
+        } catch (EmptyResultDataAccessException e) {
+            throw new BadRequestException("Invalid blogId.");
         } catch (Exception e) {
             throw new InternalServerException();
         }
@@ -61,11 +66,13 @@ public class BlogService {
             }
 
             // return a updated blog
-            if (blogRepository.insert(blog) > 0) {
+            if (blogRepository.update(blog) > 0) {
                 return blog;
             } else {
                 throw new InternalServerException();
             }
+        } catch (BadRequestException e) {
+            throw e;
         } catch (Exception e) {
             throw new InternalServerException();
         }
@@ -85,6 +92,8 @@ public class BlogService {
             } else {
                 throw new InternalServerException();
             }
+        } catch (BadRequestException e) {
+            throw e;
         } catch (Exception e) {
             throw new InternalServerException();
         }

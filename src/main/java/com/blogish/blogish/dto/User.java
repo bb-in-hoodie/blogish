@@ -8,6 +8,9 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class User {
+    @Builder.Default
+    private Long id = -1L;
+
     @NonNull
     private String nickname;
 

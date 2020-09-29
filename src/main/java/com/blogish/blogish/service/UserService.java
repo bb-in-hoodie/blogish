@@ -24,12 +24,15 @@ public class UserService {
                 userRepository.insert(user);
 
                 return UserBody.builder()
+                        .id(user.getId())
                         .userId(user.getUserId())
                         .nickname(user.getNickname())
                         .build();
             } else {
                 throw new BadRequestException("The userId on the request is already used by other user.");
             }
+        } catch (BadRequestException e) {
+            throw e;
         } catch (Exception e) {
             throw new InternalServerException(e.getMessage());
         }
@@ -49,6 +52,7 @@ public class UserService {
         try {
             User user = userRepository.selectById(userId);
             return UserBody.builder()
+                    .id(user.getId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
                     .deleted(user.isDeleted())
