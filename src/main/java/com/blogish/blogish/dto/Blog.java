@@ -2,24 +2,26 @@ package com.blogish.blogish.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Blog {
     @Builder.Default
     private Long id = -1L;
 
     @NonNull
-    private String nickname;
+    private String title;
+
+    @Builder.Default
+    private String description = "";
+
+    @Builder.Default
+    private LocalDateTime createdTime = LocalDateTime.now();
 
     @NonNull
-    private String userId;
-
-    @Builder.Default
-    private String password = null;
-
-    @Builder.Default
-    private boolean deleted = false;
+    private Long ownerId;
 }

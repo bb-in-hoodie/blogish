@@ -18,10 +18,8 @@ import static com.blogish.blogish.util.Queries.*;
 
 @Repository
 public class UserRepository {
-    private String tableName = "user";
-    private String generatedKeyColumn = "id";
-    private SimpleJdbcInsert simpleJdbcInsert;
-    private RowMapper<User> userMapper = BeanPropertyRowMapper.newInstance(User.class);
+    private final SimpleJdbcInsert simpleJdbcInsert;
+    private final RowMapper<User> userMapper = BeanPropertyRowMapper.newInstance(User.class);
 
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -29,8 +27,8 @@ public class UserRepository {
     public UserRepository(DataSource dataSource) {
         // create a new simpleJdbcInsert with associated settings
         simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-                                .withTableName(tableName)
-                                .usingGeneratedKeyColumns(generatedKeyColumn);
+                                .withTableName("user")
+                                .usingGeneratedKeyColumns("id");
     }
 
     public int countById(String userId) throws DataAccessException, NullPointerException {
