@@ -58,7 +58,14 @@ public class BlogRepository {
 
     public List<Blog> selectAllByUserId(Long ownerId) {
         MapSqlParameterSource param = new MapSqlParameterSource("ownerId", ownerId);
-        return namedParameterJdbcTemplate.queryForList(SELECT_BLOGS_BY_OWNER_ID, param, Blog.class);
+        return namedParameterJdbcTemplate.query(SELECT_BLOGS_BY_OWNER_ID, param, blogMapper);
+    }
+
+    public List<Blog> selectAllNotOwnedBy(Long ownerId, int size) {
+        MapSqlParameterSource param = new MapSqlParameterSource()
+                .addValue("ownerId", ownerId)
+                .addValue("size", size);
+        return namedParameterJdbcTemplate.query(SELECT_BLOGS_NOT_OWNED_BY, param, blogMapper);
     }
 
     public int delete(Long blogId) {

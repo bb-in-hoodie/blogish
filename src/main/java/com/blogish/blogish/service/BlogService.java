@@ -58,6 +58,15 @@ public class BlogService {
     }
 
     @Transactional
+    public List<Blog> getBlogsNotOwnedBy(Long ownerId, int size) throws BadRequestException, InternalServerException {
+        try {
+            return blogRepository.selectAllNotOwnedBy(ownerId, size);
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
+
+    @Transactional
     public Blog updateInfo(Blog blog) throws BadRequestException, InternalServerException {
         try {
             // check if a blog with the id exist

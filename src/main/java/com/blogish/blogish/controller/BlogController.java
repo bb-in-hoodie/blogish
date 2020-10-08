@@ -101,4 +101,49 @@ public class BlogController {
         }
     }
 
+    @GetMapping("/{blogId}")
+    public ResponseEntity<?> getBlog(@PathVariable("blogId") long blogId) {
+        try {
+            Blog blog = blogService.getBlog(blogId);
+            if (blog == null) {
+                return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity(blog, HttpStatus.OK);
+            }
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<?> getBlogsOwnedBy(@PathVariable("ownerId") long ownerId) {
+        try {
+            List<Blog> blogs = blogService.getBlogsOfOwner(ownerId);
+            return new ResponseEntity(blogs, HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/others/{ownerId}")
+    public ResponseEntity<?> getBlogsNotOwnedBy(@PathVariable("ownerId") long ownerId, @RequestParam(defaultValue = "10") int size) {
+        try {
+            // size validation
+            if (size <= 0) {
+                return new ResponseEntity("The value of size should be larger than 0.", HttpStatus.BAD_REQUEST);
+            }
+
+            // get list
+            List<Blog> blogs = blogService.getBlogsNotOwnedBy(ownerId, size);
+            return new ResponseEntity(blogs, HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
