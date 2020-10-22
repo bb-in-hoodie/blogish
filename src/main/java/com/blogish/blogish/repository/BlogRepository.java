@@ -49,21 +49,21 @@ public class BlogRepository {
         return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG, param, blogMapper);
     }
 
-    public int countByTitleAndOwnerId(Long ownerId, String title) {
+    public int countByTitleAndOwnerId(String userId, String title) {
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("ownerId", ownerId)
+                .addValue("userId", userId)
                 .addValue("title", title);
-        return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG_COUNT_BY_TITLE_AND_OWNER_ID, params, Integer.class);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG_COUNT_BY_TITLE_AND_USER_ID, params, Integer.class);
     }
 
-    public List<Blog> selectAllByUserId(Long ownerId) {
-        MapSqlParameterSource param = new MapSqlParameterSource("ownerId", ownerId);
-        return namedParameterJdbcTemplate.query(SELECT_BLOGS_BY_OWNER_ID, param, blogMapper);
+    public List<Blog> selectAllByUserId(String userId) {
+        MapSqlParameterSource param = new MapSqlParameterSource("userId", userId);
+        return namedParameterJdbcTemplate.query(SELECT_BLOGS_BY_USER_ID, param, blogMapper);
     }
 
-    public List<Blog> selectAllNotOwnedBy(Long ownerId, int size) {
+    public List<Blog> selectAllNotOwnedBy(String userId, int size) {
         MapSqlParameterSource param = new MapSqlParameterSource()
-                .addValue("ownerId", ownerId)
+                .addValue("userId", userId)
                 .addValue("size", size);
         return namedParameterJdbcTemplate.query(SELECT_BLOGS_NOT_OWNED_BY, param, blogMapper);
     }

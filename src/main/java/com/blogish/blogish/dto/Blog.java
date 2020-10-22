@@ -1,5 +1,7 @@
 package com.blogish.blogish.dto;
 
+import com.blogish.blogish.body.BlogRequestBody;
+import com.blogish.blogish.body.BlogResponseBody;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,4 +26,22 @@ public class Blog {
 
     @NonNull
     private Long ownerId;
+
+    public static Blog create(BlogRequestBody blogReq, Long ownerId) {
+        return Blog.builder()
+                .title(blogReq.getTitle())
+                .description(blogReq.getDescription())
+                .ownerId(ownerId)
+                .build();
+    }
+
+    public static Blog fetch(BlogResponseBody blogResp) {
+        return Blog.builder()
+                .id(blogResp.getId())
+                .title(blogResp.getTitle())
+                .description(blogResp.getDescription())
+                .createdTime(blogResp.getCreatedTime())
+                .ownerId(blogResp.getOwner().getId())
+                .build();
+    }
 }

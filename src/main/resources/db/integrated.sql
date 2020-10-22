@@ -65,3 +65,9 @@ CREATE TABLE `comment`
     KEY `fkIdx_40` (`author_id`),
     CONSTRAINT `comment_author` FOREIGN KEY `fkIdx_40` (`author_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE VIEW blog_user AS
+SELECT blog.*, user.user_id
+FROM blog
+INNER JOIN user
+ON blog.owner_id = user.id

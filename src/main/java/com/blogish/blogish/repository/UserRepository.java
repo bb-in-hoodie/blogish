@@ -41,14 +41,19 @@ public class UserRepository {
         return simpleJdbcInsert.execute(sqlParameterSource);
     }
 
-    public User selectById(String userId) throws DataAccessException, NullPointerException {
-        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+    public User selectById(Long id) throws DataAccessException, NullPointerException {
+        MapSqlParameterSource params = new MapSqlParameterSource("id", id);
         return namedParameterJdbcTemplate.queryForObject(SELECT_USER, params, userMapper);
     }
 
-    public String selectPasswordById(String userId) throws DataAccessException, NullPointerException {
+    public User selectByUserId(String userId) throws DataAccessException, NullPointerException {
         MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
-        return namedParameterJdbcTemplate.queryForObject(SELECT_USER_PASSWORD, params, String.class);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_USER_BY_USER_ID, params, userMapper);
+    }
+
+    public String selectPasswordByUserId(String userId) throws DataAccessException, NullPointerException {
+        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_USER_PASSWORD_BY_USER_ID, params, String.class);
     }
 
     public int setDeleted(String userId, boolean deleted) throws DataAccessException {

@@ -1,5 +1,8 @@
 package com.blogish.blogish.service;
 
+import com.blogish.blogish.body.BlogRequestBody;
+import com.blogish.blogish.body.BlogResponseBody;
+import com.blogish.blogish.body.UserBody;
 import com.blogish.blogish.dto.Blog;
 import com.blogish.blogish.exception.BadRequestException;
 import com.blogish.blogish.exception.InternalServerException;
@@ -9,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,18 +20,24 @@ public class BlogService {
     @Autowired
     BlogRepository blogRepository;
 
+    @Autowired
+    UserService userService;
+
     @Transactional
-    public Blog addBlog(Blog blog) throws BadRequestException, InternalServerException {
+    public BlogResponseBody addBlog(BlogRequestBody blogReq) throws BadRequestException, InternalServerException {
         try {
             // check if any blog already exist with the same title owned by the same user
-            if (blogRepository.countByTitleAndOwnerId(blog.getOwnerId(), blog.getTitle()) > 0) {
+            if (blogRepository.countByTitleAndOwnerId(blogReq.getUserId(), blogReq.getTitle()) > 0) {
                 throw new BadRequestException("A blog owned by the user with the same title exists.");
             }
 
-            // return blog instance with the returned id
+            // create a blog and insert it
+            UserBody userBody = userService.getUser(blogReq.getUserId());
+            Blog blog = Blog.create(blogReq, userBody.getId());
             Long blogId = blogRepository.insert(blog);
             blog.setId(blogId);
-            return blog;
+
+            return BlogResponseBody.create(blog, userBody);
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
@@ -36,9 +46,12 @@ public class BlogService {
     }
 
     @Transactional
-    public Blog getBlog(Long blogId) throws BadRequestException, InternalServerException {
+    public BlogResponseBody getBlog(Long blogId) throws BadRequestException, InternalServerException {
         try {
-            return blogRepository.selectByBlogId(blogId);
+            Blog blog = blogRepository.selectByBlogId(blogId);
+            UserBody userBody = userService.getUser(blog.getOwnerId());
+
+            return BlogResponseBody.create(blog, userBody);
         } catch (NullPointerException e) {
             throw new BadRequestException(e.getMessage());
         } catch (EmptyResultDataAccessException e) {
@@ -49,25 +62,39 @@ public class BlogService {
     }
 
     @Transactional
-    public List<Blog> getBlogsOfOwner(Long ownerId) throws BadRequestException, InternalServerException {
+    public List<BlogResponseBody> getBlogsOfOwner(String userId) throws BadRequestException, InternalServerException {
         try {
-            return blogRepository.selectAllByUserId(ownerId);
+            List<Blog> blogs = blogRepository.selectAllByUserId(userId);
+            List<BlogResponseBody> blogBodies = new ArrayList<>();
+
+            for (Blog blog : blogs) {
+                UserBody userBody = userService.getUser(blog.getOwnerId());
+                blogBodies.add(BlogResponseBody.create(blog, userBody));
+            }
+            return blogBodies;
         } catch (Exception e) {
             throw new InternalServerException();
         }
     }
 
     @Transactional
-    public List<Blog> getBlogsNotOwnedBy(Long ownerId, int size) throws BadRequestException, InternalServerException {
+    public List<BlogResponseBody> getBlogsNotOwnedBy(String userId, int size) throws BadRequestException, InternalServerException {
         try {
-            return blogRepository.selectAllNotOwnedBy(ownerId, size);
+            List<Blog> blogs = blogRepository.selectAllNotOwnedBy(userId, size);
+            List<BlogResponseBody> blogBodies = new ArrayList<>();
+
+            for (Blog blog : blogs) {
+                UserBody userBody = userService.getUser(blog.getOwnerId());
+                blogBodies.add(BlogResponseBody.create(blog, userBody));
+            }
+            return blogBodies;
         } catch (Exception e) {
             throw new InternalServerException();
         }
     }
 
     @Transactional
-    public Blog updateInfo(Blog blog) throws BadRequestException, InternalServerException {
+    public BlogResponseBody updateInfo(Blog blog) throws BadRequestException, InternalServerException {
         try {
             // check if a blog with the id exist
             if (blogRepository.countByBlogId(blog.getId()) <= 0) {
@@ -76,7 +103,8 @@ public class BlogService {
 
             // return a updated blog
             if (blogRepository.update(blog) > 0) {
-                return blog;
+                UserBody userBody = userService.getUser(blog.getOwnerId());
+                return BlogResponseBody.create(blog, userBody);
             } else {
                 throw new InternalServerException();
             }
