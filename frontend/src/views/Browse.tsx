@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import {
-  Nav, NavItem, NavLink, Card,
+  Nav, NavItem, NavLink,
 } from 'reactstrap';
-import useUser from '../hooks/useUser';
-import BlogCard from '../components/browse/BlogCard';
 import '../css/browse.css';
 import BlogList from '../components/browse/BlogList';
 
 export type BrowseTab = 'MINE' | 'OTHERS';
 
 export default function Browse(): JSX.Element {
-  const history = useHistory();
-  const user = useUser(true);
   const [activeTab, setActiveTab] = useState<BrowseTab>('MINE');
 
   return (

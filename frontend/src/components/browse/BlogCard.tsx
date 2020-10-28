@@ -4,13 +4,13 @@ import '../../css/components/blogcard.css';
 import Blog from '../../types/Blog';
 
 export default function BlogCard({
-  title, description, user,
-}: Blog): JSX.Element {
+  id, title, description, owner,
+}: Partial<Blog>): JSX.Element {
   return (
     <Card>
       <h4>{title}</h4>
       <p>{description}</p>
-      {user && (<div className="user_info">{user.nickname}</div>)}
+      {owner && (<div className="user_info">{owner.nickname}</div>)}
     </Card>
   );
 }
