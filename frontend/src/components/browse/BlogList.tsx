@@ -7,16 +7,22 @@ import '../../css/components/bloglist.css';
 import BlogCard from './BlogCard';
 import Blog from '../../types/Blog';
 import { BrowseTab } from '../../views/Browse';
-import useUser from '../../hooks/useUser';
 import { blogsOfOthersAPI, blogsOfUserAPI } from '../../api/BlogAPI';
+import User from '../../types/User';
 
 type BlogListProps = {
+  user: User;
   activeTab: BrowseTab;
+  setCreateModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateToggle: boolean;
 };
 
-export default function BlogList({ activeTab }: BlogListProps): JSX.Element {
-  const user = useUser(true);
-
+export default function BlogList({
+  user,
+  activeTab,
+  setCreateModalOpen,
+  updateToggle,
+}: BlogListProps): JSX.Element {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([]);
   const [keyword, setKeyword] = useState('');
@@ -36,13 +42,14 @@ export default function BlogList({ activeTab }: BlogListProps): JSX.Element {
     } catch (e) {
       alert('블로그 목록을 불러오는데 실패했습니다.');
     }
-  }, [activeTab, user]);
+  }, [activeTab, user, updateToggle]);
 
   useEffect(() => {
     setKeyword('');
     updateBlogs();
   }, [updateBlogs]);
 
+  // filter blogs by keyword
   const throttledSetFilteredBlogs = useCallback(debounce((newKeyword: string) => {
     setFilteredBlogs(
       newKeyword
@@ -53,7 +60,6 @@ export default function BlogList({ activeTab }: BlogListProps): JSX.Element {
     );
   }, 200), [blogs]);
 
-  // filter blogs by keyword
   useEffect(() => {
     if (keyword) {
       throttledSetFilteredBlogs(keyword);
@@ -73,7 +79,7 @@ export default function BlogList({ activeTab }: BlogListProps): JSX.Element {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        {activeTab === 'MINE' && <Button size="sm" color="primary">CREATE</Button>}
+        {activeTab === 'MINE' && <Button size="sm" color="primary" onClick={() => setCreateModalOpen(true)}>CREATE</Button>}
       </header>
       {filteredBlogs.map((blog) => (
         <BlogCard

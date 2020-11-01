@@ -4,11 +4,17 @@ import {
 } from 'reactstrap';
 import '../css/browse.css';
 import BlogList from '../components/browse/BlogList';
+import CreateBlogModal from '../components/browse/CreateBlogModal';
+import useUser from '../hooks/useUser';
 
 export type BrowseTab = 'MINE' | 'OTHERS';
 
 export default function Browse(): JSX.Element {
+  const user = useUser(true);
+
   const [activeTab, setActiveTab] = useState<BrowseTab>('MINE');
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [updateToggle, setUpdateToggle] = useState(false);
 
   return (
     <div className="browse">
@@ -34,8 +40,19 @@ export default function Browse(): JSX.Element {
             </NavLink>
           </NavItem>
         </Nav>
-        <BlogList activeTab={activeTab} />
+        <BlogList
+          user={user}
+          activeTab={activeTab}
+          setCreateModalOpen={setCreateModalOpen}
+          updateToggle={updateToggle}
+        />
       </main>
+      <CreateBlogModal
+        user={user}
+        createModalOpen={createModalOpen}
+        setCreateModalOpen={setCreateModalOpen}
+        setUpdateToggle={setUpdateToggle}
+      />
     </div>
   );
 }
