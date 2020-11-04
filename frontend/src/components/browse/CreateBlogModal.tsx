@@ -44,7 +44,11 @@ export default function CreateBlogModal({
       setUpdateToggle((toggle) => !toggle);
       setCreateModalOpen(false);
     } catch (e) {
-      alert('블로그를 생성하는 과정에서 에러가 발생했습니다.');
+      if (e.response.status === 400) { // bad request
+        alert('이미 같은 이름의 블로그를 사용하고 있습니다.');
+      } else {
+        alert('블로그를 생성하는 과정에서 에러가 발생했습니다.');
+      }
     }
   }
 
