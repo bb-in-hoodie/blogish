@@ -1,8 +1,15 @@
 import User from './User';
 
-export default interface Blog {
+export interface BlogRequestBody {
   title: string;
   description: string;
-  blogId: string;
-  user?: User;
+  userId: string;
+}
+
+export default interface Blog {
+  id: number;
+  title: string;
+  description: string;
+  createdTime: string;
+  owner: User;
 }

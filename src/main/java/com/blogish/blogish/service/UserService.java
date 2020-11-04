@@ -50,7 +50,24 @@ public class UserService {
     @Transactional
     public UserBody getUser(String userId) throws InternalServerException{
         try {
-            User user = userRepository.selectById(userId);
+            User user = userRepository.selectByUserId(userId);
+            return UserBody.builder()
+                    .id(user.getId())
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .deleted(user.isDeleted())
+                    .build();
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return null;
+        } catch (NullPointerException e) {
+            throw new InternalServerException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public UserBody getUser(Long id) throws InternalServerException{
+        try {
+            User user = userRepository.selectById(id);
             return UserBody.builder()
                     .id(user.getId())
                     .userId(user.getUserId())
@@ -67,7 +84,7 @@ public class UserService {
     @Transactional
     public String getPassword(String userId) throws BadRequestException, InternalServerException {
         try {
-            return userRepository.selectPasswordById(userId);
+            return userRepository.selectPasswordByUserId(userId);
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new InternalServerException(e.getMessage());
         } catch (NullPointerException e) {

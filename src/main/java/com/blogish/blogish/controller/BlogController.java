@@ -1,8 +1,9 @@
 package com.blogish.blogish.controller;
 
+import com.blogish.blogish.body.BlogRequestBody;
+import com.blogish.blogish.body.BlogResponseBody;
 import com.blogish.blogish.body.UserBody;
 import com.blogish.blogish.dto.Blog;
-import com.blogish.blogish.dto.User;
 import com.blogish.blogish.exception.BadRequestException;
 import com.blogish.blogish.exception.InternalServerException;
 import com.blogish.blogish.service.BlogService;
@@ -29,14 +30,14 @@ public class BlogController {
     BCryptPasswordEncoder bcryptEncoder;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Blog blog) {
-        if (blog.getTitle().length() < 1) {
+    public ResponseEntity<?> create(@RequestBody BlogRequestBody blogReq) {
+        if (blogReq.getTitle().length() < 1) {
             return new ResponseEntity("Title is empty.", HttpStatus.BAD_REQUEST);
         }
 
         try {
-            Blog createdBlog = blogService.addBlog(blog);
-            return new ResponseEntity(createdBlog, HttpStatus.OK);
+            BlogResponseBody createdBlogResponseBody = blogService.addBlog(blogReq);
+            return new ResponseEntity(createdBlogResponseBody, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {
@@ -45,19 +46,20 @@ public class BlogController {
     }
 
     @PatchMapping("/{blogId}")
-    public ResponseEntity<?> update(@PathVariable("blogId") long blogId, @RequestBody Blog blog) {
+    public ResponseEntity<?> update(@PathVariable("blogId") long blogId, @RequestBody BlogRequestBody blogReq) {
         try {
-            Blog targetBlog = blogService.getBlog(blogId);
+            BlogResponseBody blogResp = blogService.getBlog(blogId);
 
             // requester validation
-            if (!targetBlog.getOwnerId().equals(blog.getOwnerId())) {
+            if (!blogResp.getOwner().getUserId().equals(blogReq.getUserId())) {
                 return new ResponseEntity("The blog is not owned by the requester.", HttpStatus.BAD_REQUEST);
             }
 
             // update
-            targetBlog.setTitle(blog.getTitle());
-            targetBlog.setDescription(blog.getDescription());
-            Blog updatedBlog = blogService.updateInfo(targetBlog);
+            Blog blog = Blog.fetch(blogResp);
+            blog.setTitle(blogReq.getTitle());
+            blog.setDescription(blogReq.getDescription());
+            BlogResponseBody updatedBlog = blogService.updateInfo(blog);
 
             return new ResponseEntity(updatedBlog, HttpStatus.OK);
         } catch (BadRequestException e) {
@@ -84,10 +86,10 @@ public class BlogController {
             }
 
             // blog validation
-            Blog targetBlog = blogService.getBlog(blogId);
-            if (targetBlog == null) {
+            BlogResponseBody blogResp = blogService.getBlog(blogId);
+            if (blogResp == null) {
                 return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
-            } else if (!targetBlog.getOwnerId().equals(userBody.getId())) {
+            } else if (!blogResp.getOwner().getUserId().equals(userBody.getUserId())) {
                 return new ResponseEntity("The blog is not owned by the requester.", HttpStatus.BAD_REQUEST);
             }
 
@@ -104,11 +106,11 @@ public class BlogController {
     @GetMapping("/{blogId}")
     public ResponseEntity<?> getBlog(@PathVariable("blogId") long blogId) {
         try {
-            Blog blog = blogService.getBlog(blogId);
-            if (blog == null) {
+            BlogResponseBody blogResp = blogService.getBlog(blogId);
+            if (blogResp == null) {
                 return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
             } else {
-                return new ResponseEntity(blog, HttpStatus.OK);
+                return new ResponseEntity(blogResp, HttpStatus.OK);
             }
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -117,11 +119,11 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/owner/{ownerId}")
-    public ResponseEntity<?> getBlogsOwnedBy(@PathVariable("ownerId") long ownerId) {
+    @GetMapping("/owner/{userId}")
+    public ResponseEntity<?> getBlogsOwnedBy(@PathVariable("userId") String userId) {
         try {
-            List<Blog> blogs = blogService.getBlogsOfOwner(ownerId);
-            return new ResponseEntity(blogs, HttpStatus.OK);
+            List<BlogResponseBody> blogBodies = blogService.getBlogsOfOwner(userId);
+            return new ResponseEntity(blogBodies, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {
@@ -129,8 +131,8 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/others/{ownerId}")
-    public ResponseEntity<?> getBlogsNotOwnedBy(@PathVariable("ownerId") long ownerId, @RequestParam(defaultValue = "10") int size) {
+    @GetMapping("/others/{userId}")
+    public ResponseEntity<?> getBlogsNotOwnedBy(@PathVariable("userId") String userId, @RequestParam(defaultValue = "10") int size) {
         try {
             // size validation
             if (size <= 0) {
@@ -138,8 +140,8 @@ public class BlogController {
             }
 
             // get list
-            List<Blog> blogs = blogService.getBlogsNotOwnedBy(ownerId, size);
-            return new ResponseEntity(blogs, HttpStatus.OK);
+            List<BlogResponseBody> blogBodies = blogService.getBlogsNotOwnedBy(userId, size);
+            return new ResponseEntity(blogBodies, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {

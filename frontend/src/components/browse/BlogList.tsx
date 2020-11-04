@@ -7,72 +7,59 @@ import '../../css/components/bloglist.css';
 import BlogCard from './BlogCard';
 import Blog from '../../types/Blog';
 import { BrowseTab } from '../../views/Browse';
+import { blogsOfOthersAPI, blogsOfUserAPI } from '../../api/BlogAPI';
+import User from '../../types/User';
 
 type BlogListProps = {
+  user: User;
   activeTab: BrowseTab;
+  setCreateModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateToggle: boolean;
 };
 
-export default function BlogList({ activeTab }: BlogListProps): JSX.Element {
+export default function BlogList({
+  user,
+  activeTab,
+  setCreateModalOpen,
+  updateToggle,
+}: BlogListProps): JSX.Element {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([]);
   const [keyword, setKeyword] = useState('');
 
   // update blogs by activeTab
+  const updateBlogs = useCallback(async () => {
+    if (!user?.userId) {
+      return;
+    }
+
+    try {
+      if (activeTab === 'MINE') {
+        setBlogs(await blogsOfUserAPI(user.userId));
+      } else {
+        setBlogs(await blogsOfOthersAPI(user.userId));
+      }
+    } catch (e) {
+      alert('블로그 목록을 불러오는데 실패했습니다.');
+    }
+  }, [activeTab, user, updateToggle]);
+
   useEffect(() => {
     setKeyword('');
+    updateBlogs();
+  }, [updateBlogs]);
 
-    // TODO: 실제 데이터 사용
-    setBlogs(activeTab === 'MINE'
-      ? [
-        {
-          title: '내가 만든 블로그',
-          description: '내가 만든 블로그에 대한 설명이다.',
-          blogId: '1',
-        },
-        {
-          title: '요리가 좋아요',
-          description: '요리를 사랑한다면?',
-          blogId: '2',
-        },
-        {
-          title: '엔비디아는 신인가요?',
-          description: '황회장님에 대한 믿음으로 가득한 곳.',
-          blogId: '3',
-        },
-      ]
-      : [
-        {
-          title: '남이 만든 블로그',
-          description: '남이 만든 블로그에 대한 설명이다.',
-          blogId: '11',
-          user: { userId: '111', nickname: 'abc' },
-        },
-        {
-          title: '요리가 싫어요',
-          description: '요리를 증오한다면?',
-          blogId: '22',
-          user: { userId: '222', nickname: 'bindy' },
-        },
-        {
-          title: '절세미녀',
-          description: '도대체...',
-          blogId: '33',
-          user: { userId: '333', nickname: 'lselse' },
-        },
-      ]);
-  }, [activeTab]);
-
+  // filter blogs by keyword
   const throttledSetFilteredBlogs = useCallback(debounce((newKeyword: string) => {
     setFilteredBlogs(
       newKeyword
         ? blogs.filter(
-          (blog) => blog.title.includes(newKeyword) || blog.description.includes(newKeyword) || blog.user?.nickname.includes(newKeyword),
+          (blog) => blog.title.includes(newKeyword) || blog.description.includes(newKeyword) || blog.owner?.nickname.includes(newKeyword),
         )
         : blogs,
     );
   }, 200), [blogs]);
 
-  // filter blogs by keyword
   useEffect(() => {
     if (keyword) {
       throttledSetFilteredBlogs(keyword);
@@ -92,15 +79,15 @@ export default function BlogList({ activeTab }: BlogListProps): JSX.Element {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        {activeTab === 'MINE' && <Button size="sm" color="primary">CREATE</Button>}
+        {activeTab === 'MINE' && <Button size="sm" color="primary" onClick={() => setCreateModalOpen(true)}>CREATE</Button>}
       </header>
       {filteredBlogs.map((blog) => (
         <BlogCard
-          key={blog.blogId}
+          key={blog.id}
+          id={blog.id}
           title={blog.title}
           description={blog.description}
-          blogId={blog.blogId}
-          user={blog.user}
+          owner={blog.owner}
         />
       ))}
     </section>

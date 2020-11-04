@@ -5,7 +5,7 @@ import {
 import Main from './views/Main';
 import Join from './views/Join';
 import Browse from './views/Browse';
-import Blog from './views/Blog';
+import BlogView from './views/BlogView';
 import Editor from './views/Editor';
 
 export default function App(): JSX.Element {
@@ -19,7 +19,7 @@ export default function App(): JSX.Element {
           <Browse />
         </Route>
         <Route path="/blog/:blogId">
-          <Blog />
+          <BlogView />
         </Route>
         <Route path="/edit/:blogId">
           <Editor />
