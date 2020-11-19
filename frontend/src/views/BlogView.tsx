@@ -37,7 +37,11 @@ export default function BlogView(): JSX.Element {
         </div>
         <div className="blog_info">
           <h2>{ blog?.title }</h2>
-          {blog?.description && <h5>{ blog?.description }</h5>}
+          {blog?.description && <h5 className="description">{ blog?.description }</h5>}
+          <span className="nickname">
+            @
+            { blog?.owner.nickname }
+          </span>
         </div>
       </header>
       <nav>
@@ -51,20 +55,50 @@ export default function BlogView(): JSX.Element {
         </div>
         <div className="post_list">
           <ul>
-            <li>the very first movie I&apos;ve watched</li>
-            <li>It&apos;s good to go outside</li>
-            <li>What a sunny day</li>
+            <li className="hover">
+              <span className="title">the very first movie I&apos;ve watched</span>
+              <span className="created_time">2020.05.14 13:10</span>
+            </li>
+            <li>
+              <span className="title">It&apos;s good to go outside</span>
+              <span className="created_time">2020.05.05 18:11</span>
+            </li>
+            <li>
+              <span className="title">What a sunny day</span>
+              <span className="created_time">2020.02.14 09:30</span>
+            </li>
           </ul>
+          {/* paging component */}
         </div>
       </nav>
       <article>
-        <header className="post_info">post title</header>
+        <header className="post_info">
+          <h3 className="title">the very first movie I&apos;ve watched</h3>
+          <span className="created_time">작성 2020.05.14 13:10</span>
+        </header>
         <main className="post_context">
-          and the article goes like this
-          on and on
-          down and down
-          one by one
-          line by line
+          <p>
+            and the article goes like this
+            <br />
+            on and on
+            <br />
+            down and down
+            <br />
+            one by one
+            <br />
+            line by line
+          </p>
+          <p>
+            and the article goes like this
+            <br />
+            on and on
+            <br />
+            down and down
+            <br />
+            one by one
+            <br />
+            line by line
+          </p>
         </main>
       </article>
     </div>
