@@ -5,13 +5,13 @@
   margin: 0 auto;
 }
 
-header {
+.browse header {
   padding: 4rem 0;
   font-size: 4rem;
   font-weight: 700;
 }
 
-section {
+.browse section {
   padding-top: 2rem;
   padding-bottom: 4rem;
 }

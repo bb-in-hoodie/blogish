@@ -16,7 +16,7 @@ export default function BlogCard({
   return (
     <Card onClick={() => onCardClicked(id)}>
       <h4>{title}</h4>
-      <p>{description}</p>
+      <span>{description}</span>
       {owner && (<div className="user_info">{owner.nickname}</div>)}
     </Card>
   );
