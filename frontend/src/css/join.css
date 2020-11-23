@@ -5,43 +5,43 @@
     margin: 0 auto;
 }
 
-header {
+.join header {
     padding: 4rem 0;
     font-size: 4rem;
     font-weight: 700;
 }
 
-.form-group {
+.join .form-group {
     padding-bottom: 1rem;
 }
 
-.formgroup_id span {
+.join .formgroup_id span {
     font-size: 0.8rem;
 }
 
-.valid {
+.join .valid {
     color: green;
 }
 
-.invalid {
+.join .invalid {
     color: red;
 }
 
-.input_with_button {
+.join .input_with_button {
     display: flex !important;
 }
 
-.input_with_button button {
+.join .input_with_button button {
     margin-left: 1rem;
     width: 7rem;
 }
 
-.submit_btn_area {
+.join .submit_btn_area {
     display: flex;
     justify-content: space-between;
     padding-top: 2rem;
 }
 
-.submit_btn_area * {
+.join .submit_btn_area * {
     width: 6rem;
 }

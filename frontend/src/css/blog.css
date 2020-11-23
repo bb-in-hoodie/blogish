@@ -5,59 +5,61 @@
   margin: 0 auto;
 }
 
-.hidden {
+.blog .hidden {
   display: none;
 }
 
 /* header */
-header.main_header {
-  padding-top: 2.5rem;
+.blog header.main_header {
   font-size: 0;
 }
 
-.user_info {
-  padding-bottom: 0.6rem;
-  margin-right: -3rem;
-  font-weight: 500;
+.blog .main_header .user_info {
+  padding: 0.5rem 0 0.4rem 0;
+  margin-right: -3.6rem;
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgb(150, 150, 150);
 }
 
-.blog_info {
+.blog .main_header .blog_info {
   padding: 6rem 4rem;
   margin: 0rem -4rem 1.5rem -4rem;
-  background-color: rgb(200, 200, 200);
   border-radius: 0.25rem;
+  background-color: rgb(200, 200, 200);
 }
 
-.blog_info h2 {
+.blog .main_header .blog_info h2 {
   margin-bottom: 1rem;
   font-weight: 400;
   color: rgb(60, 60, 60);
 }
 
-.blog_info .description {
+.blog .main_header .blog_info .description {
   margin-bottom: 0.75rem;
   font-size: 1rem;
   font-weight: 400;
   color: rgb(100, 100, 100);
 }
 
-.blog_info .nickname {
+.blog .main_header .blog_info .nickname {
   font-size: 0.8rem;
   font-weight: 400;
   color: rgb(89, 141, 145);
 }
 
 /* nav */
-nav {
+.blog nav {
   margin-bottom: 1rem;
   border-radius: 0.75rem;
 }
 
-.category_list {
+.blog nav .category_list {
   padding: 1rem 0.2rem;
 }
 
-.category_list .badge {
+.blog nav .category_list .badge {
   padding: 0.35rem 0.8rem;
   margin-right: 0.3rem;
   background-color: transparent;
@@ -66,51 +68,51 @@ nav {
   border-radius: 1rem;
 }
 
-.category_list .badge-primary {
+.blog nav .category_list .badge-primary {
   border: 1px solid rgb(112, 166, 170);
   color: rgb(112, 166, 170);
 }
 
-.category_list .badge-secondary {
+.blog nav .category_list .badge-secondary {
   border: 1px solid rgb(200, 200, 200);
   color: rgb(200, 200, 200);
 }
 
-.category_list .badge-primary.active {
+.blog nav .category_list .badge-primary.active {
   background-color: rgb(112, 166, 170);
   color: white;
 }
 
-.category_list .badge-secondary.active {
+.blog nav .category_list .badge-secondary.active {
   background-color: rgb(200, 200, 200);
   color: white;
 }
 
-.post_list {
+.blog nav .post_list {
   padding: 0.6rem 0.2rem;
   margin-bottom: 3rem;
   border-radius: 0.75rem;
   border: solid 1px rgb(200, 200, 200);
 }
 
-.post_list ul {
+.blog nav .post_list ul {
   margin: 0;
   padding: 0;
 }
 
-.post_list li {
+.blog nav .post_list li {
   list-style: none;
   padding: 0.1rem 1rem;
   margin-bottom: 0.3rem;
 }
 
-.post_list li .title {
+.blog nav .post_list li .title {
   font-weight: 400;
   font-size: 0.85rem;
   color: rgb(100, 100, 100);
 }
 
-.post_list li .created_time {
+.blog nav .post_list li .created_time {
   float: right;
   margin-top: 0.2rem;
   font-weight: 400;
@@ -118,41 +120,41 @@ nav {
   color: rgb(120, 120, 120);
 }
 
-.post_list li.hover span {
+.blog nav .post_list li.hover span {
   color: rgb(50, 50, 50) !important;
 }
 
 /* article */
-article {
+.blog article {
   padding: 2rem 2rem;
   border-radius: 0.75rem;
   border: solid 1px rgb(200, 200, 200);
 }
 
-header {
+.blog article header {
   padding: 0;
 }
 
-header.post_info {
+.blog article header.post_info {
   margin-bottom: 2.5rem;
   font-size: 0;
   height: fit-content;
 }
 
-header.post_info .title {
+.blog article header.post_info .title {
   margin-bottom: 1rem;
   font-size: 1.75rem;
   font-weight: 400;
   color: rgb(80, 80, 80);
 }
 
-header.post_info .created_time {
+.blog article header.post_info .created_time {
   font-size: 0.9rem;
   font-weight: 400;
   color: rgb(150, 150, 150);
 }
 
-main.post_context {
+.blog article main.post_context {
   padding: 0 0.1rem;
   color: rgb(85, 85, 85);
 }

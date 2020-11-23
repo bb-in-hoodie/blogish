@@ -5,26 +5,26 @@
     margin: 0 auto;
 }
 
-header {
+.main header {
     padding: 4rem 0;
     font-size: 4rem;
     font-weight: 700;
 }
 
-.form-group {
+.main .form-group {
     padding-bottom: 1rem;
 }
 
-.formgroup_id span {
+.main .formgroup_id span {
     font-size: 0.8rem;
 }
 
-.login_btn_area {
+.main .login_btn_area {
     display: flex;
     justify-content: space-between;
     padding-top: 2rem;
 }
 
-.login_btn_area * {
+.main .login_btn_area * {
     width: 6rem;
 }
