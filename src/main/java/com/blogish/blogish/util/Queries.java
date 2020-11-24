@@ -21,6 +21,7 @@ public class Queries {
     public static String SELECT_CATEGORIES_BY_BLOG_ID = "SELECT * FROM category WHERE blog_id = :blogId AND name = :name";
     public static String SELECT_CATEGORY_BY_CATEGORY_ID = "SELECT * FROM category WHERE id = :categoryId";
     public static String SELECT_CATEGORY_BY_BLOG_ID_AND_NAME = "SELECT * FROM category WHERE blog_id = :blogId AND name = :name";
+    public static String SELECT_CATEGORY_COUNT_BY_CATEGORY_ID = "SELECT count(*) FROM category WHERE id = :categoryId";
     public static String SELECT_CATEGORY_COUNT_BY_NAME_AND_BLOG_ID = "SELECT count(*) FROM category WHERE blog_id = :blogId AND name = :name";
     public static String DELETE_CATEGORY = "DELETE FROM category WHERE categoryId = :categoryId";
     public static String UPDATE_CATEGORY = "UPDATE category SET name = :name WHERE categoryId = :categoryId";

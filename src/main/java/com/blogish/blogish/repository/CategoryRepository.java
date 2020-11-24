@@ -38,6 +38,11 @@ public class CategoryRepository {
         return returnId.longValue();
     }
 
+    public int countByCategoryId(Long categoryId) {
+        MapSqlParameterSource param = new MapSqlParameterSource("categoryId", categoryId);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_CATEGORY_COUNT_BY_CATEGORY_ID, param, Integer.class);
+    }
+
     public int countByBlogIdAndName(Long blogId, String name) {
         MapSqlParameterSource param = new MapSqlParameterSource()
                 .addValue("blogId", blogId)
