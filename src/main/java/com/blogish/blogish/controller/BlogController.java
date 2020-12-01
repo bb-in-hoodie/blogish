@@ -4,9 +4,11 @@ import com.blogish.blogish.body.BlogRequestBody;
 import com.blogish.blogish.body.BlogResponseBody;
 import com.blogish.blogish.body.UserBody;
 import com.blogish.blogish.dto.Blog;
+import com.blogish.blogish.dto.Category;
 import com.blogish.blogish.exception.BadRequestException;
 import com.blogish.blogish.exception.InternalServerException;
 import com.blogish.blogish.service.BlogService;
+import com.blogish.blogish.service.CategoryService;
 import com.blogish.blogish.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +29,12 @@ public class BlogController {
     UserService userService;
 
     @Autowired
+    CategoryService categoryService;
+
+    @Autowired
     BCryptPasswordEncoder bcryptEncoder;
 
+    // Blog
     @PostMapping
     public ResponseEntity<?> create(@RequestBody BlogRequestBody blogReq) {
         if (blogReq.getTitle().length() < 1) {
@@ -142,6 +148,45 @@ public class BlogController {
             // get list
             List<BlogResponseBody> blogBodies = blogService.getBlogsNotOwnedBy(userId, size);
             return new ResponseEntity(blogBodies, HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // Category
+    @GetMapping("/{blogId}/categories")
+    public ResponseEntity<?> getCategoriesOfBlog(@PathVariable("blogId") Long blogId) {
+        try {
+            // blog validation
+            if (blogService.getBlog(blogId) == null) {
+                return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
+            }
+
+            // get list
+            List<Category> categories = categoryService.getCategoriesOfBlog(blogId);
+            return new ResponseEntity(categories, HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/{blogId}/categories")
+    public ResponseEntity<?> createCategory(@PathVariable("blogId") Long blogId, @RequestBody Map<String, String> body) {
+        try {
+            // input validation
+            if (blogService.getBlog(blogId) == null) {
+                return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
+            } else if (!body.containsKey("name")) {
+                return new ResponseEntity("The name of a category is empty.", HttpStatus.BAD_REQUEST);
+            }
+
+            // add category
+            Category category = categoryService.addCategory(blogId, body.get("name"));
+            return new ResponseEntity(category, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {
