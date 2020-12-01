@@ -29,7 +29,7 @@ public class CategoryRepository {
         // create a new simpleJdbcInsert with associated settings
         simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("category")
-                .usingGeneratedKeyColumns("categoryId");
+                .usingGeneratedKeyColumns("id");
     }
 
     public Long insert(Category category) {
@@ -72,10 +72,10 @@ public class CategoryRepository {
         return namedParameterJdbcTemplate.update(DELETE_CATEGORY, param);
     }
 
-    public int update(Category category) {
+    public int update(Long categoryId, String name) {
         MapSqlParameterSource param = new MapSqlParameterSource()
-                .addValue("categoryId", category.getId())
-                .addValue("name", category.getName());
+                .addValue("categoryId", categoryId)
+                .addValue("name", name);
         return namedParameterJdbcTemplate.update(UPDATE_CATEGORY, param);
     }
 }

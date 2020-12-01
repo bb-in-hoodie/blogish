@@ -23,6 +23,11 @@ public class CategoryService {
     @Transactional
     public Category addCategory(Long blogId, String name) throws BadRequestException, InternalServerException {
         try {
+            // blog validation
+            if (blogRepository.countByBlogId(blogId) <= 0) {
+                throw new BadRequestException("Invalid blogId.");
+            }
+
             // check if any category with the same name already exists
             if (categoryRepository.countByBlogIdAndName(blogId, name) > 0) {
                 throw new BadRequestException("A category with the same name exists.");
@@ -35,7 +40,9 @@ public class CategoryService {
                     .build();
 
             // return a category on success
-            if (categoryRepository.insert(category) > 0L) {
+            Long id = categoryRepository.insert(category);
+            if (id > 0L) {
+                category.setId(id);
                 return category;
             } else {
                 throw new InternalServerException();
@@ -78,16 +85,16 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category updateName(Category category) throws BadRequestException, InternalServerException {
+    public Category updateName(Long categoryId, String name) throws BadRequestException, InternalServerException {
         try {
             // category validation
-            if (categoryRepository.countByCategoryId(category.getId()) <= 0) {
+            if (categoryRepository.countByCategoryId(categoryId) <= 0) {
                 throw new BadRequestException("Invalid categoryId.");
             }
 
             // update the name and return the updated category
-            if (categoryRepository.update(category) > 0) {
-                return category;
+            if (categoryRepository.update(categoryId, name) > 0) {
+                return categoryRepository.selectByCategoryId(categoryId);
             } else {
                 throw new InternalServerException();
             }
