@@ -159,11 +159,6 @@ public class BlogController {
     @GetMapping("/{blogId}/categories")
     public ResponseEntity<?> getCategoriesOfBlog(@PathVariable("blogId") Long blogId) {
         try {
-            // blog validation
-            if (blogService.getBlog(blogId) == null) {
-                return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
-            }
-
             // get list
             List<Category> categories = categoryService.getCategoriesOfBlog(blogId);
             return new ResponseEntity(categories, HttpStatus.OK);
@@ -178,9 +173,7 @@ public class BlogController {
     public ResponseEntity<?> createCategory(@PathVariable("blogId") Long blogId, @RequestBody Map<String, String> body) {
         try {
             // input validation
-            if (blogService.getBlog(blogId) == null) {
-                return new ResponseEntity("Invalid blogId.", HttpStatus.BAD_REQUEST);
-            } else if (!body.containsKey("name")) {
+            if (!body.containsKey("name")) {
                 return new ResponseEntity("The name of a category is empty.", HttpStatus.BAD_REQUEST);
             }
 

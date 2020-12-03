@@ -41,7 +41,7 @@ public class BlogService {
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -57,7 +57,7 @@ public class BlogService {
         } catch (EmptyResultDataAccessException e) {
             throw new BadRequestException("Invalid blogId.");
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -73,7 +73,7 @@ public class BlogService {
             }
             return blogBodies;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class BlogService {
             }
             return blogBodies;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -106,12 +106,12 @@ public class BlogService {
                 UserBody userBody = userService.getUser(blog.getOwnerId());
                 return BlogResponseBody.create(blog, userBody);
             } else {
-                throw new InternalServerException();
+                throw new InternalServerException("Failed to update the blog.");
             }
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -127,12 +127,12 @@ public class BlogService {
             if (blogRepository.delete(blogId) > 0) {
                 return blogId;
             } else {
-                throw new InternalServerException();
+                throw new InternalServerException("Failed to delete the blog.");
             }
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 }

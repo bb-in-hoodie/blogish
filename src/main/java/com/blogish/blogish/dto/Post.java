@@ -22,8 +22,8 @@ public class Post {
     @Builder.Default
     private String content = null;
 
-    @Builder.Default
-    private Long categoryId = null;
+    @NonNull
+    private Long categoryId;
 
     @Builder.Default
     private LocalDateTime createdTime = null;

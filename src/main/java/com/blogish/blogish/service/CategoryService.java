@@ -45,12 +45,12 @@ public class CategoryService {
                 category.setId(id);
                 return category;
             } else {
-                throw new InternalServerException();
+                throw new InternalServerException("Failed to insert the category.");
             }
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class CategoryService {
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -96,12 +96,12 @@ public class CategoryService {
             if (categoryRepository.update(categoryId, name) > 0) {
                 return categoryRepository.selectByCategoryId(categoryId);
             } else {
-                throw new InternalServerException();
+                throw new InternalServerException("Failed to update the category.");
             }
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
@@ -118,12 +118,12 @@ public class CategoryService {
             if (categoryRepository.delete(categoryId) > 0) {
                 return category;
             } else {
-                throw new InternalServerException();
+                throw new InternalServerException("Failed to delete the category.");
             }
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 }
