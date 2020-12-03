@@ -20,14 +20,14 @@ public class Post {
     private String title;
 
     @Builder.Default
-    private String content = "";
+    private String content = null;
 
     @Builder.Default
     private Long categoryId = null;
 
     @Builder.Default
-    private LocalDateTime createdTime = LocalDateTime.now();
+    private LocalDateTime createdTime = null;
 
     @Builder.Default
-    private LocalDateTime updatedTime = LocalDateTime.now();
+    private LocalDateTime updatedTime = null;
 }
