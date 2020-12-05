@@ -13,14 +13,14 @@ public class Post {
     @Builder.Default
     private Long id = -1L;
 
-    @NonNull
-    private Long blogId;
+    @Builder.Default
+    private Long blogId = -1L;
 
     @NonNull
     private String title;
 
     @Builder.Default
-    private String content = null;
+    private String content = "";
 
     @NonNull
     private Long categoryId;

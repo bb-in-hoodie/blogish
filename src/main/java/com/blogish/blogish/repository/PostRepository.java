@@ -45,7 +45,7 @@ public class PostRepository {
 
     public Post selectByPostId(Long postId) {
         MapSqlParameterSource param = new MapSqlParameterSource("postId", postId);
-        return namedParameterJdbcTemplate.queryForObject(SELECT_POST_BY_POST_ID, param, Post.class);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_POST_BY_POST_ID, param, postMapper);
     }
 
     public List<Post> selectAllByBlogId(Long blogId) {

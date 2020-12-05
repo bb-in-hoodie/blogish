@@ -28,8 +28,8 @@ public class Queries {
 
     // post
     public static String SELECT_POST_BY_POST_ID = "SELECT * FROM post WHERE id = :postId";
-    public static String SELECT_POSTS_BY_BLOG_ID = "SELECT id, title, created_time, blog_id, category_id FROM post WHERE blog_id = :blogId";
-    public static String SELECT_POSTS_BY_CATEGORY_ID = "SELECT id, title, created_time, blog_id, category_id FROM post WHERE category_id = :categoryId";
+    public static String SELECT_POSTS_BY_BLOG_ID = "SELECT id, title, created_time, updated_time, blog_id, category_id FROM post WHERE blog_id = :blogId";
+    public static String SELECT_POSTS_BY_CATEGORY_ID = "SELECT id, title, created_time, updated_time, blog_id, category_id FROM post WHERE category_id = :categoryId";
     public static String SELECT_POST_COUNT_BY_POST_ID = "SELECT count(*) FROM post WHERE id = :postId";
     public static String DELETE_POST = "DELETE FROM post WHERE id = :postId";
     public static String UPDATE_POST = "UPDATE post SET title = :title, content = :content, category_id = :categoryId, updated_time = :updatedTime WHERE id = :postId";

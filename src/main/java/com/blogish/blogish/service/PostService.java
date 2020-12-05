@@ -99,7 +99,7 @@ public class PostService {
 
             // update a post
             if (postRepository.update(post) > 0) {
-                return post;
+                return postRepository.selectByPostId(post.getId());
             } else {
                 throw new InternalServerException("Failed to update a post.");
             }
