@@ -4,6 +4,7 @@ import com.blogish.blogish.body.BlogRequestBody;
 import com.blogish.blogish.body.BlogResponseBody;
 import com.blogish.blogish.body.UserBody;
 import com.blogish.blogish.dto.Blog;
+import com.blogish.blogish.dto.Category;
 import com.blogish.blogish.exception.BadRequestException;
 import com.blogish.blogish.exception.InternalServerException;
 import com.blogish.blogish.repository.BlogRepository;
@@ -23,6 +24,9 @@ public class BlogService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @Transactional
     public BlogResponseBody addBlog(BlogRequestBody blogReq) throws BadRequestException, InternalServerException {
         try {
@@ -36,6 +40,9 @@ public class BlogService {
             Blog blog = Blog.create(blogReq, userBody.getId());
             Long blogId = blogRepository.insert(blog);
             blog.setId(blogId);
+
+            // create a default category
+            categoryService.addCategory(blogId, Category.DEFAULT_CATEGORY_NAME);
 
             return BlogResponseBody.create(blog, userBody);
         } catch (BadRequestException e) {

@@ -8,6 +8,8 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Category {
+    public static String DEFAULT_CATEGORY_NAME = "default";
+
     @Builder.Default
     private Long id = -1L;
 
