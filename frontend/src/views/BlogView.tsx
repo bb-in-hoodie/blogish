@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Badge } from 'reactstrap';
 import { blogInfoAPI } from '../api/BlogAPI';
+import BlogNav from '../components/blog/BlogNav';
 import '../css/blog.css';
 import useUser from '../hooks/useUser';
 import Blog from '../types/Blog';
@@ -44,33 +44,7 @@ export default function BlogView(): JSX.Element {
           </span>
         </div>
       </header>
-      <nav>
-        <div className="category_list">
-          <Badge color="primary" className="active">ALL</Badge>
-          <Badge color="secondary" className="active">Computer</Badge>
-          <Badge color="secondary">Daily Life</Badge>
-          <Badge color="secondary">Musics</Badge>
-          <Badge color="secondary">Movies</Badge>
-          <Badge color="secondary">Netflix</Badge>
-        </div>
-        <div className="post_list">
-          <ul>
-            <li className="hover">
-              <span className="title">the very first movie I&apos;ve watched</span>
-              <span className="created_time">2020.05.14 13:10</span>
-            </li>
-            <li>
-              <span className="title">It&apos;s good to go outside</span>
-              <span className="created_time">2020.05.05 18:11</span>
-            </li>
-            <li>
-              <span className="title">What a sunny day</span>
-              <span className="created_time">2020.02.14 09:30</span>
-            </li>
-          </ul>
-          {/* paging component */}
-        </div>
-      </nav>
+      <BlogNav blog={blog} />
       <article>
         <header className="post_info">
           <h3 className="title">the very first movie I&apos;ve watched</h3>

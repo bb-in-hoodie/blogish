@@ -3,3 +3,5 @@ export default interface Category {
   name: string,
   blogId: number
 }
+
+export const ALL_CATEGORIES = -1;

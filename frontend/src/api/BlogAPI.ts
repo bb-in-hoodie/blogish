@@ -20,6 +20,6 @@ export function blogInfoAPI(blogId: number): Promise<Blog> {
   return axios.get(`${url}/${blogId}`).then((resp) => resp.data);
 }
 
-export function categoriesOfBlogAPI(blogId: number): Promise<Category> {
+export function categoriesOfBlogAPI(blogId: number): Promise<Category[]> {
   return axios.get(`${url}/${blogId}/categories`).then((resp) => resp.data);
 }
