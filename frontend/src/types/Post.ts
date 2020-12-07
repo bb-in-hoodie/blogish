@@ -4,6 +4,6 @@ export default interface Post {
   title: string;
   content?: string;
   createdTime?: string;
-  updateTime?: string;
+  updatedTime?: string;
   categoryId: number;
 }

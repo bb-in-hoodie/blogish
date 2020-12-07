@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Badge } from 'reactstrap';
 import { format } from 'date-fns';
@@ -8,9 +9,11 @@ import Blog from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import '../../css/components/blognav.css';
+import { postInfoAPI } from '../../api/PostAPI';
 
 interface BlogNavProps {
-  blog: Blog | null
+  blog: Blog | null,
+  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
 }
 
 function formatDateTime(currentDay: number, datetime?: string) {
@@ -22,7 +25,7 @@ function formatDateTime(currentDay: number, datetime?: string) {
   return format(date, date.getDay() === currentDay ? 'HH:mm' : 'yyyy.MM.dd', { });
 }
 
-export default function BlogNav({ blog }: BlogNavProps): JSX.Element {
+export default function BlogNav({ blog, setSelectedPost }: BlogNavProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -54,6 +57,19 @@ export default function BlogNav({ blog }: BlogNavProps): JSX.Element {
     getPosts(activeCategoryId);
   }, [getPosts, activeCategoryId]);
 
+  // select first post of posts
+  const fetchPost = useCallback(async (postId?: number) => {
+    if (postId) {
+      setSelectedPost(await postInfoAPI(postId));
+    }
+  }, [setSelectedPost]);
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      fetchPost(posts[0].id);
+    }
+  }, [posts]);
+
   return (
     <nav>
       <div className="category_list">
@@ -78,7 +94,11 @@ export default function BlogNav({ blog }: BlogNavProps): JSX.Element {
       <div className="post_list">
         <ul>
           {posts.map((post) => (
-            <li key={post.id ?? 0} className="hover">
+            <li
+              key={post.id ?? 0}
+              className="hover"
+              onClick={() => fetchPost(post.id)}
+            >
               <span className="title">{post.title}</span>
               <span className="created_time">{formatDateTime(currentDay, post.createdTime)}</span>
             </li>
