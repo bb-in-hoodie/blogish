@@ -1,28 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Badge } from 'reactstrap';
-import { categoriesOfBlogAPI } from '../../api/BlogAPI';
+import { format } from 'date-fns';
+import ko from 'date-fns/locale/ko';
+import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
+import { postsOfCategoryAPI } from '../../api/CategoryAPI';
 import Blog from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
+import Post from '../../types/Post';
 import '../../css/components/blognav.css';
 
 interface BlogNavProps {
   blog: Blog | null
 }
 
+function formatDateTime(currentDay: number, datetime?: string) {
+  if (!datetime) {
+    return '';
+  }
+
+  const date = new Date(`${datetime}Z`);
+  return format(date, date.getDay() === currentDay ? 'HH:mm' : 'yyyy.MM.dd', { });
+}
+
 export default function BlogNav({ blog }: BlogNavProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const currentDay = (new Date()).getDay();
 
   // fetch categories on blog change
-  useEffect(() => {
-    async function getCategories(blogId: number) {
-      setCategories(await categoriesOfBlogAPI(blogId));
-    }
+  const getCategories = useCallback(async (blogId: number) => {
+    setCategories(await categoriesOfBlogAPI(blogId));
+  }, [setCategories]);
 
+  useEffect(() => {
     if (blog) {
       getCategories(blog.id);
     }
-  }, [blog]);
+  }, [getCategories, blog]);
+
+  // fetch posts on category change
+  const getPosts = useCallback(async (categoryId: number) => {
+    if (categoryId === ALL_CATEGORIES) {
+      if (blog) {
+        setPosts(await postsOfBlogAPI(blog?.id));
+      }
+    } else {
+      setPosts(await postsOfCategoryAPI(categoryId));
+    }
+  }, [blog, setPosts]);
+
+  useEffect(() => {
+    getPosts(activeCategoryId);
+  }, [getPosts, activeCategoryId]);
 
   return (
     <nav>
@@ -36,6 +66,7 @@ export default function BlogNav({ blog }: BlogNavProps): JSX.Element {
         </Badge>
         {categories.map((category) => (
           <Badge
+            key={category.id ?? 0}
             className={activeCategoryId === category.id ? 'active' : ''}
             color="secondary"
             onClick={() => setActiveCategoryId(category.id as number)}
@@ -46,18 +77,12 @@ export default function BlogNav({ blog }: BlogNavProps): JSX.Element {
       </div>
       <div className="post_list">
         <ul>
-          <li className="hover">
-            <span className="title">the very first movie I&apos;ve watched</span>
-            <span className="created_time">2020.05.14 13:10</span>
-          </li>
-          <li>
-            <span className="title">It&apos;s good to go outside</span>
-            <span className="created_time">2020.05.05 18:11</span>
-          </li>
-          <li>
-            <span className="title">What a sunny day</span>
-            <span className="created_time">2020.02.14 09:30</span>
-          </li>
+          {posts.map((post) => (
+            <li key={post.id ?? 0} className="hover">
+              <span className="title">{post.title}</span>
+              <span className="created_time">{formatDateTime(currentDay, post.createdTime)}</span>
+            </li>
+          ))}
         </ul>
         {/* paging component */}
       </div>
