@@ -27,6 +27,14 @@
   color: rgb(200, 200, 200);
 }
 
+.blog nav .category_list .badge-primary:hover {
+  background-color: rgb(219, 238, 240);
+}
+
+.blog nav .category_list .badge-secondary:hover {
+  background-color: rgb(243, 243, 243);
+}
+
 .blog nav .category_list .badge-primary.active {
   background-color: rgb(112, 166, 170);
   color: white;
@@ -70,6 +78,14 @@
   color: rgb(120, 120, 120);
 }
 
-.blog nav .post_list li.hover span {
-  color: rgb(50, 50, 50) !important;
+.blog nav .post_list li:hover span {
+  color: rgb(32, 32, 32);
+}
+
+.blog nav .post_list li.selected span {
+  color: rgb(112, 166, 170);
+}
+
+.blog nav .post_list li.selected:hover span {
+  color: rgb(50, 102, 105);
 }

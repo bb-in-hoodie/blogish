@@ -105,7 +105,7 @@ export default function BlogNav({
             <li
               key={post.id ?? 0}
               role="menuitem"
-              className="hover"
+              className={`${selectedPost?.id === post.id ? 'selected' : ''}`}
               onClick={() => fetchPost(post.id)}
               onKeyDown={(e) => fetchPostOnKeyDown(e.nativeEvent.code, post.id)}
             >
