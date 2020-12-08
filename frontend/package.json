@@ -17,6 +17,7 @@
     "@types/reactstrap": "^8.5.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
+    "date-fns": "^2.16.1",
     "history": "^5.0.0",
     "lodash": "^4.17.20",
     "react": "^16.13.1",

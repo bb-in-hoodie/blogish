@@ -1,0 +1,91 @@
+.blog nav {
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+}
+
+.blog nav .category_list {
+  padding: 1rem 0.2rem;
+}
+
+.blog nav .category_list .badge {
+  padding: 0.35rem 0.8rem;
+  margin-right: 0.3rem;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 0.8rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.blog nav .category_list .badge-primary {
+  border: 1px solid rgb(112, 166, 170);
+  color: rgb(112, 166, 170);
+}
+
+.blog nav .category_list .badge-secondary {
+  border: 1px solid rgb(200, 200, 200);
+  color: rgb(200, 200, 200);
+}
+
+.blog nav .category_list .badge-primary:hover {
+  background-color: rgb(219, 238, 240);
+}
+
+.blog nav .category_list .badge-secondary:hover {
+  background-color: rgb(243, 243, 243);
+}
+
+.blog nav .category_list .badge-primary.active {
+  background-color: rgb(112, 166, 170);
+  color: white;
+}
+
+.blog nav .category_list .badge-secondary.active {
+  background-color: rgb(200, 200, 200);
+  color: white;
+}
+
+.blog nav .post_list {
+  padding: 0.6rem 0.2rem;
+  margin-bottom: 3rem;
+  border-radius: 0.75rem;
+  border: solid 1px rgb(200, 200, 200);
+}
+
+.blog nav .post_list ul {
+  margin: 0;
+  padding: 0;
+}
+
+.blog nav .post_list li {
+  list-style: none;
+  padding: 0.1rem 1rem;
+  margin-bottom: 0.3rem;
+  cursor: pointer;
+}
+
+.blog nav .post_list li .title {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: rgb(100, 100, 100);
+}
+
+.blog nav .post_list li .created_time {
+  float: right;
+  margin-top: 0.2rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: rgb(120, 120, 120);
+}
+
+.blog nav .post_list li:hover span {
+  color: rgb(32, 32, 32);
+}
+
+.blog nav .post_list li.selected span {
+  color: rgb(112, 166, 170);
+}
+
+.blog nav .post_list li.selected:hover span {
+  color: rgb(50, 102, 105);
+}

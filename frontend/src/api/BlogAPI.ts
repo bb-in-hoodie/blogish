@@ -1,5 +1,7 @@
 import axios from 'axios';
 import Blog, { BlogRequestBody } from '../types/Blog';
+import Category from '../types/Category';
+import Post from '../types/Post';
 
 const url = '/api/blogs';
 
@@ -17,4 +19,12 @@ export function createBlogAPI(blog: BlogRequestBody): Promise<Blog> {
 
 export function blogInfoAPI(blogId: number): Promise<Blog> {
   return axios.get(`${url}/${blogId}`).then((resp) => resp.data);
+}
+
+export function categoriesOfBlogAPI(blogId: number): Promise<Category[]> {
+  return axios.get(`${url}/${blogId}/categories`).then((resp) => resp.data);
+}
+
+export function postsOfBlogAPI(blogId: number): Promise<Post[]> {
+  return axios.get(`${url}/${blogId}/posts`).then((resp) => resp.data);
 }
