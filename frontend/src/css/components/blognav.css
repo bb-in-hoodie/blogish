@@ -1,7 +1,6 @@
 .blog nav {
   margin-bottom: 1rem;
   border-radius: 0.75rem;
-  cursor: pointer;
 }
 
 .blog nav .category_list {
@@ -15,6 +14,7 @@
   font-weight: 500;
   font-size: 0.8rem;
   border-radius: 1rem;
+  cursor: pointer;
 }
 
 .blog nav .category_list .badge-primary {
@@ -53,6 +53,7 @@
   list-style: none;
   padding: 0.1rem 1rem;
   margin-bottom: 0.3rem;
+  cursor: pointer;
 }
 
 .blog nav .post_list li .title {

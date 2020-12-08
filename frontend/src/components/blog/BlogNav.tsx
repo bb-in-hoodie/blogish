@@ -1,8 +1,6 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Badge } from 'reactstrap';
 import { format } from 'date-fns';
-import ko from 'date-fns/locale/ko';
 import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
 import Blog from '../../types/Blog';
@@ -13,6 +11,7 @@ import { postInfoAPI } from '../../api/PostAPI';
 
 interface BlogNavProps {
   blog: Blog | null,
+  selectedPost: Post | null,
   setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
 }
 
@@ -25,7 +24,9 @@ function formatDateTime(currentDay: number, datetime?: string) {
   return format(date, date.getDay() === currentDay ? 'HH:mm' : 'yyyy.MM.dd', { });
 }
 
-export default function BlogNav({ blog, setSelectedPost }: BlogNavProps): JSX.Element {
+export default function BlogNav({
+  blog, selectedPost, setSelectedPost,
+}: BlogNavProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -64,8 +65,15 @@ export default function BlogNav({ blog, setSelectedPost }: BlogNavProps): JSX.El
     }
   }, [setSelectedPost]);
 
+  const fetchPostOnKeyDown = (code: string, postId?: number) => {
+    if (code === 'Enter' || code === 'Space') {
+      fetchPost(postId);
+    }
+  };
+
   useEffect(() => {
-    if (posts.length > 0) {
+    // fetch the first post if selectedPost is null
+    if (posts.length > 0 && !selectedPost) {
       fetchPost(posts[0].id);
     }
   }, [posts]);
@@ -96,8 +104,10 @@ export default function BlogNav({ blog, setSelectedPost }: BlogNavProps): JSX.El
           {posts.map((post) => (
             <li
               key={post.id ?? 0}
+              role="menuitem"
               className="hover"
               onClick={() => fetchPost(post.id)}
+              onKeyDown={(e) => fetchPostOnKeyDown(e.nativeEvent.code, post.id)}
             >
               <span className="title">{post.title}</span>
               <span className="created_time">{formatDateTime(currentDay, post.createdTime)}</span>
