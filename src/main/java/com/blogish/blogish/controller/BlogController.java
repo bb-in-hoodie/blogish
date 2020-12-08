@@ -205,9 +205,10 @@ public class BlogController {
             }
 
             // fill in the missing properties
+            LocalDateTime now = LocalDateTime.now();
             post.setBlogId(blogId);
-            post.setCreatedTime(LocalDateTime.now());
-            post.setUpdatedTime(LocalDateTime.now());
+            post.setCreatedTime(now);
+            post.setUpdatedTime(now);
 
             // create a post
             Post createdPost = postService.addPost(post);

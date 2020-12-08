@@ -21,7 +21,7 @@ function formatDateTime(currentDay: number, datetime?: string) {
   }
 
   const date = new Date(`${datetime}Z`);
-  return format(date, date.getDay() === currentDay ? 'HH:mm' : 'yyyy.MM.dd', { });
+  return format(date, date.getDay() === currentDay ? 'HH:mm' : 'yyyy.MM.dd');
 }
 
 export default function BlogNav({
