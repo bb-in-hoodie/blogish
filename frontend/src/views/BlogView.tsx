@@ -48,7 +48,7 @@ export default function BlogView(): JSX.Element {
         </div>
       </header>
       <BlogNav blog={blog} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
-      <PostView post={selectedPost} />
+      {selectedPost && <PostView post={selectedPost} />}
     </div>
   );
 }

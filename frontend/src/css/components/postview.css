@@ -1,39 +1,39 @@
-.blog article {
+.blog .post {
   padding: 3rem 2rem;
   border-radius: 0.75rem;
   border: solid 1px rgb(200, 200, 200);
 }
 
-.blog article header {
+.blog .post header {
   padding: 0;
 }
 
-.blog article header.post_info {
+.blog .post header.post_info {
   margin-bottom: 2.5rem;
   font-size: 0;
   height: fit-content;
 }
 
-.blog article header.post_info .title {
+.blog .post header.post_info .title {
   margin-bottom: 0.5rem;
   font-size: 1.75rem;
   font-weight: 400;
   color: rgb(80, 80, 80);
 }
 
-.blog article header.post_info span {
+.blog .post header.post_info span {
   font-size: 0.85rem;
   font-weight: 400;
 }
 
-.blog article header.post_info .created_time {
+.blog .post header.post_info .created_time {
   color: rgb(150, 150, 150);
 }
-.blog article header.post_info .updated_time {
+.blog .post header.post_info .updated_time {
   color: rgb(192, 192, 192);
 }
 
-.blog article main.post_context {
+.blog .post main.post_context {
   padding: 0 0.1rem;
   color: rgb(85, 85, 85);
 }

@@ -14,7 +14,7 @@ function formatPostDateTime(datetime: string) {
 
 export default function PostView({ post }: PostViewProps): JSX.Element {
   return (
-    <article>
+    <article className="post">
       {post && (
         <>
           <header className="post_info">

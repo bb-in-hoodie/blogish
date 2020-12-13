@@ -80,7 +80,7 @@ export default function BlogNav({
 
   return (
     <nav>
-      <div className="category_list">
+      <section className="category_list">
         <Badge
           className={activeCategoryId === ALL_CATEGORIES ? 'active' : ''}
           color="primary"
@@ -98,24 +98,34 @@ export default function BlogNav({
             {category.name}
           </Badge>
         ))}
-      </div>
-      <div className="post_list">
-        <ul>
-          {posts.map((post) => (
-            <li
-              key={post.id ?? 0}
-              role="menuitem"
-              className={`${selectedPost?.id === post.id ? 'selected' : ''}`}
-              onClick={() => fetchPost(post.id)}
-              onKeyDown={(e) => fetchPostOnKeyDown(e.nativeEvent.code, post.id)}
-            >
-              <span className="title">{post.title}</span>
-              <span className="created_time">{formatDateTime(currentDay, post.createdTime)}</span>
-            </li>
-          ))}
-        </ul>
-        {/* paging component */}
-      </div>
+      </section>
+      {posts.length > 0
+        ? (
+          <section className="post_list">
+            <ul>
+              {posts.map((post) => (
+                <li
+                  key={post.id ?? 0}
+                  role="menuitem"
+                  className={`${selectedPost?.id === post.id ? 'selected' : ''}`}
+                  onClick={() => fetchPost(post.id)}
+                  onKeyDown={(e) => fetchPostOnKeyDown(e.nativeEvent.code, post.id)}
+                >
+                  <span className="title">{post.title}</span>
+                  <span className="created_time">{formatDateTime(currentDay, post.createdTime)}</span>
+                </li>
+              ))}
+            </ul>
+            {/* paging component */}
+          </section>
+        )
+        : (
+          <section className="empty_post_list">
+            {activeCategoryId === ALL_CATEGORIES
+              ? <span>아직 작성된 글이 없습니다.</span>
+              : <span>이 카테고리에 작성된 글이 없습니다.</span>}
+          </section>
+        )}
     </nav>
   );
 }
