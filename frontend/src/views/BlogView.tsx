@@ -14,6 +14,7 @@ export default function BlogView(): JSX.Element {
   const { blogId } = useParams() as { blogId: string };
   const [blog, setBlog] = useState<Blog | null>(null);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
 
   useEffect(() => {
     if (!blogId) {
@@ -30,7 +31,7 @@ export default function BlogView(): JSX.Element {
       }
     }
     updateBlog();
-  }, [blogId]);
+  }, [blogId, history]);
 
   return (
     <div className="blog">
@@ -41,14 +42,22 @@ export default function BlogView(): JSX.Element {
         <div className="blog_info">
           <h2>{ blog?.title }</h2>
           {blog?.description && <h5 className="description">{ blog?.description }</h5>}
-          <span className="nickname">
-            @
-            { blog?.owner.nickname }
-          </span>
+          {blog?.owner.nickname && (
+            <span className="nickname">
+              @
+              { blog?.owner.nickname }
+            </span>
+          )}
         </div>
       </header>
-      <BlogNav blog={blog} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
-      <PostView post={selectedPost} />
+      <BlogNav
+        blog={blog}
+        selectedPost={selectedPost}
+        setSelectedPost={setSelectedPost}
+        waitingFetchingPost={waitingFetchingPost}
+        setWaitingFetchingPost={setWaitingFetchingPost}
+      />
+      <PostView selectedPost={selectedPost} waitingFetchingPost={waitingFetchingPost} />
     </div>
   );
 }
