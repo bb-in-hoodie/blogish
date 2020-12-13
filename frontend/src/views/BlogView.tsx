@@ -42,10 +42,12 @@ export default function BlogView(): JSX.Element {
         <div className="blog_info">
           <h2>{ blog?.title }</h2>
           {blog?.description && <h5 className="description">{ blog?.description }</h5>}
-          <span className="nickname">
-            @
-            { blog?.owner.nickname }
-          </span>
+          {blog?.owner.nickname && (
+            <span className="nickname">
+              @
+              { blog?.owner.nickname }
+            </span>
+          )}
         </div>
       </header>
       <BlogNav
