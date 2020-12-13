@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Badge } from 'reactstrap';
+import { Badge, Spinner } from 'reactstrap';
 import { format } from 'date-fns';
 import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
@@ -12,7 +12,9 @@ import { postInfoAPI } from '../../api/PostAPI';
 interface BlogNavProps {
   blog: Blog | null,
   selectedPost: Post | null,
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
+  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>,
+  waitingFetchingPost: boolean,
+  setWaitingFetchingPost: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function formatDateTime(currentDay: number, datetime?: string) {
@@ -25,11 +27,12 @@ function formatDateTime(currentDay: number, datetime?: string) {
 }
 
 export default function BlogNav({
-  blog, selectedPost, setSelectedPost,
+  blog, selectedPost, setSelectedPost, waitingFetchingPost, setWaitingFetchingPost,
 }: BlogNavProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDay = (new Date()).getDay();
 
   // fetch categories on blog change
@@ -45,6 +48,12 @@ export default function BlogNav({
 
   // fetch posts on category change
   const getPosts = useCallback(async (categoryId: number) => {
+    if (!blog) {
+      return;
+    }
+
+    setPosts([]);
+    setWaitingGettingPosts(true);
     if (categoryId === ALL_CATEGORIES) {
       if (blog) {
         setPosts(await postsOfBlogAPI(blog?.id));
@@ -52,7 +61,8 @@ export default function BlogNav({
     } else {
       setPosts(await postsOfCategoryAPI(categoryId));
     }
-  }, [blog, setPosts]);
+    setWaitingGettingPosts(false);
+  }, [blog, setPosts, setWaitingGettingPosts]);
 
   useEffect(() => {
     getPosts(activeCategoryId);
@@ -61,9 +71,15 @@ export default function BlogNav({
   // select first post of posts
   const fetchPost = useCallback(async (postId?: number) => {
     if (postId) {
+      // initialize
+      setSelectedPost(null);
+      setWaitingFetchingPost(true);
+
+      // API request
       setSelectedPost(await postInfoAPI(postId));
+      setWaitingFetchingPost(false);
     }
-  }, [setSelectedPost]);
+  }, [setSelectedPost, setWaitingFetchingPost]);
 
   const fetchPostOnKeyDown = (code: string, postId?: number) => {
     if (code === 'Enter' || code === 'Space') {
@@ -73,10 +89,10 @@ export default function BlogNav({
 
   useEffect(() => {
     // fetch the first post if selectedPost is null
-    if (posts.length > 0 && !selectedPost) {
+    if (posts.length > 0 && !selectedPost && !waitingFetchingPost) {
       fetchPost(posts[0].id);
     }
-  }, [posts]);
+  }, [posts, fetchPost, selectedPost, waitingFetchingPost]);
 
   return (
     <nav>
@@ -121,9 +137,10 @@ export default function BlogNav({
         )
         : (
           <section className="empty_post_list">
-            {activeCategoryId === ALL_CATEGORIES
+            {waitingGettingPosts && <Spinner />}
+            {!waitingGettingPosts && (activeCategoryId === ALL_CATEGORIES
               ? <span>아직 작성된 글이 없습니다.</span>
-              : <span>이 카테고리에 작성된 글이 없습니다.</span>}
+              : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
           </section>
         )}
     </nav>

@@ -67,7 +67,7 @@ export default function BlogList({
       throttledSetFilteredBlogs.cancel();
       setFilteredBlogs(blogs);
     }
-  }, [keyword, throttledSetFilteredBlogs]);
+  }, [keyword, throttledSetFilteredBlogs, blogs]);
 
   return (
     <section className="blog_list">

@@ -1,10 +1,12 @@
 import React from 'react';
+import { Spinner } from 'reactstrap';
 import { format } from 'date-fns';
 import Post from '../../types/Post';
 import '../../css/components/postview.css';
 
 interface PostViewProps {
-  post: Post | null
+  selectedPost: Post | null
+  waitingFetchingPost: boolean
 }
 
 function formatPostDateTime(datetime: string) {
@@ -12,31 +14,38 @@ function formatPostDateTime(datetime: string) {
   return format(date, 'yyyy.MM.dd HH:mm');
 }
 
-export default function PostView({ post }: PostViewProps): JSX.Element {
+export default function PostView({
+  selectedPost, waitingFetchingPost,
+}: PostViewProps): JSX.Element {
   return (
-    <article className="post">
-      {post && (
-        <>
-          <header className="post_info">
-            <h3 className="title">{post.title}</h3>
-            {post.createdTime && (
-            <span className="created_time">
-              {formatPostDateTime(post.createdTime)}
-            </span>
-            )}
-            {(post.updatedTime && post.updatedTime !== post.createdTime) && (
-            <span className="updated_time">
-              &nbsp;(updated &nbsp;
-              {formatPostDateTime(post.updatedTime)}
-              )
-            </span>
-            )}
-          </header>
-          <main className="post_context">
-            {post.content ?? ''}
-          </main>
-        </>
+    <>
+      {(selectedPost || waitingFetchingPost) && (
+        <article className={`post${waitingFetchingPost ? ' spinner' : ''}`}>
+          {selectedPost && (
+            <>
+              <header className="post_info">
+                <h3 className="title">{selectedPost.title}</h3>
+                {selectedPost.createdTime && (
+                <span className="created_time">
+                  {formatPostDateTime(selectedPost.createdTime)}
+                </span>
+                )}
+                {(selectedPost.updatedTime && selectedPost.updatedTime !== selectedPost.createdTime) && (
+                <span className="updated_time">
+                  &nbsp;(updated &nbsp;
+                    {formatPostDateTime(selectedPost.updatedTime)}
+                  )
+                </span>
+                )}
+              </header>
+              <main className="post_context">
+                {selectedPost.content ?? ''}
+              </main>
+            </>
+          )}
+          {waitingFetchingPost && <Spinner />}
+        </article>
       )}
-    </article>
+    </>
   );
 }
