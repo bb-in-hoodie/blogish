@@ -8,6 +8,7 @@ import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import '../../css/components/blognav.css';
 import { postInfoAPI } from '../../api/PostAPI';
+import Paging from '../common/Paging';
 
 interface BlogNavProps {
   blog: Blog | null,
@@ -32,6 +33,7 @@ export default function BlogNav({
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDay = (new Date()).getDay();
 
@@ -119,7 +121,7 @@ export default function BlogNav({
         ? (
           <section className="post_list">
             <ul>
-              {posts.map((post) => (
+              {pagedPosts.map((post) => (
                 <li
                   key={post.id ?? 0}
                   role="menuitem"
@@ -132,7 +134,12 @@ export default function BlogNav({
                 </li>
               ))}
             </ul>
-            {/* paging component */}
+            <Paging
+              data={posts}
+              sizeOfPage={5}
+              widthOfPaging={5}
+              onPageSelected={setPagedPosts}
+            />
           </section>
         )
         : (

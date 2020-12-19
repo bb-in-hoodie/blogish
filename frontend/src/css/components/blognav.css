@@ -46,7 +46,10 @@
 }
 
 .blog nav .post_list {
-  min-height: 14rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 14.5rem;
   padding: 1rem 0.2rem 0.6rem 0.2rem;
   border-radius: 0.75rem;
   border: solid 1px rgb(200, 200, 200);
@@ -97,7 +100,7 @@
 
 .blog nav .empty_post_list {
   display: flex;
-  min-height: 14rem;
+  min-height: 14.5rem;
   align-items: center;
   justify-content: center;
   border-radius: 0.75rem;
