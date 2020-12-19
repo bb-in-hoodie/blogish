@@ -39,8 +39,8 @@ export default function PostView({
                 )}
               </header>
               <main className="post_context">
-                {selectedPost.content?.split('\n').map((line) => (
-                  <p>{line}</p>
+                {selectedPost.content?.split('\n').map((line, index) => (
+                  <p key={index}>{line}</p>
                 ))}
               </main>
             </>
