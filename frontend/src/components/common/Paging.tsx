@@ -1,6 +1,8 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import '../../css/components/paging.css';
 
 interface PagingProps<T> {
   data: T[],
@@ -77,15 +79,38 @@ export default function Paging<T>({
     onPageClicked(1);
   }, [data, sizeOfPage, setCurrentPage, slidePagesToLeftmostPage, onPageClicked]);
 
+  // arrow button state
+  const leftArrowDisabled = leftmostPage.current <= 1;
+  const rightArrowDisabled = leftmostPage.current + widthOfPaging >= pageCount.current;
+
   return (
-    <nav>
-      <button type="button" onClick={() => onPageClicked(currentPage - 1)}>{'<'}</button>
+    <nav className="paging">
+      <button
+        type="button"
+        className="arrow"
+        onClick={() => onPageClicked(leftmostPage.current - 1)}
+        disabled={leftArrowDisabled}
+      >
+        <AiOutlineLeft size="0.5rem" />
+      </button>
       {pages.map((page) => (
-        <button key={page} type="button" onClick={() => onPageClicked(page)}>
+        <button
+          key={page}
+          type="button"
+          className={`page_number${page === currentPage ? ' selected' : ''}`}
+          onClick={() => onPageClicked(page)}
+        >
           {page}
         </button>
       ))}
-      <button type="button" onClick={() => onPageClicked(currentPage + 1)}>{'>'}</button>
+      <button
+        type="button"
+        className="arrow"
+        onClick={() => onPageClicked(leftmostPage.current + widthOfPaging)}
+        disabled={rightArrowDisabled}
+      >
+        <AiOutlineRight size="0.5rem" />
+      </button>
     </nav>
   );
 }

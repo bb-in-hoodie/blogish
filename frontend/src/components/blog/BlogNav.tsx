@@ -136,7 +136,7 @@ export default function BlogNav({
             </ul>
             <Paging
               data={posts}
-              sizeOfPage={4}
+              sizeOfPage={5}
               widthOfPaging={5}
               onPageSelected={setPagedPosts}
             />
