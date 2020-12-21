@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { Badge, Spinner } from 'reactstrap';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
 import Blog from '../../types/Blog';
@@ -18,13 +20,13 @@ interface BlogNavProps {
   setWaitingFetchingPost: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function formatDateTime(currentDay: number, datetime?: string) {
+function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: string) {
   if (!datetime) {
     return '';
   }
 
   const date = new Date(`${datetime}Z`);
-  return format(date, date.getDay() === currentDay ? 'HH:mm' : 'yyyy.MM.dd');
+  return format(date, isSameDay(currentDate.current, date) ? 'HH:mm' : 'yyyy.MM.dd');
 }
 
 export default function BlogNav({
@@ -35,7 +37,7 @@ export default function BlogNav({
   const [posts, setPosts] = useState<Post[]>([]);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
-  const currentDay = (new Date()).getDay();
+  const currentDate = useRef(new Date());
 
   // fetch categories on blog change
   const getCategories = useCallback(async (blogId: number) => {
@@ -130,7 +132,7 @@ export default function BlogNav({
                   onKeyDown={(e) => fetchPostOnKeyDown(e.nativeEvent.code, post.id)}
                 >
                   <span className="title">{post.title}</span>
-                  <span className="created_time">{formatDateTime(currentDay, post.createdTime)}</span>
+                  <span className="created_time">{formatDateTime(currentDate, post.createdTime)}</span>
                 </li>
               ))}
             </ul>
