@@ -1,18 +1,21 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Badge, Spinner } from 'reactstrap';
+import { Badge, Button, Spinner } from 'reactstrap';
 import { format, isSameDay } from 'date-fns';
+import { ImPen } from 'react-icons/im';
 import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
+import { postInfoAPI } from '../../api/PostAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
+import User from '../../types/User';
 import Blog from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
-import '../../css/components/blognav.css';
-import { postInfoAPI } from '../../api/PostAPI';
 import Paging from '../common/Paging';
+import '../../css/components/blognav.css';
 
 interface BlogNavProps {
+  user: User,
   blog: Blog | null,
   selectedPost: Post | null,
   setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>,
@@ -30,7 +33,7 @@ function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: st
 }
 
 export default function BlogNav({
-  blog, selectedPost, setSelectedPost, waitingFetchingPost, setWaitingFetchingPost,
+  user, blog, selectedPost, setSelectedPost, waitingFetchingPost, setWaitingFetchingPost,
 }: BlogNavProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
@@ -152,6 +155,8 @@ export default function BlogNav({
               : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
           </section>
         )}
+      {user.userId === blog?.owner.userId
+        && <Button className="post_button"><ImPen /></Button>}
     </nav>
   );
 }

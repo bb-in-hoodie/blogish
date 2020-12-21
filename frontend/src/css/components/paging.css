@@ -1,7 +1,6 @@
 .paging {
   display: flex;
   justify-content: center;
-  width: 100%;
   margin-bottom: 0.8rem !important;
 }
 
@@ -11,6 +10,7 @@
   font-size: 0.85rem;
   padding: 0 0.4rem;
 }
+
 .paging button:focus {
   outline: 0;
 }

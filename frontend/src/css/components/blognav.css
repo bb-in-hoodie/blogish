@@ -107,3 +107,22 @@
   border: solid 1px rgb(200, 200, 200);
   color: rgb(200, 200, 200);
 }
+
+.blog nav .post_button {
+  position: fixed;
+  display: flex;
+  right: 2rem;
+  bottom: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.blog nav .post_button svg{
+  width: 1.5rem;
+  height: 1.5rem;
+  align-self: center;
+}

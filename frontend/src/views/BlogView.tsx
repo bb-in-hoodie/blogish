@@ -5,8 +5,8 @@ import useUser from '../hooks/useUser';
 import Blog from '../types/Blog';
 import Post from '../types/Post';
 import BlogNav from '../components/blog/BlogNav';
-import '../css/blog.css';
 import PostView from '../components/blog/PostView';
+import '../css/blog.css';
 
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
@@ -51,6 +51,7 @@ export default function BlogView(): JSX.Element {
         </div>
       </header>
       <BlogNav
+        user={user}
         blog={blog}
         selectedPost={selectedPost}
         setSelectedPost={setSelectedPost}
