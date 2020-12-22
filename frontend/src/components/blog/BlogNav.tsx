@@ -4,6 +4,7 @@ import React, {
 import { Badge, Button, Spinner } from 'reactstrap';
 import { format, isSameDay } from 'date-fns';
 import { ImPen } from 'react-icons/im';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
 import { postInfoAPI } from '../../api/PostAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
@@ -41,6 +42,8 @@ export default function BlogNav({
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDate = useRef(new Date());
+  const { url } = useRouteMatch();
+  const history = useHistory();
 
   // fetch categories on blog change
   const getCategories = useCallback(async (blogId: number) => {
@@ -101,6 +104,11 @@ export default function BlogNav({
     }
   }, [posts, fetchPost, selectedPost, waitingFetchingPost]);
 
+  // write button
+  const onWriteClicked = () => {
+    history.push(`${url}/post`);
+  };
+
   return (
     <nav>
       <section className="category_list">
@@ -156,7 +164,7 @@ export default function BlogNav({
           </section>
         )}
       {user.userId === blog?.owner.userId
-        && <Button className="post_button"><ImPen /></Button>}
+        && <Button className="post_button" onClick={onWriteClicked}><ImPen /></Button>}
     </nav>
   );
 }

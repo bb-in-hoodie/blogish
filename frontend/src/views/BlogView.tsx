@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import {
+  Redirect,
+  Route, Switch, useHistory, useParams, useRouteMatch,
+} from 'react-router-dom';
 import { blogInfoAPI } from '../api/BlogAPI';
 import useUser from '../hooks/useUser';
 import Blog from '../types/Blog';
@@ -7,6 +10,7 @@ import Post from '../types/Post';
 import BlogNav from '../components/blog/BlogNav';
 import PostView from '../components/blog/PostView';
 import '../css/blog.css';
+import Write from '../components/blog/Write';
 
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
@@ -15,6 +19,7 @@ export default function BlogView(): JSX.Element {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
+  const { path, url } = useRouteMatch();
 
   useEffect(() => {
     if (!blogId) {
@@ -50,15 +55,26 @@ export default function BlogView(): JSX.Element {
           )}
         </div>
       </header>
-      <BlogNav
-        user={user}
-        blog={blog}
-        selectedPost={selectedPost}
-        setSelectedPost={setSelectedPost}
-        waitingFetchingPost={waitingFetchingPost}
-        setWaitingFetchingPost={setWaitingFetchingPost}
-      />
-      <PostView selectedPost={selectedPost} waitingFetchingPost={waitingFetchingPost} />
+
+      <Switch>
+        <Route exact strict path={path}>
+          <BlogNav
+            user={user}
+            blog={blog}
+            selectedPost={selectedPost}
+            setSelectedPost={setSelectedPost}
+            waitingFetchingPost={waitingFetchingPost}
+            setWaitingFetchingPost={setWaitingFetchingPost}
+          />
+          <PostView selectedPost={selectedPost} waitingFetchingPost={waitingFetchingPost} />
+        </Route>
+        <Route exact path={`${path}/post`}>
+          <Write />
+        </Route>
+        <Route path={path}>
+          <Redirect to={url.replace(/(.*)\/$/, '$1')} />
+        </Route>
+      </Switch>
     </div>
   );
 }
