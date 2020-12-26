@@ -80,6 +80,7 @@ export default function BlogView(): JSX.Element {
         <Route exact path={`${path}/post`}>
           <Write
             mode={writeMode}
+            user={user}
             blog={blog}
             categories={categories}
             initialCategory={activeCategory}

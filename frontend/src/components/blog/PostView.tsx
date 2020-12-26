@@ -30,7 +30,9 @@ export default function PostView({
                   {formatPostDateTime(selectedPost.createdTime)}
                 </span>
                 )}
-                {(selectedPost.updatedTime && selectedPost.updatedTime !== selectedPost.createdTime) && (
+                {(selectedPost.updatedTime
+                && selectedPost.updatedTime !== selectedPost.createdTime)
+                && (
                 <span className="updated_time">
                   &nbsp;(updated &nbsp;
                     {formatPostDateTime(selectedPost.updatedTime)}
@@ -38,7 +40,7 @@ export default function PostView({
                 </span>
                 )}
               </header>
-              <main className="post_context">
+              <main className="post_content">
                 {selectedPost.content?.split('\n').map((line, index) => (
                   <p key={index}>{line}</p>
                 ))}

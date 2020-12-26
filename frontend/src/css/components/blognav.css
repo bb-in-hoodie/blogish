@@ -3,6 +3,10 @@
   border-radius: 0.75rem;
 }
 
+.blog nav .category_selection {
+  padding: 1rem 0.2rem;
+}
+
 .blog nav .post_list {
   display: flex;
   flex-direction: column;

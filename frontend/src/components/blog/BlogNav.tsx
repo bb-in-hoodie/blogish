@@ -114,6 +114,7 @@ export default function BlogNav({
         categories={categories}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
+        enableAllCategories
       />
       {posts.length > 0
         ? (
