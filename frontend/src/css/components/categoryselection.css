@@ -1,0 +1,41 @@
+.category_selection {
+  padding: 1rem 0.2rem;
+}
+
+.category_selection .badge {
+  padding: 0.35rem 0.8rem;
+  margin-right: 0.3rem;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 0.8rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.category_selection .badge-primary {
+  border: 1px solid rgb(112, 166, 170);
+  color: rgb(112, 166, 170);
+}
+
+.category_selection .badge-secondary {
+  border: 1px solid rgb(200, 200, 200);
+  color: rgb(200, 200, 200);
+}
+
+.category_selection .badge-primary:hover {
+  background-color: rgb(219, 238, 240);
+}
+
+.category_selection .badge-secondary:hover {
+  background-color: rgb(243, 243, 243);
+}
+
+.category_selection .badge-primary.active {
+  background-color: rgb(112, 166, 170);
+  color: white;
+}
+
+.category_selection .badge-secondary.active {
+  background-color: rgb(200, 200, 200);
+  color: white;
+}

@@ -1,7 +1,7 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Badge, Button, Spinner } from 'reactstrap';
+import { Button, Spinner } from 'reactstrap';
 import { format, isSameDay } from 'date-fns';
 import { ImPen } from 'react-icons/im';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -14,6 +14,7 @@ import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import Paging from '../common/Paging';
 import '../../css/components/blognav.css';
+import CategorySelection from './CategorySelection';
 
 interface BlogNavProps {
   user: User,
@@ -109,25 +110,11 @@ export default function BlogNav({
 
   return (
     <nav>
-      <section className="category_list">
-        <Badge
-          className={activeCategoryId === ALL_CATEGORIES ? 'active' : ''}
-          color="primary"
-          onClick={() => setActiveCategoryId(ALL_CATEGORIES)}
-        >
-          ALL
-        </Badge>
-        {categories.map((category) => (
-          <Badge
-            key={category.id ?? 0}
-            className={activeCategoryId === category.id ? 'active' : ''}
-            color="secondary"
-            onClick={() => setActiveCategoryId(category.id as number)}
-          >
-            {category.name}
-          </Badge>
-        ))}
-      </section>
+      <CategorySelection
+        categories={categories}
+        activeCategoryId={activeCategoryId}
+        setActiveCategoryId={setActiveCategoryId}
+      />
       {posts.length > 0
         ? (
           <section className="post_list">
