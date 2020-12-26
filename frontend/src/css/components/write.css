@@ -17,10 +17,24 @@
   color: rgb(150, 150, 150);
 }
 
+.blog .write .contents>section input,textarea {
+  border: 1px dashed rgb(200, 200, 200) !important;
+}
+
 .blog .write .contents>section.context textarea {
   height: 10rem;
 }
 
 .blog .write .contents>section:not(:last-child) {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.blog .write .contents>section:last-child {
+  margin-bottom: 0.4rem;
+}
+
+.blog .write .contents .limit {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: rgb(190, 190, 190);
 }

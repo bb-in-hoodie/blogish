@@ -7,3 +7,5 @@ export default interface Post {
   updatedTime?: string;
   categoryId: number;
 }
+
+export const TITLE_MAX_LENGTH = 100;
