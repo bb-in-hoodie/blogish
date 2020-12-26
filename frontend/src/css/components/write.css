@@ -2,12 +2,25 @@
   margin-top: 2.5rem;
 }
 
-.blog .write section {
+.blog .write>section {
   padding: 2rem;
   border-radius: 0.75rem;
   border: solid 1px rgb(200, 200, 200);
 }
 
-.blog .write section:not(:last-child) {
+.blog .write>section:not(:last-child) {
   margin-bottom: 1.5rem;
+}
+
+.blog .write .contents>section label {
+  font-size: 0.9rem;
+  color: rgb(150, 150, 150);
+}
+
+.blog .write .contents>section.context textarea {
+  height: 10rem;
+}
+
+.blog .write .contents>section:not(:last-child) {
+  margin-bottom: 1.2rem;
 }
