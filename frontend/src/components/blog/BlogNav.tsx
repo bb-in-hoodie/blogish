@@ -20,8 +20,8 @@ interface BlogNavProps {
   user: User,
   blog: Blog | null,
   categories: Category[],
-  activeCategoryId: number,
-  setActiveCategoryId: React.Dispatch<React.SetStateAction<number>>,
+  activeCategory: Category,
+  setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
   selectedPost: Post | null,
   setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>,
   waitingFetchingPost: boolean,
@@ -41,8 +41,8 @@ export default function BlogNav({
   user,
   blog,
   categories,
-  activeCategoryId,
-  setActiveCategoryId,
+  activeCategory,
+  setActiveCategory,
   selectedPost,
   setSelectedPost,
   waitingFetchingPost,
@@ -56,26 +56,26 @@ export default function BlogNav({
   const history = useHistory();
 
   // fetch posts on category change
-  const getPosts = useCallback(async (categoryId: number) => {
+  const getPosts = useCallback(async (category: Category) => {
     if (!blog) {
       return;
     }
 
     setPosts([]);
     setWaitingGettingPosts(true);
-    if (categoryId === ALL_CATEGORIES) {
+    if (category.id === ALL_CATEGORIES.id) {
       if (blog) {
         setPosts(await postsOfBlogAPI(blog?.id));
       }
-    } else {
-      setPosts(await postsOfCategoryAPI(categoryId));
+    } else if (category.id) {
+      setPosts(await postsOfCategoryAPI(category.id));
     }
     setWaitingGettingPosts(false);
   }, [blog, setPosts, setWaitingGettingPosts]);
 
   useEffect(() => {
-    getPosts(activeCategoryId);
-  }, [getPosts, activeCategoryId]);
+    getPosts(activeCategory);
+  }, [getPosts, activeCategory]);
 
   // select first post of posts
   const fetchPost = useCallback(async (postId?: number) => {
@@ -112,8 +112,8 @@ export default function BlogNav({
     <nav>
       <CategorySelection
         categories={categories}
-        activeCategoryId={activeCategoryId}
-        setActiveCategoryId={setActiveCategoryId}
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
       />
       {posts.length > 0
         ? (
@@ -143,7 +143,7 @@ export default function BlogNav({
         : (
           <section className="empty_post_list">
             {waitingGettingPosts && <Spinner />}
-            {!waitingGettingPosts && (activeCategoryId === ALL_CATEGORIES
+            {!waitingGettingPosts && (activeCategory.id === ALL_CATEGORIES.id
               ? <span>아직 작성된 글이 없습니다.</span>
               : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
           </section>

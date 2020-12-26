@@ -5,28 +5,28 @@ import '../../css/components/categoryselection.css';
 
 interface CategorySelectionProps {
   categories: Category[],
-  activeCategoryId: number,
-  setActiveCategoryId: React.Dispatch<React.SetStateAction<number>>,
+  activeCategory: Category,
+  setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
 }
 
 export default function CategorySelection({
-  categories, activeCategoryId, setActiveCategoryId,
+  categories, activeCategory, setActiveCategory,
 }: CategorySelectionProps): JSX.Element {
   return (
     <section className="category_selection">
       <Badge
-        className={activeCategoryId === ALL_CATEGORIES ? 'active' : ''}
+        className={activeCategory.id === ALL_CATEGORIES.id ? 'active' : ''}
         color="primary"
-        onClick={() => setActiveCategoryId(ALL_CATEGORIES)}
+        onClick={() => setActiveCategory(ALL_CATEGORIES)}
       >
-        ALL
+        {ALL_CATEGORIES.name}
       </Badge>
       {categories.map((category) => (
         <Badge
           key={category.id ?? 0}
-          className={activeCategoryId === category.id ? 'active' : ''}
+          className={activeCategory.id === category.id ? 'active' : ''}
           color="secondary"
-          onClick={() => setActiveCategoryId(category.id as number)}
+          onClick={() => setActiveCategory(category)}
         >
           {category.name}
         </Badge>

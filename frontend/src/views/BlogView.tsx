@@ -19,7 +19,7 @@ export default function BlogView(): JSX.Element {
   const { blogId } = useParams() as { blogId: string };
   const [blog, setBlog] = useState<Blog | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
+  const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
   const [writeMode] = useState<WriteMode>('WRITE');
@@ -68,8 +68,8 @@ export default function BlogView(): JSX.Element {
             user={user}
             blog={blog}
             categories={categories}
-            activeCategoryId={activeCategoryId}
-            setActiveCategoryId={setActiveCategoryId}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
             selectedPost={selectedPost}
             setSelectedPost={setSelectedPost}
             waitingFetchingPost={waitingFetchingPost}
@@ -82,7 +82,7 @@ export default function BlogView(): JSX.Element {
             mode={writeMode}
             blog={blog}
             categories={categories}
-            activeCategoryId={activeCategoryId}
+            initialCategory={activeCategory}
             selectedPost={selectedPost}
           />
         </Route>

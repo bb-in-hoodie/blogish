@@ -4,20 +4,22 @@ import Blog, { WriteMode } from '../../types/Blog';
 import Category from '../../types/Category';
 import Post, { TITLE_MAX_LENGTH } from '../../types/Post';
 import '../../css/components/write.css';
+import CategorySelection from './CategorySelection';
 
 interface WriteProps {
   mode: WriteMode,
   blog: Blog | null,
   categories: Category[],
-  activeCategoryId: number,
+  initialCategory: Category | null,
   selectedPost: Post | null,
 }
 
 export default function Write({
-  mode, blog, categories, activeCategoryId, selectedPost,
+  mode, blog, categories, initialCategory, selectedPost,
 }: WriteProps): JSX.Element {
   const [title, setTitle] = useState('');
   const [contextText, setContextText] = useState('');
+  const [activeCategory, setActiveCategory] = useState<Category>(initialCategory ?? categories?.[0]);
 
   return (
     <main className="write">
@@ -53,7 +55,11 @@ export default function Write({
         </section>
       </section>
       <section className="submission">
-        submission
+        <CategorySelection
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+        />
       </section>
     </main>
   );
