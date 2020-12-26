@@ -1,7 +1,20 @@
 import React from 'react';
+import Blog, { WriteMode } from '../../types/Blog';
+import Category from '../../types/Category';
+import Post from '../../types/Post';
 import '../../css/components/write.css';
 
-export default function Write(): JSX.Element {
+interface WriteProps {
+  mode: WriteMode,
+  blog: Blog | null,
+  categories: Category[],
+  activeCategoryId: number,
+  selectedPost: Post | null,
+}
+
+export default function Write({
+  mode, blog, categories, activeCategoryId, selectedPost,
+}: WriteProps): JSX.Element {
   return (
     <main className="write">
       <section className="contents">

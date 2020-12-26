@@ -5,7 +5,7 @@ import { Badge, Button, Spinner } from 'reactstrap';
 import { format, isSameDay } from 'date-fns';
 import { ImPen } from 'react-icons/im';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { categoriesOfBlogAPI, postsOfBlogAPI } from '../../api/BlogAPI';
+import { postsOfBlogAPI } from '../../api/BlogAPI';
 import { postInfoAPI } from '../../api/PostAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
 import User from '../../types/User';
@@ -18,6 +18,9 @@ import '../../css/components/blognav.css';
 interface BlogNavProps {
   user: User,
   blog: Blog | null,
+  categories: Category[],
+  activeCategoryId: number,
+  setActiveCategoryId: React.Dispatch<React.SetStateAction<number>>,
   selectedPost: Post | null,
   setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>,
   waitingFetchingPost: boolean,
@@ -34,27 +37,22 @@ function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: st
 }
 
 export default function BlogNav({
-  user, blog, selectedPost, setSelectedPost, waitingFetchingPost, setWaitingFetchingPost,
+  user,
+  blog,
+  categories,
+  activeCategoryId,
+  setActiveCategoryId,
+  selectedPost,
+  setSelectedPost,
+  waitingFetchingPost,
+  setWaitingFetchingPost,
 }: BlogNavProps): JSX.Element {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [activeCategoryId, setActiveCategoryId] = useState(ALL_CATEGORIES);
   const [posts, setPosts] = useState<Post[]>([]);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDate = useRef(new Date());
   const { url } = useRouteMatch();
   const history = useHistory();
-
-  // fetch categories on blog change
-  const getCategories = useCallback(async (blogId: number) => {
-    setCategories(await categoriesOfBlogAPI(blogId));
-  }, [setCategories]);
-
-  useEffect(() => {
-    if (blog) {
-      getCategories(blog.id);
-    }
-  }, [getCategories, blog]);
 
   // fetch posts on category change
   const getPosts = useCallback(async (categoryId: number) => {
