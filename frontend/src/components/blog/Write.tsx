@@ -45,12 +45,12 @@ export default function Write({
       alert('포스트 작성은 블로그 주인만 할 수 있습니다.');
       history.push(`/blog/${blog?.id}`);
     }
-  }, [user, blog]);
+  }, [user, blog, history]);
 
   // buttons
   const onCancelClicked = useCallback(() => {
     history.push(`/blog/${blog?.id}`);
-  }, [blog]);
+  }, [blog, history]);
 
   const onSubmitClicked = useCallback(async (
     postTitle: string, postContent: string, postCategory: Category | null,
@@ -83,7 +83,7 @@ export default function Write({
       alert(alertText);
       setWaitingAPI(false);
     }
-  }, [mode, blog]);
+  }, [mode, blog, history]);
 
   return (
     <section className="write">
@@ -92,15 +92,16 @@ export default function Write({
           <Label for="input_title">
             TITLE
             {title.length > 0
-            && (
-            <span className="limit">
-              (
-              {title.length}
-              /
-              {TITLE_MAX_LENGTH}
+              ? (
+                <span className="limit">
+                  (
+                  {title.length}
+                  /
+                  {TITLE_MAX_LENGTH}
+                  )
+                </span>
               )
-            </span>
-            )}
+              : '*'}
           </Label>
           <Input type="text" id="input_title" maxLength={TITLE_MAX_LENGTH} value={title} onChange={(e) => setTitle(e.target.value)} />
         </section>
@@ -118,7 +119,10 @@ export default function Write({
           <Input type="textarea" id="input_content" value={content} onChange={(e) => setContent(e.target.value)} />
         </section>
         <section className="category">
-          <Label>CATEGORY</Label>
+          <Label>
+            CATEGORY
+            {!activeCategory && '*'}
+          </Label>
           <CategorySelection
             categories={categories}
             activeCategory={activeCategory}
@@ -132,7 +136,7 @@ export default function Write({
         <Button
           className="submit"
           color="success"
-          disabled={title.length <= 0 || waitingAPI}
+          disabled={title.length <= 0 || !activeCategory || waitingAPI}
           onClick={() => onSubmitClicked(title, content, activeCategory)}
         >
           {mode === 'WRITE' ? 'POST' : 'EDIT'}
