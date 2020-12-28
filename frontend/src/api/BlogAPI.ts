@@ -28,3 +28,7 @@ export function categoriesOfBlogAPI(blogId: number): Promise<Category[]> {
 export function postsOfBlogAPI(blogId: number): Promise<Post[]> {
   return axios.get(`${url}/${blogId}/posts`).then((resp) => resp.data);
 }
+
+export function createPostAPI(post: Post): Promise<Post> {
+  return axios.post(`${url}/${post.blogId}/posts`, post).then((resp) => resp.data);
+}

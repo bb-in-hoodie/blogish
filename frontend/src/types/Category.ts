@@ -1,7 +1,10 @@
 export default interface Category {
   id?: number,
   name: string,
-  blogId: number
+  blogId?: number
 }
 
-export const ALL_CATEGORIES = -1;
+export const ALL_CATEGORIES: Category = {
+  id: -1,
+  name: 'ALL',
+};

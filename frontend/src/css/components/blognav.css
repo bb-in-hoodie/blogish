@@ -3,46 +3,8 @@
   border-radius: 0.75rem;
 }
 
-.blog nav .category_list {
+.blog nav .category_selection {
   padding: 1rem 0.2rem;
-}
-
-.blog nav .category_list .badge {
-  padding: 0.35rem 0.8rem;
-  margin-right: 0.3rem;
-  background-color: transparent;
-  font-weight: 500;
-  font-size: 0.8rem;
-  border-radius: 1rem;
-  cursor: pointer;
-}
-
-.blog nav .category_list .badge-primary {
-  border: 1px solid rgb(112, 166, 170);
-  color: rgb(112, 166, 170);
-}
-
-.blog nav .category_list .badge-secondary {
-  border: 1px solid rgb(200, 200, 200);
-  color: rgb(200, 200, 200);
-}
-
-.blog nav .category_list .badge-primary:hover {
-  background-color: rgb(219, 238, 240);
-}
-
-.blog nav .category_list .badge-secondary:hover {
-  background-color: rgb(243, 243, 243);
-}
-
-.blog nav .category_list .badge-primary.active {
-  background-color: rgb(112, 166, 170);
-  color: white;
-}
-
-.blog nav .category_list .badge-secondary.active {
-  background-color: rgb(200, 200, 200);
-  color: white;
 }
 
 .blog nav .post_list {
@@ -106,4 +68,23 @@
   border-radius: 0.75rem;
   border: solid 1px rgb(200, 200, 200);
   color: rgb(200, 200, 200);
+}
+
+.blog nav .post_button {
+  position: fixed;
+  display: flex;
+  right: 2rem;
+  bottom: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.blog nav .post_button svg{
+  width: 1.5rem;
+  height: 1.5rem;
+  align-self: center;
 }

@@ -1,36 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { blogInfoAPI } from '../api/BlogAPI';
+import {
+  Redirect,
+  Route, Switch, useHistory, useParams, useRouteMatch,
+} from 'react-router-dom';
+import { blogInfoAPI, categoriesOfBlogAPI } from '../api/BlogAPI';
 import useUser from '../hooks/useUser';
-import Blog from '../types/Blog';
+import Blog, { WriteMode } from '../types/Blog';
 import Post from '../types/Post';
+import Category, { ALL_CATEGORIES } from '../types/Category';
 import BlogNav from '../components/blog/BlogNav';
-import '../css/blog.css';
 import PostView from '../components/blog/PostView';
+import '../css/blog.css';
+import Write from '../components/blog/Write';
 
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
   const history = useHistory();
   const { blogId } = useParams() as { blogId: string };
   const [blog, setBlog] = useState<Blog | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
+  const [writeMode] = useState<WriteMode>('WRITE');
+  const { path, url } = useRouteMatch();
 
+  // get blog info
   useEffect(() => {
     if (!blogId) {
       history.push('/browse');
     }
 
-    async function updateBlog() {
+    async function updateBlogAndCategories() {
       try {
-        const blogInfo = await blogInfoAPI(parseInt(blogId, 10));
-        setBlog(blogInfo);
+        const blogIdNumber = parseInt(blogId, 10);
+        setBlog(await blogInfoAPI(blogIdNumber));
+        setCategories(await categoriesOfBlogAPI(blogIdNumber));
       } catch (e) {
-        alert('블로그를 불러오는데 실패했습니다.');
+        alert('블로그 정보를 불러오는데 실패했습니다.');
         history.push('/browse');
       }
     }
-    updateBlog();
+    updateBlogAndCategories();
   }, [blogId, history]);
 
   return (
@@ -50,14 +61,36 @@ export default function BlogView(): JSX.Element {
           )}
         </div>
       </header>
-      <BlogNav
-        blog={blog}
-        selectedPost={selectedPost}
-        setSelectedPost={setSelectedPost}
-        waitingFetchingPost={waitingFetchingPost}
-        setWaitingFetchingPost={setWaitingFetchingPost}
-      />
-      <PostView selectedPost={selectedPost} waitingFetchingPost={waitingFetchingPost} />
+
+      <Switch>
+        <Route exact strict path={path}>
+          <BlogNav
+            user={user}
+            blog={blog}
+            categories={categories}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+            selectedPost={selectedPost}
+            setSelectedPost={setSelectedPost}
+            waitingFetchingPost={waitingFetchingPost}
+            setWaitingFetchingPost={setWaitingFetchingPost}
+          />
+          <PostView selectedPost={selectedPost} waitingFetchingPost={waitingFetchingPost} />
+        </Route>
+        <Route exact path={`${path}/post`}>
+          <Write
+            mode={writeMode}
+            user={user}
+            blog={blog}
+            categories={categories}
+            initialCategory={activeCategory}
+            selectedPost={selectedPost}
+          />
+        </Route>
+        <Route path={path}>
+          <Redirect to={url.replace(/(.*)\/$/, '$1')} />
+        </Route>
+      </Switch>
     </div>
   );
 }

@@ -13,3 +13,5 @@ export default interface Blog {
   createdTime: string;
   owner: User;
 }
+
+export type WriteMode = 'WRITE' | 'EDIT';
