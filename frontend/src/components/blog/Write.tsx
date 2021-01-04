@@ -128,6 +128,7 @@ export default function Write({
             activeCategory={activeCategory}
             setActiveCategory={setActiveCategory}
             enableAllCategories={false}
+            categorySelectionType="ADDABLE"
           />
         </section>
       </main>

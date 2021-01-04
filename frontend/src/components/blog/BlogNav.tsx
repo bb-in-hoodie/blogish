@@ -115,6 +115,7 @@ export default function BlogNav({
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
         enableAllCategories
+        categorySelectionType={user.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
       />
       {posts.length > 0
         ? (
