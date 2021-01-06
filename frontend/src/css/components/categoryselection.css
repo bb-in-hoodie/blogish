@@ -65,7 +65,7 @@
   cursor: pointer;
 }
 
-.category_selection .icon:hover {
+.category_selection .icon:not(.disabled):hover {
   color: rgb(150, 150, 150);
 }
 
@@ -73,7 +73,7 @@
   color: rgb(200, 200, 200);
 }
 
-.category_selection .icon.plus:hover {
+.category_selection .icon.plus:not(.disabled):hover {
   color: rgb(150, 150, 150);
 }
 
@@ -81,6 +81,11 @@
   color: rgb(218, 189, 189);
 }
 
-.category_selection .icon.x:hover {
+.category_selection .icon.x:not(.disabled):hover {
   color: rgb(199, 160, 160);
+}
+
+.category_selection .icon.disabled {
+  color: rgb(243, 243, 243);
+  cursor: default;
 }

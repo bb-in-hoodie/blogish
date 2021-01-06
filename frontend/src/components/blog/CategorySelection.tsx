@@ -1,35 +1,33 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge } from 'reactstrap';
-import {
-  FiCheckCircle,
-  FiPlusCircle, FiSettings, FiXCircle,
-} from 'react-icons/fi';
+import { FiSettings, FiXCircle } from 'react-icons/fi';
 import Category, { ALL_CATEGORIES, CategorySelectionState, CategorySelectionType } from '../../types/Category';
 import '../../css/components/categoryselection.css';
 import EditableCategory from './EditableCategory';
+import AddableCategory from './AddableCategory';
 
 interface CategorySelectionProps {
   categories: Category[],
   activeCategory: Category | null,
   setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
   enableAllCategories: boolean,
-  categorySelectionType: CategorySelectionType
+  categorySelectionType: CategorySelectionType,
 }
 
 export default function CategorySelection({
-  categories, activeCategory, setActiveCategory, enableAllCategories, categorySelectionType,
+  categories,
+  activeCategory,
+  setActiveCategory,
+  enableAllCategories,
+  categorySelectionType,
 }: CategorySelectionProps): JSX.Element {
   const [curState, setCurState] = useState<CategorySelectionState>('IDLE');
   const [categoryToEdit, setCategoryToEdit] = useState<Category | null>(null);
-  const categoriesToEdit = useRef<{[key: number]: Category}>({});
 
   const setCategorySelectionState = (nextState: CategorySelectionState) => {
     setCurState(nextState);
     setCategoryToEdit(null);
-    categoriesToEdit.current = {};
   };
-
-  const categoriesToEditExist = Object.keys(categoriesToEdit.current).length > 0;
 
   return (
     <section className="category_selection">
@@ -59,32 +57,28 @@ export default function CategorySelection({
       {categorySelectionType === 'EDITABLE'
       && (
       <>
-        {curState === 'IDLE'
-          ? <FiSettings className="icon" onClick={() => setCategorySelectionState('EDITING')} />
-          : categories.map((category) => (
-            <EditableCategory
-              key={category.id ?? 0}
-              category={category}
-              categoryToEdit={categoryToEdit}
-              setCategoryToEdit={setCategoryToEdit}
-              categorySelectionState={curState}
-              categoriesToEdit={categoriesToEdit}
-            />
-          ))}
-        {curState === 'EDITING' && (
-          <>
-            {!categoryToEdit && <FiPlusCircle className="icon plus" onClick={() => setCategorySelectionState('ADDING')} />}
-            {categoriesToEditExist && <FiCheckCircle className="icon check" />}
-            <FiXCircle className="icon x" onClick={() => setCategorySelectionState('IDLE')} />
-          </>
-        )}
-        {curState === 'ADDING' && (
-          <Badge className="category_button">
-            ADD
-            <FiPlusCircle className="icon plus" />
-            <FiXCircle className="icon x" onClick={() => setCategorySelectionState('EDITING')} />
-          </Badge>
-        )}
+        {curState === 'IDLE' && <FiSettings className="icon" onClick={() => setCategorySelectionState('EDITING')} />}
+        {curState !== 'IDLE'
+            && (
+            <>
+              {categories.map((category) => (
+                <EditableCategory
+                  key={category.id ?? 0}
+                  category={category}
+                  categoryToEdit={categoryToEdit}
+                  setCategoryToEdit={setCategoryToEdit}
+                  categorySelectionState={curState}
+                  setCategorySelectionState={setCurState}
+                />
+              ))}
+              <AddableCategory
+                categoryToEdit={categoryToEdit}
+                categorySelectionState={curState}
+                setCategorySelectionState={setCurState}
+              />
+              <FiXCircle className="icon x" onClick={() => setCategorySelectionState('IDLE')} />
+            </>
+            )}
       </>
       )}
 

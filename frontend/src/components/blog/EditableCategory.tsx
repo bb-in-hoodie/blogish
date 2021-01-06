@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
+import BlogContext from '../../contexts/BlogContext';
 import Category, { CategorySelectionState } from '../../types/Category';
 
 interface EditableCategoryProps {
@@ -8,7 +9,7 @@ interface EditableCategoryProps {
   categoryToEdit: Category | null,
   setCategoryToEdit: React.Dispatch<React.SetStateAction<Category | null>>,
   categorySelectionState: CategorySelectionState,
-  categoriesToEdit: React.MutableRefObject<{[key: number]: Category}>
+  setCategorySelectionState: (nextState: CategorySelectionState) => void;
 }
 
 export default function EditableCategory({
@@ -16,10 +17,10 @@ export default function EditableCategory({
   categoryToEdit,
   setCategoryToEdit,
   categorySelectionState,
-  categoriesToEdit,
+  setCategorySelectionState,
 }: EditableCategoryProps): JSX.Element {
-  // editing related
   const [newName, setNewName] = useState(category.name);
+  const { updateCategories } = useContext(BlogContext);
 
   // click event
   const onCategoryClicked = () => {
@@ -28,31 +29,24 @@ export default function EditableCategory({
     }
   };
 
-  const onApplyClicked = () => {
-    setCategoryToEdit(null);
-
-    if (!category.id) {
+  const onSubmitClicked = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (newName.length <= 0) {
       return;
     }
 
-    if (category.name === newName) {
-      // if newName equals to the original one, remove it from the candidate list
-      delete categoriesToEdit.current[category.id];
-    } else {
-      // else, add it to the candidate list
-      categoriesToEdit.current[category.id as number] = { ...category, name: newName };
+    // TODO: API call
+    setCategoryToEdit(null);
+    setCategorySelectionState('IDLE');
+    if (updateCategories) {
+      updateCategories();
     }
   };
 
-  const onCancelClicked = () => {
+  const onCancelClicked = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCategoryToEdit(null);
-
-    // reset name
-    if (category.id && category.id in categoriesToEdit.current) {
-      setNewName(categoriesToEdit.current[category.id].name);
-    } else {
-      setNewName(category.name);
-    }
+    setNewName(category.name);
   };
 
   // set className
@@ -61,6 +55,8 @@ export default function EditableCategory({
   let className = 'category_button';
   if (categorySelectionState === 'EDITING' && categoryToEdit) {
     className += isEditingThis ? ' editing' : ' disabled';
+  } else if (categorySelectionState === 'ADDING') {
+    className += ' disabled';
   }
 
   return (
@@ -69,7 +65,7 @@ export default function EditableCategory({
       className={className}
       onClick={onCategoryClicked}
     >
-      {!isEditingThis && newName}
+      {!isEditingThis && category.name}
       {isEditingThis && (
       <>
         <input
@@ -77,8 +73,14 @@ export default function EditableCategory({
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
         />
-        <FiPlusCircle className="icon plus" onClick={onApplyClicked} />
-        <FiXCircle className="icon x" onClick={onCancelClicked} />
+        <FiPlusCircle
+          className={`icon plus${newName.length > 0 ? '' : ' disabled'}`}
+          onClick={onSubmitClicked}
+        />
+        <FiXCircle
+          className="icon x"
+          onClick={onCancelClicked}
+        />
       </>
       )}
     </Badge>
