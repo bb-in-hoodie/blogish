@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
+import { updateCategoryAPI } from '../../api/CategoryAPI';
 import BlogContext from '../../contexts/BlogContext';
 import Category, { CategorySelectionState, MAX_CATEGORY_LENGTH } from '../../types/Category';
 
@@ -35,11 +36,15 @@ export default function EditableCategory({
       return;
     }
 
-    // TODO: API call
-    setCategoryToEdit(null);
-    setCategorySelectionState('IDLE');
-    if (updateCategories) {
-      updateCategories();
+    try {
+      await updateCategoryAPI(category.id as number, newName);
+      setCategoryToEdit(null);
+      setCategorySelectionState('IDLE');
+      if (updateCategories) {
+        updateCategories();
+      }
+    } catch {
+      alert('카테고리를 수정하는 과정에서 에러가 발생했습니다.');
     }
   };
 
