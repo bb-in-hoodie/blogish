@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import BlogContext from '../../contexts/BlogContext';
-import Category, { CategorySelectionState } from '../../types/Category';
+import Category, { CategorySelectionState, MAX_CATEGORY_LENGTH } from '../../types/Category';
 
 interface EditableCategoryProps {
   category: Category,
@@ -71,6 +71,7 @@ export default function EditableCategory({
         <input
           type="text"
           value={newName}
+          maxLength={MAX_CATEGORY_LENGTH}
           onChange={(e) => setNewName(e.target.value)}
         />
         <FiPlusCircle

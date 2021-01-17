@@ -32,3 +32,7 @@ export function postsOfBlogAPI(blogId: number): Promise<Post[]> {
 export function createPostAPI(post: Post): Promise<Post> {
   return axios.post(`${url}/${post.blogId}/posts`, post).then((resp) => resp.data);
 }
+
+export function createCategoryAPI(blogId: number, name: string): Promise<Category> {
+  return axios.post(`${url}/${blogId}/categories`, { name }).then((resp) => resp.data);
+}

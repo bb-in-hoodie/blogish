@@ -11,3 +11,4 @@ export const ALL_CATEGORIES: Category = {
 
 export type CategorySelectionType = 'READONLY' | 'EDITABLE' | 'ADDABLE';
 export type CategorySelectionState = 'IDLE' | 'EDITING' | 'ADDING';
+export const MAX_CATEGORY_LENGTH = 20;

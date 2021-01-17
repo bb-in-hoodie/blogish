@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Redirect,
   Route, Switch, useHistory, useParams, useRouteMatch,
@@ -17,7 +17,6 @@ import BlogContext from '../contexts/BlogContext';
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
   const history = useHistory();
-  const { blogId } = useParams() as { blogId: string };
   const [blog, setBlog] = useState<Blog | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES);
@@ -25,15 +24,16 @@ export default function BlogView(): JSX.Element {
   const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
   const [writeMode] = useState<WriteMode>('WRITE');
   const { path, url } = useRouteMatch();
+  const { blogId } = useParams() as { blogId: string };
 
   // get blog info
-  const updateBlog = useCallback(async () => {
+  const updateBlog = async () => {
     setBlog(await blogInfoAPI(parseInt(blogId, 10)));
-  }, [blogId]);
+  };
 
-  const updateCategories = useCallback(async () => {
+  const updateCategories = async () => {
     setCategories(await categoriesOfBlogAPI(parseInt(blogId, 10)));
-  }, [blogId]);
+  };
 
   useEffect(() => {
     if (!blogId) {
@@ -50,10 +50,10 @@ export default function BlogView(): JSX.Element {
       }
     };
     updateBlogAndCategories();
-  }, [blogId, history, updateBlog, updateCategories]);
+  }, [blogId, history]);
 
   // context
-  const blogContext = { updateCategories };
+  const blogContext = { blogId: parseInt(blogId, 10), updateCategories };
 
   return (
     <BlogContext.Provider value={blogContext}>
