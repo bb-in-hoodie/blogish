@@ -26,7 +26,7 @@ export default function AddableCategory({
   const onSubmitClicked = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (name.length <= 0) {
-      // return;
+      return;
     }
 
     // TODO: API call
@@ -38,6 +38,7 @@ export default function AddableCategory({
 
   const onCancelClicked = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setName('');
     setCategorySelectionState('EDITING');
   };
 
