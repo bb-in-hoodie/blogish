@@ -34,7 +34,7 @@ export default function AddableCategory({
       await createCategoryAPI(blogId, name);
       setCategorySelectionState('IDLE');
       if (updateCategories) {
-        updateCategories();
+        await updateCategories();
       }
     } catch {
       alert('카테고리를 생성하는 과정에서 에러가 발생했습니다.');

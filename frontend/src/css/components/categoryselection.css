@@ -15,6 +15,7 @@
 }
 
 .category_selection .badge {
+  position: relative;
   padding: 0.35rem 0.8rem;
   background-color: transparent;
   font-weight: 500;
@@ -83,6 +84,23 @@
 
 .category_selection .icon.x:not(.disabled):hover {
   color: rgb(199, 160, 160);
+}
+
+.category_selection .icon.delete {
+  position: absolute;
+  padding: 0.15rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  top: -8px;
+  right: -6px;
+  border-radius: 50%;
+  background-color: rgb(218, 189, 189);
+  color: white;
+}
+
+.category_selection .icon.delete:not(.disabled):hover {
+  background-color: rgb(199, 160, 160);
+  color: white;
 }
 
 .category_selection .icon.disabled {

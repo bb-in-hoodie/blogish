@@ -47,7 +47,7 @@ CREATE TABLE `post`
     KEY `fkIdx_28` (`blog_id`),
     CONSTRAINT `posts_in_blog` FOREIGN KEY `fkIdx_28` (`blog_id`) REFERENCES `blog` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     KEY `fkIdx_50` (`category_id`),
-    CONSTRAINT `posts_in_category` FOREIGN KEY `fkIdx_50` (`category_id`) REFERENCES `category` (`id`) ON DELETE SET DEFAULT ON UPDATE CASCADE
+    CONSTRAINT `posts_in_category` FOREIGN KEY `fkIdx_50` (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `comment`
