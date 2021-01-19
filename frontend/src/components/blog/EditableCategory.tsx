@@ -3,7 +3,7 @@ import { FiPlusCircle, FiXCircle, FiTrash2 } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import { deleteCategoryAPI, updateCategoryAPI } from '../../api/CategoryAPI';
 import BlogContext from '../../contexts/BlogContext';
-import Category, { CategorySelectionState, MAX_CATEGORY_LENGTH } from '../../types/Category';
+import Category, { ALL_CATEGORIES, CategorySelectionState, MAX_CATEGORY_LENGTH } from '../../types/Category';
 
 interface EditableCategoryProps {
   category: Category,
@@ -21,7 +21,7 @@ export default function EditableCategory({
   setCategorySelectionState,
 }: EditableCategoryProps): JSX.Element {
   const [newName, setNewName] = useState(category.name);
-  const { updateCategories } = useContext(BlogContext);
+  const { updateCategories, setActiveCategory, setSelectedPost } = useContext(BlogContext);
 
   // click event
   const onCategoryClicked = () => {
@@ -58,7 +58,11 @@ export default function EditableCategory({
         await deleteCategoryAPI(category.id as number);
         setCategoryToEdit(null);
         setCategorySelectionState('IDLE');
-        if (updateCategories) {
+
+        // initialize and re-fetch categories
+        if (setActiveCategory && setSelectedPost && updateCategories) {
+          setActiveCategory(ALL_CATEGORIES);
+          setSelectedPost(null);
           await updateCategories();
         }
       } catch {

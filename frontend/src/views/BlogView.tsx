@@ -53,7 +53,12 @@ export default function BlogView(): JSX.Element {
   }, [blogId, history]);
 
   // context
-  const blogContext = { blogId: parseInt(blogId, 10), updateCategories };
+  const blogContext = {
+    blogId: parseInt(blogId, 10),
+    updateCategories,
+    setActiveCategory,
+    setSelectedPost,
+  };
 
   return (
     <BlogContext.Provider value={blogContext}>
