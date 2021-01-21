@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Input, Label } from 'reactstrap';
 import Blog, { WriteMode } from '../../types/Blog';
-import Category, { ALL_CATEGORIES } from '../../types/Category';
+import Category, { ALL_CATEGORIES, CategorySelectionState } from '../../types/Category';
 import Post, { TITLE_MAX_LENGTH } from '../../types/Post';
-import AddableCategorySelection from './AddableCategorySelection';
-import '../../css/components/write.css';
 import User from '../../types/User';
 import { createPostAPI } from '../../api/BlogAPI';
+import AddableCategorySelection from './AddableCategorySelection';
+import '../../css/components/write.css';
 
 interface WriteProps {
   mode: WriteMode,
@@ -23,7 +23,9 @@ export default function Write({
 }: WriteProps): JSX.Element {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | ADDING (EDITING is not available)
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+  const [newCategoryName, setNewCategoryName] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
   const history = useHistory();
 
@@ -85,6 +87,11 @@ export default function Write({
     }
   }, [mode, blog, history]);
 
+  const isSubmitDisabled = (curState === 'ADDING' && !newCategoryName)
+                          || !activeCategory
+                          || title.length <= 0
+                          || waitingAPI;
+
   return (
     <section className="write">
       <main className="input_wrapper">
@@ -127,6 +134,10 @@ export default function Write({
             categories={categories}
             activeCategory={activeCategory}
             setActiveCategory={setActiveCategory}
+            newCategoryName={newCategoryName}
+            setNewCategoryName={setNewCategoryName}
+            curState={curState}
+            setCurState={setCurState}
           />
         </section>
       </main>
@@ -135,7 +146,7 @@ export default function Write({
         <Button
           className="submit"
           color="success"
-          disabled={title.length <= 0 || !activeCategory || waitingAPI}
+          disabled={isSubmitDisabled}
           onClick={() => onSubmitClicked(title, content, activeCategory)}
         >
           {mode === 'WRITE' ? 'POST' : 'EDIT'}

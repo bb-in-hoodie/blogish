@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Badge } from 'reactstrap';
 import Category, { CategorySelectionState } from '../../types/Category';
 import '../../css/components/categoryselection.css';
@@ -7,16 +7,22 @@ import AddableCategory from './AddableCategory';
 interface CategorySelectionProps {
   categories: Category[],
   activeCategory: Category | null,
-  setActiveCategory: React.Dispatch<React.SetStateAction<Category>>
+  setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
+  newCategoryName: string,
+  setNewCategoryName: React.Dispatch<React.SetStateAction<string>>,
+  curState: CategorySelectionState,
+  setCurState: React.Dispatch<React.SetStateAction<CategorySelectionState>>,
 }
 
 export default function AddableCategorySelection({
   categories,
   activeCategory,
   setActiveCategory,
+  newCategoryName,
+  setNewCategoryName,
+  curState,
+  setCurState,
 }: CategorySelectionProps): JSX.Element {
-  const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | ADDING (EDITING is not available)
-
   const getIsActive = (category: Category) => (activeCategory?.id === category.id && curState !== 'ADDING');
 
   const onCategoryClicked = (category: Category) => {
@@ -41,6 +47,8 @@ export default function AddableCategorySelection({
         categorySelectionState={curState}
         setCategorySelectionState={setCurState}
         categorySelectionType="ADDABLE"
+        newCategoryName={newCategoryName}
+        setNewCategoryName={setNewCategoryName}
       />
     </section>
   );

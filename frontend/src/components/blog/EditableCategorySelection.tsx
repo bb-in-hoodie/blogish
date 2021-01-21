@@ -21,6 +21,7 @@ export default function EditableCategorySelection({
 }: CategorySelectionProps): JSX.Element {
   const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | EDITING | ADDING
   const [targetCategory, setTargetCategory] = useState<Category | null>(null);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   const setCategorySelectionState = (nextState: CategorySelectionState) => {
     setCurState(nextState);
@@ -72,6 +73,8 @@ export default function EditableCategorySelection({
                   categorySelectionType={categorySelectionType}
                   categorySelectionState={curState}
                   setCategorySelectionState={setCurState}
+                  newCategoryName={newCategoryName}
+                  setNewCategoryName={setNewCategoryName}
                 />
                 <FiXCircle className="icon x" onClick={() => setCategorySelectionState('IDLE')} />
               </>

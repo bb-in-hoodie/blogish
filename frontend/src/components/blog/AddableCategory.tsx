@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import { createCategoryAPI } from '../../api/BlogAPI';
@@ -10,6 +10,8 @@ interface AddableCategoryProps {
   categorySelectionState: CategorySelectionState,
   setCategorySelectionState: (nextState: CategorySelectionState) => void,
   categorySelectionType: CategorySelectionType,
+  newCategoryName: string,
+  setNewCategoryName: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function AddableCategory({
@@ -17,8 +19,9 @@ export default function AddableCategory({
   categorySelectionState,
   setCategorySelectionState,
   categorySelectionType,
+  newCategoryName,
+  setNewCategoryName,
 }: AddableCategoryProps): JSX.Element {
-  const [name, setName] = useState('');
   const { blogId, updateCategories } = useContext(BlogContext);
   const isAddableType = categorySelectionType === 'ADDABLE';
   const isDisabled = !isAddableType && targetCategory; // always enabled on ADDABLE type
@@ -32,12 +35,12 @@ export default function AddableCategory({
 
   const onSubmitClicked = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (name.length <= 0 || blogId === undefined) {
+    if (newCategoryName.length <= 0 || blogId === undefined) {
       return;
     }
 
     try {
-      await createCategoryAPI(blogId, name);
+      await createCategoryAPI(blogId, newCategoryName);
       setCategorySelectionState('IDLE');
       if (updateCategories) {
         await updateCategories();
@@ -49,7 +52,7 @@ export default function AddableCategory({
 
   const onCancelClicked = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setName('');
+    setNewCategoryName('');
     setCategorySelectionState('EDITING');
   };
 
@@ -65,14 +68,14 @@ export default function AddableCategory({
           <>
             <input
               type="text"
-              value={name}
+              value={newCategoryName}
               maxLength={MAX_CATEGORY_LENGTH}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setNewCategoryName(e.target.value)}
             />
             {categorySelectionType === 'EDITABLE' && (
             <>
               <FiPlusCircle
-                className={`icon plus${name.length > 0 ? '' : ' disabled'}`}
+                className={`icon plus${newCategoryName.length > 0 ? '' : ' disabled'}`}
                 onClick={onSubmitClicked}
               />
               <FiXCircle
