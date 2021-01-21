@@ -22,7 +22,7 @@ export default function AddableCategory({
   newCategoryName,
   setNewCategoryName,
 }: AddableCategoryProps): JSX.Element {
-  const { blogId, updateCategories } = useContext(BlogContext);
+  const { blog, updateCategories } = useContext(BlogContext);
   const isAddableType = categorySelectionType === 'ADDABLE';
   const isDisabled = !isAddableType && targetCategory; // always enabled on ADDABLE type
 
@@ -35,12 +35,12 @@ export default function AddableCategory({
 
   const onSubmitClicked = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (newCategoryName.length <= 0 || blogId === undefined) {
+    if (newCategoryName.length <= 0 || blog?.id === undefined) {
       return;
     }
 
     try {
-      await createCategoryAPI(blogId, newCategoryName);
+      await createCategoryAPI(blog?.id, newCategoryName);
       setCategorySelectionState('IDLE');
       if (updateCategories) {
         await updateCategories();

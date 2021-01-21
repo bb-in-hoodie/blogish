@@ -54,7 +54,8 @@ export default function BlogView(): JSX.Element {
 
   // context
   const blogContext = {
-    blogId: parseInt(blogId, 10),
+    user,
+    blog,
     updateCategories,
     setActiveCategory,
     setSelectedPost,
@@ -82,8 +83,6 @@ export default function BlogView(): JSX.Element {
         <Switch>
           <Route exact strict path={path}>
             <BlogNav
-              user={user}
-              blog={blog}
               categories={categories}
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
@@ -97,8 +96,6 @@ export default function BlogView(): JSX.Element {
           <Route exact path={`${path}/post`}>
             <Write
               mode={writeMode}
-              user={user}
-              blog={blog}
               categories={categories}
               initialCategory={activeCategory}
               selectedPost={selectedPost}

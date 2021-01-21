@@ -1,15 +1,14 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import { Button, Spinner } from 'reactstrap';
 import { format, isSameDay } from 'date-fns';
 import { ImPen } from 'react-icons/im';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import BlogContext from '../../contexts/BlogContext';
 import { postsOfBlogAPI } from '../../api/BlogAPI';
 import { postInfoAPI } from '../../api/PostAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
-import User from '../../types/User';
-import Blog from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import Paging from '../common/Paging';
@@ -17,8 +16,6 @@ import EditableCategorySelection from './EditableCategorySelection';
 import '../../css/components/blognav.css';
 
 interface BlogNavProps {
-  user: User,
-  blog: Blog | null,
   categories: Category[],
   activeCategory: Category,
   setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
@@ -38,8 +35,6 @@ function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: st
 }
 
 export default function BlogNav({
-  user,
-  blog,
   categories,
   activeCategory,
   setActiveCategory,
@@ -48,6 +43,7 @@ export default function BlogNav({
   waitingFetchingPost,
   setWaitingFetchingPost,
 }: BlogNavProps): JSX.Element {
+  const { user, blog } = useContext(BlogContext);
   const [posts, setPosts] = useState<Post[]>([]);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
@@ -114,7 +110,7 @@ export default function BlogNav({
         categories={categories}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
-        categorySelectionType={user.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
+        categorySelectionType={user?.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
       />
       {posts.length > 0
         ? (
@@ -149,7 +145,7 @@ export default function BlogNav({
               : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
           </section>
         )}
-      {user.userId === blog?.owner.userId
+      {user?.userId === blog?.owner.userId
         && <Button className="post_button" onClick={onWriteClicked}><ImPen /></Button>}
     </nav>
   );
