@@ -15,15 +15,22 @@ export default function AddableCategorySelection({
   activeCategory,
   setActiveCategory,
 }: CategorySelectionProps): JSX.Element {
-  const [curState, setCurState] = useState<CategorySelectionState>('IDLE');
+  const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | ADDING (EDITING is not available)
+
+  const getIsActive = (category: Category) => (activeCategory?.id === category.id && curState !== 'ADDING');
+
+  const onCategoryClicked = (category: Category) => {
+    setActiveCategory(category);
+    setCurState('IDLE');
+  };
 
   return (
     <section className="category_selection">
       {categories.map((category) => (
         <Badge
           key={category.id ?? 0}
-          className={`category_button${activeCategory?.id === category.id ? ' active' : ''}`}
-          onClick={() => setActiveCategory(category)}
+          className={`category_button${getIsActive(category) ? ' active' : ''}`}
+          onClick={() => onCategoryClicked(category)}
         >
           {category.name}
         </Badge>

@@ -19,7 +19,7 @@ export default function EditableCategorySelection({
   setActiveCategory,
   categorySelectionType,
 }: CategorySelectionProps): JSX.Element {
-  const [curState, setCurState] = useState<CategorySelectionState>('IDLE');
+  const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | EDITING | ADDING
   const [targetCategory, setTargetCategory] = useState<Category | null>(null);
 
   const setCategorySelectionState = (nextState: CategorySelectionState) => {

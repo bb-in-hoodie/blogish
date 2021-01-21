@@ -20,10 +20,14 @@ export default function AddableCategory({
 }: AddableCategoryProps): JSX.Element {
   const [name, setName] = useState('');
   const { blogId, updateCategories } = useContext(BlogContext);
+  const isAddableType = categorySelectionType === 'ADDABLE';
+  const isDisabled = !isAddableType && targetCategory; // always enabled on ADDABLE type
 
   // click event
   const onCategoryClicked = () => {
-    setCategorySelectionState('ADDING');
+    if (!isDisabled) {
+      setCategorySelectionState('ADDING');
+    }
   };
 
   const onSubmitClicked = async (e: React.MouseEvent) => {
@@ -49,9 +53,11 @@ export default function AddableCategory({
     setCategorySelectionState('EDITING');
   };
 
+  const isActive = isAddableType && categorySelectionState === 'ADDING';
+
   return (
     <Badge
-      className={`category_button${targetCategory ? ' disabled' : ''}`}
+      className={`category_button${isDisabled ? ' disabled' : ''}${isActive ? ' active' : ''}`}
       onClick={onCategoryClicked}
     >
       {categorySelectionState === 'ADDING'
@@ -63,14 +69,18 @@ export default function AddableCategory({
               maxLength={MAX_CATEGORY_LENGTH}
               onChange={(e) => setName(e.target.value)}
             />
-            <FiPlusCircle
-              className={`icon plus${name.length > 0 ? '' : ' disabled'}`}
-              onClick={onSubmitClicked}
-            />
-            <FiXCircle
-              className="icon x"
-              onClick={onCancelClicked}
-            />
+            {categorySelectionType === 'EDITABLE' && (
+            <>
+              <FiPlusCircle
+                className={`icon plus${name.length > 0 ? '' : ' disabled'}`}
+                onClick={onSubmitClicked}
+              />
+              <FiXCircle
+                className="icon x"
+                onClick={onCancelClicked}
+              />
+            </>
+            )}
           </>
         )
         : 'ADD'}
