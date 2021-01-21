@@ -13,8 +13,8 @@ import Blog from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import Paging from '../common/Paging';
+import EditableCategorySelection from './EditableCategorySelection';
 import '../../css/components/blognav.css';
-import CategorySelection from './CategorySelection';
 
 interface BlogNavProps {
   user: User,
@@ -110,11 +110,10 @@ export default function BlogNav({
 
   return (
     <nav>
-      <CategorySelection
+      <EditableCategorySelection
         categories={categories}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
-        enableAllCategories
         categorySelectionType={user.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
       />
       {posts.length > 0

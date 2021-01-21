@@ -15,7 +15,7 @@
 }
 
 .blog .write .input_wrapper section.content textarea {
-  height: 10rem;
+  min-height: 10rem;
 }
 
 .blog .write .input_wrapper section:not(:last-child) {

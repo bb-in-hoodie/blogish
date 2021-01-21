@@ -4,7 +4,7 @@ import { Button, Input, Label } from 'reactstrap';
 import Blog, { WriteMode } from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post, { TITLE_MAX_LENGTH } from '../../types/Post';
-import CategorySelection from './CategorySelection';
+import AddableCategorySelection from './AddableCategorySelection';
 import '../../css/components/write.css';
 import User from '../../types/User';
 import { createPostAPI } from '../../api/BlogAPI';
@@ -123,12 +123,10 @@ export default function Write({
             CATEGORY
             {!activeCategory && '*'}
           </Label>
-          <CategorySelection
+          <AddableCategorySelection
             categories={categories}
             activeCategory={activeCategory}
             setActiveCategory={setActiveCategory}
-            enableAllCategories={false}
-            categorySelectionType="ADDABLE"
           />
         </section>
       </main>

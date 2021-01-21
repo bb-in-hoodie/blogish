@@ -7,16 +7,16 @@ import Category, { ALL_CATEGORIES, CategorySelectionState, MAX_CATEGORY_LENGTH }
 
 interface EditableCategoryProps {
   category: Category,
-  categoryToEdit: Category | null,
-  setCategoryToEdit: React.Dispatch<React.SetStateAction<Category | null>>,
+  targetCategory: Category | null,
+  setTargetCategory: React.Dispatch<React.SetStateAction<Category | null>>,
   categorySelectionState: CategorySelectionState,
   setCategorySelectionState: (nextState: CategorySelectionState) => void;
 }
 
 export default function EditableCategory({
   category,
-  categoryToEdit,
-  setCategoryToEdit,
+  targetCategory,
+  setTargetCategory,
   categorySelectionState,
   setCategorySelectionState,
 }: EditableCategoryProps): JSX.Element {
@@ -25,8 +25,8 @@ export default function EditableCategory({
 
   // click event
   const onCategoryClicked = () => {
-    if (!categoryToEdit) {
-      setCategoryToEdit(category);
+    if (!targetCategory) {
+      setTargetCategory(category);
     }
   };
 
@@ -38,7 +38,7 @@ export default function EditableCategory({
 
     try {
       await updateCategoryAPI(category.id as number, newName);
-      setCategoryToEdit(null);
+      setTargetCategory(null);
       setCategorySelectionState('IDLE');
       if (updateCategories) {
         await updateCategories();
@@ -56,7 +56,7 @@ export default function EditableCategory({
     if (confirmed) {
       try {
         await deleteCategoryAPI(category.id as number);
-        setCategoryToEdit(null);
+        setTargetCategory(null);
         setCategorySelectionState('IDLE');
 
         // initialize and re-fetch categories
@@ -73,15 +73,15 @@ export default function EditableCategory({
 
   const onCancelClicked = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCategoryToEdit(null);
+    setTargetCategory(null);
     setNewName(category.name);
   };
 
   // set className
-  const isEditingThis = categoryToEdit?.id === category.id;
+  const isEditingThis = targetCategory?.id === category.id;
 
   let className = 'category_button';
-  if (categorySelectionState === 'EDITING' && categoryToEdit) {
+  if (categorySelectionState === 'EDITING' && targetCategory) {
     className += isEditingThis ? ' editing' : ' disabled';
   } else if (categorySelectionState === 'ADDING') {
     className += ' disabled';

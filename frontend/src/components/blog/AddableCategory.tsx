@@ -3,18 +3,20 @@ import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import { createCategoryAPI } from '../../api/BlogAPI';
 import BlogContext from '../../contexts/BlogContext';
-import Category, { CategorySelectionState, MAX_CATEGORY_LENGTH } from '../../types/Category';
+import Category, { CategorySelectionState, CategorySelectionType, MAX_CATEGORY_LENGTH } from '../../types/Category';
 
 interface AddableCategoryProps {
-  categoryToEdit: Category | null,
+  targetCategory: Category | null,
   categorySelectionState: CategorySelectionState,
-  setCategorySelectionState: (nextState: CategorySelectionState) => void;
+  setCategorySelectionState: (nextState: CategorySelectionState) => void,
+  categorySelectionType: CategorySelectionType,
 }
 
 export default function AddableCategory({
-  categoryToEdit,
+  targetCategory,
   categorySelectionState,
   setCategorySelectionState,
+  categorySelectionType,
 }: AddableCategoryProps): JSX.Element {
   const [name, setName] = useState('');
   const { blogId, updateCategories } = useContext(BlogContext);
@@ -49,7 +51,7 @@ export default function AddableCategory({
 
   return (
     <Badge
-      className={`category_button${categoryToEdit ? ' disabled' : ''}`}
+      className={`category_button${targetCategory ? ' disabled' : ''}`}
       onClick={onCategoryClicked}
     >
       {categorySelectionState === 'ADDING'
