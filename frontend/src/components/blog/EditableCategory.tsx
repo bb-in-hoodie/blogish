@@ -27,6 +27,14 @@ export default function EditableCategory({
   const { updateCategories, setActiveCategory, setSelectedPost } = useContext(BlogContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // set className
+  let className: 'editing' | 'disabled' | '' = '';
+  if (categorySelectionState === 'EDITING' && targetCategory) {
+    className = isEditingThis ? 'editing' : 'disabled';
+  } else if (categorySelectionState === 'ADDING') {
+    className = 'disabled';
+  }
+
   // click event
   const onCategoryClicked = () => {
     if (!targetCategory) {
@@ -54,6 +62,9 @@ export default function EditableCategory({
 
   const onDeleteClicked = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (className === 'disabled') {
+      return;
+    }
 
     // eslint-disable-next-line no-restricted-globals
     const confirmed = confirm('카테고리를 삭제하면 해당 카테고리의 게시글도 모두 삭제됩니다. 삭제하시겠습니까?');
@@ -93,25 +104,17 @@ export default function EditableCategory({
     }
   }, [isEditingThis]);
 
-  // set className
-  let className = 'category_button';
-  if (categorySelectionState === 'EDITING' && targetCategory) {
-    className += isEditingThis ? ' editing' : ' disabled';
-  } else if (categorySelectionState === 'ADDING') {
-    className += ' disabled';
-  }
-
   return (
     <Badge
       key={`editable_${category.id ?? 0}`}
-      className={className}
+      className={`category_button ${className}`}
       onClick={onCategoryClicked}
     >
       {!isEditingThis && (
         <>
           {category.name}
           <FiTrash2
-            className="icon delete"
+            className={`icon delete ${className}`}
             onClick={onDeleteClicked}
           />
         </>

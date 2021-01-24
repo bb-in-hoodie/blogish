@@ -103,6 +103,11 @@
   color: white;
 }
 
+.category_selection .icon.delete.disabled {
+  background-color: rgb(235, 223, 223);
+  cursor: default;
+}
+
 .category_selection .icon.disabled {
   color: rgb(243, 243, 243);
   cursor: default;
