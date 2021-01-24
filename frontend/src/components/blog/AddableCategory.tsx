@@ -1,9 +1,13 @@
-import React, { useContext } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import { createCategoryAPI } from '../../api/BlogAPI';
 import BlogContext from '../../contexts/BlogContext';
-import Category, { CategorySelectionState, CategorySelectionType, MAX_CATEGORY_LENGTH } from '../../types/Category';
+import Category, {
+  CategorySelectionState, CategorySelectionType, CATEGORY_INPUT_MIN_WIDTH, MAX_CATEGORY_LENGTH,
+} from '../../types/Category';
 
 interface AddableCategoryProps {
   targetCategory: Category | null,
@@ -23,8 +27,9 @@ export default function AddableCategory({
   setNewCategoryName,
 }: AddableCategoryProps): JSX.Element {
   const { blog, updateCategories } = useContext(BlogContext);
-  const isAddableType = categorySelectionType === 'ADDABLE';
-  const isDisabled = !isAddableType && targetCategory; // always enabled on ADDABLE type
+  const [isAdding, setIsAdding] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const isDisabled = categorySelectionType !== 'ADDABLE' && targetCategory; // always enabled on ADDABLE type
 
   // click event
   const onCategoryClicked = () => {
@@ -56,17 +61,34 @@ export default function AddableCategory({
     setCategorySelectionState('EDITING');
   };
 
-  const isActive = isAddableType && categorySelectionState === 'ADDING';
+  // it's active if current state is ADDING
+  useEffect(() => {
+    setIsAdding(categorySelectionState === 'ADDING');
+  }, [categorySelectionState]);
+
+  // focus on input on active
+  useEffect(() => {
+    if (inputRef.current && isAdding) {
+      inputRef.current.focus();
+    }
+  }, [isAdding]);
+
+  // adjust width of input
+  if (inputRef.current) {
+    inputRef.current.style.width = `${CATEGORY_INPUT_MIN_WIDTH}px`;
+    inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
+  }
 
   return (
     <Badge
-      className={`category_button${isDisabled ? ' disabled' : ''}${isActive ? ' active' : ''}`}
+      className={`category_button addable ${isDisabled ? ' disabled' : ''}${isAdding ? ' adding' : ''}`}
       onClick={onCategoryClicked}
     >
       {categorySelectionState === 'ADDING'
         ? (
           <>
             <input
+              ref={inputRef}
               type="text"
               value={newCategoryName}
               maxLength={MAX_CATEGORY_LENGTH}

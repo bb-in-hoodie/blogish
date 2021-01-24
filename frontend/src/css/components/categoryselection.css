@@ -52,13 +52,34 @@
   border: 1px solid rgb(200, 200, 200);
   color: rgb(200, 200, 200);
 }
-.category_selection .category_button:not(.disabled):hover {
+
+.category_selection .category_button:not(.adding):not(.editing):not(.disabled):hover {
   background-color: rgb(243, 243, 243);
 }
 
-.category_selection .category_button.active {
+.category_selection .category_button:not(.adding):not(.editing).active {
   background-color: rgb(200, 200, 200);
   color: white;
+}
+
+.category_selection .category_button.addable {
+  border: 1px solid rgb(112, 166, 170);
+  color: rgb(112, 166, 170);
+}
+
+.category_selection .category_button.addable:not(.adding):not(.editing):not(.disabled):hover {
+  background-color: rgb(219, 238, 240);
+}
+
+.category_selection .category_button input {
+  margin: -0.35rem 0.3rem -0.35rem 0;
+  border: none;
+  background: none;
+  color: rgb(112, 166, 170);
+}
+
+.category_selection .category_button input:focus {
+  outline: none;
 }
 
 .category_selection .icon {

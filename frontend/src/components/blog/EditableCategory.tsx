@@ -5,7 +5,9 @@ import { FiPlusCircle, FiXCircle, FiTrash2 } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import { deleteCategoryAPI, updateCategoryAPI } from '../../api/CategoryAPI';
 import BlogContext from '../../contexts/BlogContext';
-import Category, { ALL_CATEGORIES, CategorySelectionState, MAX_CATEGORY_LENGTH } from '../../types/Category';
+import Category, {
+  ALL_CATEGORIES, CategorySelectionState, CATEGORY_INPUT_MIN_WIDTH, MAX_CATEGORY_LENGTH,
+} from '../../types/Category';
 
 interface EditableCategoryProps {
   category: Category,
@@ -97,10 +99,20 @@ export default function EditableCategory({
     setIsEditingThis(targetCategory?.id === category.id);
   }, [targetCategory, category]);
 
+  // adjust width of input
+  const adjustInputWidth = () => {
+    if (inputRef.current) {
+      inputRef.current.style.width = `${CATEGORY_INPUT_MIN_WIDTH}px`;
+      inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
+    }
+  };
+  adjustInputWidth();
+
   // if the category starts being edited, focus on its input
   useEffect(() => {
     if (isEditingThis && inputRef.current) {
       inputRef.current.focus();
+      adjustInputWidth();
     }
   }, [isEditingThis]);
 
