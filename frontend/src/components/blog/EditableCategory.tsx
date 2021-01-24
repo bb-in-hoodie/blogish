@@ -1,4 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { FiPlusCircle, FiXCircle, FiTrash2 } from 'react-icons/fi';
 import { Badge } from 'reactstrap';
 import { deleteCategoryAPI, updateCategoryAPI } from '../../api/CategoryAPI';
@@ -21,7 +23,9 @@ export default function EditableCategory({
   setCategorySelectionState,
 }: EditableCategoryProps): JSX.Element {
   const [newName, setNewName] = useState(category.name);
+  const [isEditingThis, setIsEditingThis] = useState(false);
   const { updateCategories, setActiveCategory, setSelectedPost } = useContext(BlogContext);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // click event
   const onCategoryClicked = () => {
@@ -77,9 +81,19 @@ export default function EditableCategory({
     setNewName(category.name);
   };
 
-  // set className
-  const isEditingThis = targetCategory?.id === category.id;
+  // check if a category currently being edited is this category
+  useEffect(() => {
+    setIsEditingThis(targetCategory?.id === category.id);
+  }, [targetCategory, category]);
 
+  // if the category starts being edited, focus on its input
+  useEffect(() => {
+    if (isEditingThis && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditingThis]);
+
+  // set className
   let className = 'category_button';
   if (categorySelectionState === 'EDITING' && targetCategory) {
     className += isEditingThis ? ' editing' : ' disabled';
@@ -105,6 +119,7 @@ export default function EditableCategory({
       {isEditingThis && (
       <>
         <input
+          ref={inputRef}
           type="text"
           value={newName}
           maxLength={MAX_CATEGORY_LENGTH}

@@ -107,7 +107,7 @@ export default function Write({
       alert(alertText);
       setWaitingAPI(false);
     }
-  }, [curState, newCategoryName, mode, blog, history]);
+  }, [curState, updateCategories, newCategoryName, mode, blog, history]);
 
   const isSubmitDisabled = (curState === 'ADDING' && !newCategoryName)
                           || !activeCategory
