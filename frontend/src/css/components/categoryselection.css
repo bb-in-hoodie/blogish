@@ -24,13 +24,13 @@
   cursor: pointer;
 }
 
-.category_selection .badge.disabled {
+.category_selection .category_button.disabled {
   border: 1px solid rgb(243, 243, 243);
   color: rgb(243, 243, 243);
   cursor: default;
 }
 
-.category_selection .badge.editing {
+.category_selection .category_button.editing {
   cursor: default;
 }
 
@@ -53,6 +53,10 @@
   color: rgb(200, 200, 200);
 }
 
+.category_selection .category_button.editable {
+  border-style: dotted;
+}
+
 .category_selection .category_button:not(.adding):not(.editing):not(.disabled):hover {
   background-color: rgb(243, 243, 243);
 }
@@ -63,8 +67,14 @@
 }
 
 .category_selection .category_button.addable {
-  border: 1px solid rgb(112, 166, 170);
+  border-color: rgb(112, 166, 170);
   color: rgb(112, 166, 170);
+}
+
+.category_selection .category_button.addable.disabled {
+  border-color: rgb(243, 243, 243);
+  color: rgb(243, 243, 243);
+  cursor: default;
 }
 
 .category_selection .category_button.addable:not(.adding):not(.editing):not(.disabled):hover {
@@ -75,11 +85,15 @@
   margin: -0.35rem 0.3rem -0.35rem 0;
   border: none;
   background: none;
-  color: rgb(112, 166, 170);
+  color: rgb(200, 200, 200);
 }
 
 .category_selection .category_button input:focus {
   outline: none;
+}
+
+.category_selection .category_button.category_button.addable input {
+  color: rgb(112, 166, 170);
 }
 
 .category_selection .icon {
@@ -115,8 +129,14 @@
   top: -8px;
   right: -6px;
   border-radius: 50%;
-  background-color: rgb(218, 189, 189);
+  background-color: rgb(200, 200, 200);
   color: white;
+  transform: scale(0, 0);
+  transition: 100ms;
+}
+
+.category_selection .category_button:not(.disabled):hover .icon.delete {
+  transform: scale(1, 1);
 }
 
 .category_selection .icon.delete:not(.disabled):hover {

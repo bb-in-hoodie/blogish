@@ -6,7 +6,7 @@ import { Badge } from 'reactstrap';
 import { createCategoryAPI } from '../../api/BlogAPI';
 import BlogContext from '../../contexts/BlogContext';
 import Category, {
-  CategorySelectionState, CategorySelectionType, CATEGORY_INPUT_MIN_WIDTH, MAX_CATEGORY_LENGTH,
+  CategorySelectionState, CategorySelectionType, MAX_CATEGORY_LENGTH,
 } from '../../types/Category';
 
 interface AddableCategoryProps {
@@ -17,6 +17,8 @@ interface AddableCategoryProps {
   newCategoryName: string,
   setNewCategoryName: React.Dispatch<React.SetStateAction<string>>
 }
+
+const INPUT_MIN_WIDTH = 75;
 
 export default function AddableCategory({
   targetCategory,
@@ -30,6 +32,7 @@ export default function AddableCategory({
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const isDisabled = categorySelectionType !== 'ADDABLE' && targetCategory; // always enabled on ADDABLE type
+  const isEditable = categorySelectionState === 'EDITING';
 
   // click event
   const onCategoryClicked = () => {
@@ -75,13 +78,13 @@ export default function AddableCategory({
 
   // adjust width of input
   if (inputRef.current) {
-    inputRef.current.style.width = `${CATEGORY_INPUT_MIN_WIDTH}px`;
+    inputRef.current.style.width = `${INPUT_MIN_WIDTH}px`;
     inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
   }
 
   return (
     <Badge
-      className={`category_button addable ${isDisabled ? ' disabled' : ''}${isAdding ? ' adding' : ''}`}
+      className={`category_button addable ${isEditable ? 'editable' : ''} ${isDisabled ? 'disabled' : ''}${isAdding ? 'adding' : ''}`}
       onClick={onCategoryClicked}
     >
       {categorySelectionState === 'ADDING'

@@ -6,7 +6,7 @@ import { Badge } from 'reactstrap';
 import { deleteCategoryAPI, updateCategoryAPI } from '../../api/CategoryAPI';
 import BlogContext from '../../contexts/BlogContext';
 import Category, {
-  ALL_CATEGORIES, CategorySelectionState, CATEGORY_INPUT_MIN_WIDTH, MAX_CATEGORY_LENGTH,
+  ALL_CATEGORIES, CategorySelectionState, MAX_CATEGORY_LENGTH,
 } from '../../types/Category';
 
 interface EditableCategoryProps {
@@ -16,6 +16,8 @@ interface EditableCategoryProps {
   categorySelectionState: CategorySelectionState,
   setCategorySelectionState: (nextState: CategorySelectionState) => void;
 }
+
+const INPUT_MIN_WIDTH = 20;
 
 export default function EditableCategory({
   category,
@@ -30,8 +32,9 @@ export default function EditableCategory({
   const inputRef = useRef<HTMLInputElement>(null);
 
   // set className
+  const isEditable = categorySelectionState === 'EDITING';
   let className: 'editing' | 'disabled' | '' = '';
-  if (categorySelectionState === 'EDITING' && targetCategory) {
+  if (isEditable && targetCategory) {
     className = isEditingThis ? 'editing' : 'disabled';
   } else if (categorySelectionState === 'ADDING') {
     className = 'disabled';
@@ -39,7 +42,7 @@ export default function EditableCategory({
 
   // click event
   const onCategoryClicked = () => {
-    if (!targetCategory) {
+    if (!targetCategory && !className) {
       setTargetCategory(category);
     }
   };
@@ -102,7 +105,7 @@ export default function EditableCategory({
   // adjust width of input
   const adjustInputWidth = () => {
     if (inputRef.current) {
-      inputRef.current.style.width = `${CATEGORY_INPUT_MIN_WIDTH}px`;
+      inputRef.current.style.width = `${INPUT_MIN_WIDTH}px`;
       inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
     }
   };
@@ -119,7 +122,7 @@ export default function EditableCategory({
   return (
     <Badge
       key={`editable_${category.id ?? 0}`}
-      className={`category_button ${className}`}
+      className={`category_button ${isEditable ? 'editable' : ''} ${className}`}
       onClick={onCategoryClicked}
     >
       {!isEditingThis && (
