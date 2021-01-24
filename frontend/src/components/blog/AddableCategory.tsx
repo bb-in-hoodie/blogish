@@ -41,8 +41,11 @@ export default function AddableCategory({
     }
   };
 
-  const onSubmitClicked = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const onSubmitClicked = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
     if (newCategoryName.length <= 0 || blog?.id === undefined) {
       return;
     }
@@ -62,6 +65,12 @@ export default function AddableCategory({
     e.stopPropagation();
     setNewCategoryName('');
     setCategorySelectionState('EDITING');
+  };
+
+  const onEnterDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSubmitClicked();
+    }
   };
 
   // it's active if current state is ADDING
@@ -96,6 +105,7 @@ export default function AddableCategory({
               value={newCategoryName}
               maxLength={MAX_CATEGORY_LENGTH}
               onChange={(e) => setNewCategoryName(e.target.value)}
+              onKeyDown={(e) => onEnterDown(e)}
             />
             {categorySelectionType === 'EDITABLE' && (
             <>

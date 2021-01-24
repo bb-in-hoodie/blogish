@@ -47,8 +47,11 @@ export default function EditableCategory({
     }
   };
 
-  const onSubmitClicked = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const onSubmitClicked = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
     if (newName.length <= 0) {
       return;
     }
@@ -97,6 +100,12 @@ export default function EditableCategory({
     setNewName(category.name);
   };
 
+  const onEnterDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSubmitClicked();
+    }
+  };
+
   // check if a category currently being edited is this category
   useEffect(() => {
     setIsEditingThis(targetCategory?.id === category.id);
@@ -142,6 +151,7 @@ export default function EditableCategory({
           value={newName}
           maxLength={MAX_CATEGORY_LENGTH}
           onChange={(e) => setNewName(e.target.value)}
+          onKeyDown={(e) => onEnterDown(e)}
         />
         <FiPlusCircle
           className={`icon plus${newName.length > 0 ? '' : ' disabled'}`}
