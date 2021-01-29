@@ -10,12 +10,12 @@
   color: rgb(150, 150, 150);
 }
 
-.blog .write .input_wrapper section input,textarea {
-  border: 1px dashed rgb(200, 200, 200) !important;
+#input_title, #input_content {
+  border: 1px dashed rgb(200, 200, 200);
 }
 
 .blog .write .input_wrapper section.content textarea {
-  height: 10rem;
+  min-height: 10rem;
 }
 
 .blog .write .input_wrapper section:not(:last-child) {

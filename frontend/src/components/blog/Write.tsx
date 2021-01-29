@@ -1,29 +1,32 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Input, Label } from 'reactstrap';
-import Blog, { WriteMode } from '../../types/Blog';
-import Category, { ALL_CATEGORIES } from '../../types/Category';
+import BlogContext from '../../contexts/BlogContext';
+import { WriteMode } from '../../types/Blog';
+import Category, { ALL_CATEGORIES, CategorySelectionState } from '../../types/Category';
 import Post, { TITLE_MAX_LENGTH } from '../../types/Post';
-import CategorySelection from './CategorySelection';
+import { createCategoryAPI, createPostAPI } from '../../api/BlogAPI';
+import AddableCategorySelection from './AddableCategorySelection';
 import '../../css/components/write.css';
-import User from '../../types/User';
-import { createPostAPI } from '../../api/BlogAPI';
 
 interface WriteProps {
   mode: WriteMode,
-  user: User | null,
-  blog: Blog | null,
   categories: Category[],
   initialCategory: Category | null,
   selectedPost: Post | null,
 }
 
 export default function Write({
-  mode, user, blog, categories, initialCategory, selectedPost,
+  mode, categories, initialCategory, selectedPost,
 }: WriteProps): JSX.Element {
+  const { user, blog, updateCategories } = useContext(BlogContext);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | ADDING (EDITING is not available)
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+  const [newCategoryName, setNewCategoryName] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
   const history = useHistory();
 
@@ -55,14 +58,35 @@ export default function Write({
   const onSubmitClicked = useCallback(async (
     postTitle: string, postContent: string, postCategory: Category | null,
   ) => {
-    if (!postCategory?.id || !blog) {
+    // blog validation
+    if (!blog) {
+      return;
+    }
+
+    // create a category if needed
+    let category = postCategory;
+
+    if (curState === 'ADDING') {
+      try {
+        category = await createCategoryAPI(blog.id, newCategoryName);
+        if (updateCategories) {
+          await updateCategories();
+        }
+      } catch (e) {
+        alert('새로운 카테고리를 생성하는 과정에서 에러가 발생했습니다.');
+        return;
+      }
+    }
+
+    // category validation
+    if (!category?.id) {
       return;
     }
 
     const post: Post = {
       title: postTitle,
       content: postContent,
-      categoryId: postCategory.id,
+      categoryId: category.id,
       blogId: blog.id,
     };
 
@@ -83,7 +107,12 @@ export default function Write({
       alert(alertText);
       setWaitingAPI(false);
     }
-  }, [mode, blog, history]);
+  }, [curState, updateCategories, newCategoryName, mode, blog, history]);
+
+  const isSubmitDisabled = (curState === 'ADDING' && !newCategoryName)
+                          || !activeCategory
+                          || title.length <= 0
+                          || waitingAPI;
 
   return (
     <section className="write">
@@ -123,11 +152,14 @@ export default function Write({
             CATEGORY
             {!activeCategory && '*'}
           </Label>
-          <CategorySelection
+          <AddableCategorySelection
             categories={categories}
             activeCategory={activeCategory}
             setActiveCategory={setActiveCategory}
-            enableAllCategories={false}
+            newCategoryName={newCategoryName}
+            setNewCategoryName={setNewCategoryName}
+            curState={curState}
+            setCurState={setCurState}
           />
         </section>
       </main>
@@ -136,7 +168,7 @@ export default function Write({
         <Button
           className="submit"
           color="success"
-          disabled={title.length <= 0 || !activeCategory || waitingAPI}
+          disabled={isSubmitDisabled}
           onClick={() => onSubmitClicked(title, content, activeCategory)}
         >
           {mode === 'WRITE' ? 'POST' : 'EDIT'}

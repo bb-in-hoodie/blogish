@@ -6,7 +6,6 @@ import Main from './views/Main';
 import Join from './views/Join';
 import Browse from './views/Browse';
 import BlogView from './views/BlogView';
-import Editor from './views/Editor';
 
 export default function App(): JSX.Element {
   return (
@@ -20,9 +19,6 @@ export default function App(): JSX.Element {
         </Route>
         <Route path="/blog/:blogId">
           <BlogView />
-        </Route>
-        <Route path="/edit/:blogId">
-          <Editor />
         </Route>
         <Route path="/">
           <Main />

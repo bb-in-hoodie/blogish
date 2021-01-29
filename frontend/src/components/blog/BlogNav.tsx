@@ -1,24 +1,21 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import { Button, Spinner } from 'reactstrap';
 import { format, isSameDay } from 'date-fns';
 import { ImPen } from 'react-icons/im';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import BlogContext from '../../contexts/BlogContext';
 import { postsOfBlogAPI } from '../../api/BlogAPI';
 import { postInfoAPI } from '../../api/PostAPI';
 import { postsOfCategoryAPI } from '../../api/CategoryAPI';
-import User from '../../types/User';
-import Blog from '../../types/Blog';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import Paging from '../common/Paging';
+import EditableCategorySelection from './EditableCategorySelection';
 import '../../css/components/blognav.css';
-import CategorySelection from './CategorySelection';
 
 interface BlogNavProps {
-  user: User,
-  blog: Blog | null,
   categories: Category[],
   activeCategory: Category,
   setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
@@ -38,8 +35,6 @@ function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: st
 }
 
 export default function BlogNav({
-  user,
-  blog,
   categories,
   activeCategory,
   setActiveCategory,
@@ -48,7 +43,9 @@ export default function BlogNav({
   waitingFetchingPost,
   setWaitingFetchingPost,
 }: BlogNavProps): JSX.Element {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const {
+    user, blog, posts, setPosts,
+  } = useContext(BlogContext);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDate = useRef(new Date());
@@ -56,25 +53,25 @@ export default function BlogNav({
   const history = useHistory();
 
   // fetch posts on category change
-  const getPosts = useCallback(async (category: Category) => {
-    if (!blog) {
+  const getPosts = useCallback(async () => {
+    if (!blog || !setPosts) {
       return;
     }
 
     setPosts([]);
     setWaitingGettingPosts(true);
-    if (category.id === ALL_CATEGORIES.id) {
+    if (activeCategory.id === ALL_CATEGORIES.id) {
       if (blog) {
         setPosts(await postsOfBlogAPI(blog?.id));
       }
-    } else if (category.id) {
-      setPosts(await postsOfCategoryAPI(category.id));
+    } else if (activeCategory.id) {
+      setPosts(await postsOfCategoryAPI(activeCategory.id));
     }
     setWaitingGettingPosts(false);
-  }, [blog, setPosts, setWaitingGettingPosts]);
+  }, [blog, activeCategory, setPosts, setWaitingGettingPosts]);
 
   useEffect(() => {
-    getPosts(activeCategory);
+    getPosts();
   }, [getPosts, activeCategory]);
 
   // select first post of posts
@@ -110,11 +107,12 @@ export default function BlogNav({
 
   return (
     <nav>
-      <CategorySelection
+      <EditableCategorySelection
         categories={categories}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
-        enableAllCategories
+        categorySelectionType={user?.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
+        getPosts={getPosts}
       />
       {posts.length > 0
         ? (
@@ -149,7 +147,7 @@ export default function BlogNav({
               : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
           </section>
         )}
-      {user.userId === blog?.owner.userId
+      {user?.userId === blog?.owner.userId
         && <Button className="post_button" onClick={onWriteClicked}><ImPen /></Button>}
     </nav>
   );
