@@ -11,6 +11,7 @@ interface CategorySelectionProps {
   activeCategory: Category | null,
   setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
   categorySelectionType: CategorySelectionType,
+  getPosts: () => Promise<void>
 }
 
 export default function EditableCategorySelection({
@@ -18,6 +19,7 @@ export default function EditableCategorySelection({
   activeCategory,
   setActiveCategory,
   categorySelectionType,
+  getPosts,
 }: CategorySelectionProps): JSX.Element {
   const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | EDITING | ADDING
   const [targetCategory, setTargetCategory] = useState<Category | null>(null);
@@ -66,6 +68,7 @@ export default function EditableCategorySelection({
                     setTargetCategory={setTargetCategory}
                     categorySelectionState={curState}
                     setCategorySelectionState={setCurState}
+                    getPosts={getPosts}
                   />
                 ))}
                 <AddableCategory

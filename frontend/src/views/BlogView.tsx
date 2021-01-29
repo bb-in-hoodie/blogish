@@ -20,6 +20,7 @@ export default function BlogView(): JSX.Element {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
   const [writeMode] = useState<WriteMode>('WRITE');
@@ -59,6 +60,8 @@ export default function BlogView(): JSX.Element {
     updateCategories,
     setActiveCategory,
     setSelectedPost,
+    posts,
+    setPosts,
   };
 
   return (

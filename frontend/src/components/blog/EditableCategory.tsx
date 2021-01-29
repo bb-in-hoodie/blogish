@@ -15,7 +15,8 @@ interface EditableCategoryProps {
   targetCategory: Category | null,
   setTargetCategory: React.Dispatch<React.SetStateAction<Category | null>>,
   categorySelectionState: CategorySelectionState,
-  setCategorySelectionState: (nextState: CategorySelectionState) => void;
+  setCategorySelectionState: (nextState: CategorySelectionState) => void,
+  getPosts: () => Promise<void>
 }
 
 const INPUT_MIN_WIDTH = 20;
@@ -26,10 +27,13 @@ export default function EditableCategory({
   setTargetCategory,
   categorySelectionState,
   setCategorySelectionState,
+  getPosts,
 }: EditableCategoryProps): JSX.Element {
   const [newName, setNewName] = useState(category.name);
   const [isEditingThis, setIsEditingThis] = useState(false);
-  const { updateCategories, setActiveCategory, setSelectedPost } = useContext(BlogContext);
+  const {
+    updateCategories, setActiveCategory, setSelectedPost, setPosts,
+  } = useContext(BlogContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // set className
@@ -84,10 +88,12 @@ export default function EditableCategory({
         setCategorySelectionState('IDLE');
 
         // initialize and re-fetch categories
-        if (setActiveCategory && setSelectedPost && updateCategories) {
-          setActiveCategory(ALL_CATEGORIES);
+        if (setActiveCategory && setSelectedPost && updateCategories && setPosts) {
+          setPosts([]);
           setSelectedPost(null);
+          setActiveCategory(ALL_CATEGORIES);
           await updateCategories();
+          getPosts();
         }
       } catch {
         alert('카테고리를 삭제하는 과정에서 에러가 발생했습니다.');

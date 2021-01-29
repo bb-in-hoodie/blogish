@@ -43,8 +43,9 @@ export default function BlogNav({
   waitingFetchingPost,
   setWaitingFetchingPost,
 }: BlogNavProps): JSX.Element {
-  const { user, blog } = useContext(BlogContext);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const {
+    user, blog, posts, setPosts,
+  } = useContext(BlogContext);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDate = useRef(new Date());
@@ -52,25 +53,25 @@ export default function BlogNav({
   const history = useHistory();
 
   // fetch posts on category change
-  const getPosts = useCallback(async (category: Category) => {
-    if (!blog) {
+  const getPosts = useCallback(async () => {
+    if (!blog || !setPosts) {
       return;
     }
 
     setPosts([]);
     setWaitingGettingPosts(true);
-    if (category.id === ALL_CATEGORIES.id) {
+    if (activeCategory.id === ALL_CATEGORIES.id) {
       if (blog) {
         setPosts(await postsOfBlogAPI(blog?.id));
       }
-    } else if (category.id) {
-      setPosts(await postsOfCategoryAPI(category.id));
+    } else if (activeCategory.id) {
+      setPosts(await postsOfCategoryAPI(activeCategory.id));
     }
     setWaitingGettingPosts(false);
-  }, [blog, setPosts, setWaitingGettingPosts]);
+  }, [blog, activeCategory, setPosts, setWaitingGettingPosts]);
 
   useEffect(() => {
-    getPosts(activeCategory);
+    getPosts();
   }, [getPosts, activeCategory]);
 
   // select first post of posts
@@ -111,6 +112,7 @@ export default function BlogNav({
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
         categorySelectionType={user?.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
+        getPosts={getPosts}
       />
       {posts.length > 0
         ? (
