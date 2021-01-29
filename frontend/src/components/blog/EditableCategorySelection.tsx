@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Badge } from 'reactstrap';
-import { FiSettings, FiXCircle } from 'react-icons/fi';
+import { FiSettings, FiX } from 'react-icons/fi';
 import Category, { ALL_CATEGORIES, CategorySelectionState, CategorySelectionType } from '../../types/Category';
 import '../../css/components/categoryselection.css';
 import EditableCategory from './EditableCategory';
@@ -76,7 +76,7 @@ export default function EditableCategorySelection({
                   newCategoryName={newCategoryName}
                   setNewCategoryName={setNewCategoryName}
                 />
-                <FiXCircle className="icon x" onClick={() => setCategorySelectionState('IDLE')} />
+                <FiX className="icon x" onClick={() => setCategorySelectionState('IDLE')} />
               </>
               )}
         </>

@@ -1,7 +1,8 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { FiPlusCircle, FiXCircle } from 'react-icons/fi';
+import { FiCheck } from 'react-icons/fi';
+import { IoRefresh } from 'react-icons/io5';
 import { Badge } from 'reactstrap';
 import { createCategoryAPI } from '../../api/BlogAPI';
 import BlogContext from '../../contexts/BlogContext';
@@ -93,36 +94,40 @@ export default function AddableCategory({
   }
 
   return (
-    <Badge
-      className={`category_button addable ${isAddable ? 'addable-type' : ''} ${isEditable ? 'editable' : ''} ${isDisabled ? 'disabled' : ''}${isAdding ? 'adding' : ''}`}
-      onClick={onCategoryClicked}
-    >
-      {categorySelectionState === 'ADDING'
-        ? (
-          <>
-            <input
-              ref={inputRef}
-              type="text"
-              value={newCategoryName}
-              maxLength={MAX_CATEGORY_LENGTH}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              onKeyDown={(e) => onEnterDown(e)}
-            />
-            {categorySelectionType === 'EDITABLE' && (
+    <>
+      <Badge
+        className={`category_button addable ${isAddable ? 'addable_type' : ''} ${isEditable ? 'editable' : ''} ${isDisabled ? 'disabled' : ''}${isAdding ? 'adding' : ''}`}
+        onClick={onCategoryClicked}
+      >
+        {categorySelectionState === 'ADDING'
+          ? (
             <>
-              <FiPlusCircle
-                className={`icon plus${newCategoryName.length > 0 ? '' : ' disabled'}`}
-                onClick={onSubmitClicked}
+              <input
+                ref={inputRef}
+                type="text"
+                value={newCategoryName}
+                maxLength={MAX_CATEGORY_LENGTH}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                onKeyDown={(e) => onEnterDown(e)}
               />
-              <FiXCircle
-                className="icon x"
-                onClick={onCancelClicked}
-              />
+              {categorySelectionType === 'EDITABLE' && (
+              <>
+                <FiCheck
+                  className={`icon plus${newCategoryName.length > 0 ? '' : ' disabled'}`}
+                  onClick={onSubmitClicked}
+                />
+              </>
+              )}
             </>
-            )}
-          </>
-        )
-        : 'ADD'}
-    </Badge>
+          )
+          : 'ADD'}
+      </Badge>
+      {categorySelectionState === 'ADDING' && categorySelectionType === 'EDITABLE' && (
+        <IoRefresh
+          className="icon x"
+          onClick={onCancelClicked}
+        />
+      )}
+    </>
   );
 }

@@ -1,7 +1,8 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { FiPlusCircle, FiXCircle, FiTrash2 } from 'react-icons/fi';
+import { FiCheck, FiTrash2 } from 'react-icons/fi';
+import { IoRefresh } from 'react-icons/io5';
 import { Badge } from 'reactstrap';
 import { deleteCategoryAPI, updateCategoryAPI } from '../../api/CategoryAPI';
 import BlogContext from '../../contexts/BlogContext';
@@ -129,12 +130,13 @@ export default function EditableCategory({
   }, [isEditingThis]);
 
   return (
-    <Badge
-      key={`editable_${category.id ?? 0}`}
-      className={`category_button ${isEditable ? 'editable' : ''} ${className}`}
-      onClick={onCategoryClicked}
-    >
-      {!isEditingThis && (
+    <>
+      <Badge
+        key={`editable_${category.id ?? 0}`}
+        className={`category_button ${isEditable ? 'editable' : ''} ${className}`}
+        onClick={onCategoryClicked}
+      >
+        {!isEditingThis && (
         <>
           {category.name}
           <FiTrash2
@@ -142,27 +144,30 @@ export default function EditableCategory({
             onClick={onDeleteClicked}
           />
         </>
-      )}
+        )}
+        {isEditingThis && (
+        <>
+          <input
+            ref={inputRef}
+            type="text"
+            value={newName}
+            maxLength={MAX_CATEGORY_LENGTH}
+            onChange={(e) => setNewName(e.target.value)}
+            onKeyDown={(e) => onEnterDown(e)}
+          />
+          <FiCheck
+            className={`icon plus${newName.length > 0 ? '' : ' disabled'}`}
+            onClick={onSubmitClicked}
+          />
+        </>
+        )}
+      </Badge>
       {isEditingThis && (
-      <>
-        <input
-          ref={inputRef}
-          type="text"
-          value={newName}
-          maxLength={MAX_CATEGORY_LENGTH}
-          onChange={(e) => setNewName(e.target.value)}
-          onKeyDown={(e) => onEnterDown(e)}
-        />
-        <FiPlusCircle
-          className={`icon plus${newName.length > 0 ? '' : ' disabled'}`}
-          onClick={onSubmitClicked}
-        />
-        <FiXCircle
+        <IoRefresh
           className="icon x"
           onClick={onCancelClicked}
         />
-      </>
       )}
-    </Badge>
+    </>
   );
 }

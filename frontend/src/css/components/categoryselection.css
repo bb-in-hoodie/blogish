@@ -81,12 +81,12 @@
   background-color: rgb(219, 238, 240);
 }
 
-.category_selection .category_button.addable.addable-type.adding {
+.category_selection .category_button.addable.addable_type.adding {
   background-color: rgb(112, 166, 170);
   color: white;
 }
 
-.category_selection .category_button.addable.addable-type:not(.adding):not(.editing):not(.disabled):hover {
+.category_selection .category_button.addable.addable_type:not(.adding):not(.editing):not(.disabled):hover {
   background-color: rgb(229, 241, 241);
 }
 
@@ -105,7 +105,7 @@
   color: rgb(112, 166, 170);
 }
 
-.category_selection .category_button.category_button.addable.addable-type input {
+.category_selection .category_button.category_button.addable.addable_type input {
   color:white;
 }
 
@@ -119,19 +119,15 @@
 }
 
 .category_selection .icon.plus {
-  color: rgb(200, 200, 200);
+  color: rgb(173, 204, 170);
 }
 
 .category_selection .icon.plus:not(.disabled):hover {
-  color: rgb(150, 150, 150);
+  color: rgb(118, 148, 116);
 }
 
 .category_selection .icon.x {
-  color: rgb(218, 189, 189);
-}
-
-.category_selection .icon.x:not(.disabled):hover {
-  color: rgb(199, 160, 160);
+  width: 0.8rem;
 }
 
 .category_selection .icon.delete {
@@ -153,12 +149,12 @@
 }
 
 .category_selection .icon.delete:not(.disabled):hover {
-  background-color: rgb(199, 160, 160);
+  background-color: rgb(150, 150, 150);
   color: white;
 }
 
 .category_selection .icon.delete.disabled {
-  background-color: rgb(235, 223, 223);
+  background-color: rgb(243, 243, 243);
   cursor: default;
 }
 
