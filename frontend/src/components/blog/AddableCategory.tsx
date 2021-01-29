@@ -31,7 +31,8 @@ export default function AddableCategory({
   const { blog, updateCategories } = useContext(BlogContext);
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const isDisabled = categorySelectionType !== 'ADDABLE' && targetCategory; // always enabled on ADDABLE type
+  const isAddable = categorySelectionType === 'ADDABLE';
+  const isDisabled = !isAddable && targetCategory; // always enabled on ADDABLE type
   const isEditable = categorySelectionState === 'EDITING';
 
   // click event
@@ -93,7 +94,7 @@ export default function AddableCategory({
 
   return (
     <Badge
-      className={`category_button addable ${isEditable ? 'editable' : ''} ${isDisabled ? 'disabled' : ''}${isAdding ? 'adding' : ''}`}
+      className={`category_button addable ${isAddable ? 'addable-type' : ''} ${isEditable ? 'editable' : ''} ${isDisabled ? 'disabled' : ''}${isAdding ? 'adding' : ''}`}
       onClick={onCategoryClicked}
     >
       {categorySelectionState === 'ADDING'

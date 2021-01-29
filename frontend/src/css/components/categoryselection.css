@@ -81,6 +81,15 @@
   background-color: rgb(219, 238, 240);
 }
 
+.category_selection .category_button.addable.addable-type.adding {
+  background-color: rgb(112, 166, 170);
+  color: white;
+}
+
+.category_selection .category_button.addable.addable-type:not(.adding):not(.editing):not(.disabled):hover {
+  background-color: rgb(229, 241, 241);
+}
+
 .category_selection .category_button input {
   margin: -0.35rem 0.3rem -0.35rem 0;
   border: none;
@@ -94,6 +103,10 @@
 
 .category_selection .category_button.category_button.addable input {
   color: rgb(112, 166, 170);
+}
+
+.category_selection .category_button.category_button.addable.addable-type input {
+  color:white;
 }
 
 .category_selection .icon {
