@@ -21,7 +21,9 @@ interface WriteProps {
 export default function Write({
   mode, categories, initialCategory, selectedPost,
 }: WriteProps): JSX.Element {
-  const { user, blog, updateCategories } = useContext(BlogContext);
+  const {
+    user, blog, updateCategories, setSelectedPost, setActiveCategory: setGlobalActiveCategory,
+  } = useContext(BlogContext);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [curState, setCurState] = useState<CategorySelectionState>('IDLE'); // IDLE | ADDING (EDITING is not available)
@@ -98,6 +100,11 @@ export default function Write({
         ? await createPostAPI(post)
         : undefined; // TODO: edit API
       if (result) {
+        // select the new post and redirect to blog
+        if (setSelectedPost && setGlobalActiveCategory) {
+          setGlobalActiveCategory(category);
+          setSelectedPost(result);
+        }
         history.push(`/blog/${blog?.id}`);
       } else {
         throw new Error('Invalid result.');

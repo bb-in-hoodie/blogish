@@ -53,19 +53,19 @@ export default function BlogNav({
   const history = useHistory();
 
   // fetch posts on category change
-  const getPosts = useCallback(async () => {
+  const getPosts = useCallback(async (category: Category = activeCategory) => {
     if (!blog || !setPosts) {
       return;
     }
 
     setPosts([]);
     setWaitingGettingPosts(true);
-    if (activeCategory.id === ALL_CATEGORIES.id) {
+    if (category.id === ALL_CATEGORIES.id) {
       if (blog) {
         setPosts(await postsOfBlogAPI(blog?.id));
       }
-    } else if (activeCategory.id) {
-      setPosts(await postsOfCategoryAPI(activeCategory.id));
+    } else if (category.id) {
+      setPosts(await postsOfCategoryAPI(category.id));
     }
     setWaitingGettingPosts(false);
   }, [blog, activeCategory, setPosts, setWaitingGettingPosts]);

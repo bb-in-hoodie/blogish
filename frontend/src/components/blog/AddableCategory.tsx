@@ -55,6 +55,7 @@ export default function AddableCategory({
     try {
       await createCategoryAPI(blog?.id, newCategoryName);
       setCategorySelectionState('IDLE');
+      setNewCategoryName('');
       if (updateCategories) {
         await updateCategories();
       }
