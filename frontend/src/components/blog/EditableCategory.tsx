@@ -16,7 +16,7 @@ interface EditableCategoryProps {
   setTargetCategory: React.Dispatch<React.SetStateAction<Category | null>>,
   categorySelectionState: CategorySelectionState,
   setCategorySelectionState: (nextState: CategorySelectionState) => void,
-  getPosts: () => Promise<void>
+  getPosts: (category?: Category) => Promise<void>
 }
 
 const INPUT_MIN_WIDTH = 20;
@@ -93,7 +93,7 @@ export default function EditableCategory({
           setSelectedPost(null);
           setActiveCategory(ALL_CATEGORIES);
           await updateCategories();
-          getPosts();
+          await getPosts(ALL_CATEGORIES);
         }
       } catch {
         alert('카테고리를 삭제하는 과정에서 에러가 발생했습니다.');
