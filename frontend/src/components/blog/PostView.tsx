@@ -42,7 +42,7 @@ export default function PostView({
               </header>
               <main className="post_content">
                 {selectedPost.content?.split('\n').map((line, index) => (
-                  <p key={index}>{line}</p>
+                  line ? <p key={index}>{line}</p> : <br key={index} />
                 ))}
               </main>
             </>
