@@ -1,8 +1,12 @@
-import React from 'react';
-import { Spinner } from 'reactstrap';
+import React, { useContext, useState } from 'react';
+import {
+  Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Spinner,
+} from 'reactstrap';
+import { FiMoreVertical } from 'react-icons/fi';
 import { format } from 'date-fns';
 import Post from '../../types/Post';
 import '../../css/components/postview.css';
+import BlogContext from '../../contexts/BlogContext';
 
 interface PostViewProps {
   selectedPost: Post | null
@@ -17,6 +21,10 @@ function formatPostDateTime(datetime: string) {
 export default function PostView({
   selectedPost, waitingFetchingPost,
 }: PostViewProps): JSX.Element {
+  const { user, blog } = useContext(BlogContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => setIsMenuOpen((opened) => !opened);
+
   return (
     <>
       {(selectedPost || waitingFetchingPost) && (
@@ -38,6 +46,21 @@ export default function PostView({
                     {formatPostDateTime(selectedPost.updatedTime)}
                   )
                 </span>
+                )}
+                {user?.userId === blog?.owner.userId && (
+                  <Dropdown
+                    className="menu"
+                    isOpen={isMenuOpen}
+                    toggle={toggleMenu}
+                  >
+                    <DropdownToggle className="toggle">
+                      <FiMoreVertical />
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                      <DropdownItem>EDIT</DropdownItem>
+                      <DropdownItem>DELETE</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
                 )}
               </header>
               <main className="post_content">
