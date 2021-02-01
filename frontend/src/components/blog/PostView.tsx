@@ -1,12 +1,16 @@
-import React from 'react';
-import { Spinner } from 'reactstrap';
+import React, { useContext, useState } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import {
+  Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Spinner,
+} from 'reactstrap';
+import { FiMoreVertical } from 'react-icons/fi';
 import { format } from 'date-fns';
-import Post from '../../types/Post';
+import { deletePostAPI } from '../../api/PostAPI';
+import BlogContext from '../../contexts/BlogContext';
 import '../../css/components/postview.css';
 
 interface PostViewProps {
-  selectedPost: Post | null
-  waitingFetchingPost: boolean
+  waitingFetchingSinglePost: boolean,
 }
 
 function formatPostDateTime(datetime: string) {
@@ -14,13 +18,33 @@ function formatPostDateTime(datetime: string) {
   return format(date, 'yyyy.MM.dd HH:mm');
 }
 
-export default function PostView({
-  selectedPost, waitingFetchingPost,
-}: PostViewProps): JSX.Element {
+export default function PostView({ waitingFetchingSinglePost }: PostViewProps): JSX.Element {
+  const {
+    user, blog, getPosts, selectedPost, setSelectedPost,
+  } = useContext(BlogContext);
+  const { url } = useRouteMatch();
+  const history = useHistory();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => setIsMenuOpen((opened) => !opened);
+
+  const onEditClicked = () => {
+    history.push(`${url}/edit`);
+  };
+
+  const onDeleteClicked = async () => {
+    // eslint-disable-next-line no-restricted-globals
+    const confirmed = confirm('정말로 게시글을 삭제하시겠습니까?');
+    if (confirmed && selectedPost?.id && setSelectedPost && getPosts) {
+      await deletePostAPI(selectedPost?.id);
+      await getPosts();
+      setSelectedPost(null);
+    }
+  };
+
   return (
     <>
-      {(selectedPost || waitingFetchingPost) && (
-        <article className={`post${waitingFetchingPost ? ' spinner' : ''}`}>
+      {(selectedPost || waitingFetchingSinglePost) && (
+        <article className={`post${waitingFetchingSinglePost ? ' spinner' : ''}`}>
           {selectedPost && (
             <>
               <header className="post_info">
@@ -39,15 +63,30 @@ export default function PostView({
                   )
                 </span>
                 )}
+                {user?.userId === blog?.owner.userId && (
+                  <Dropdown
+                    className="menu"
+                    isOpen={isMenuOpen}
+                    toggle={toggleMenu}
+                  >
+                    <DropdownToggle className="toggle">
+                      <FiMoreVertical />
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                      <DropdownItem onClick={onEditClicked}>EDIT</DropdownItem>
+                      <DropdownItem onClick={onDeleteClicked}>DELETE</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                )}
               </header>
               <main className="post_content">
                 {selectedPost.content?.split('\n').map((line, index) => (
-                  <p key={index}>{line}</p>
+                  line ? <p key={index}>{line}</p> : <br key={index} />
                 ))}
               </main>
             </>
           )}
-          {waitingFetchingPost && <Spinner />}
+          {waitingFetchingSinglePost && <Spinner />}
         </article>
       )}
     </>

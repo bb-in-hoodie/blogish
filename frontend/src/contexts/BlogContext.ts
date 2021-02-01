@@ -9,9 +9,11 @@ interface BlogContextType {
   blog?: Blog | null,
   updateCategories?: () => Promise<void>,
   setActiveCategory?: React.Dispatch<React.SetStateAction<Category>>,
-  setSelectedPost?: React.Dispatch<React.SetStateAction<Post | null>>,
   posts: Post[],
-  setPosts?: React.Dispatch<React.SetStateAction<Post[]>>
+  setPosts?: React.Dispatch<React.SetStateAction<Post[]>>,
+  getPosts?: (category?: Category) => Promise<void>,
+  selectedPost?: Post | null,
+  setSelectedPost?: React.Dispatch<React.SetStateAction<Post | null>>
 }
 
 const BlogContext = React.createContext<BlogContextType>({ posts: [] });

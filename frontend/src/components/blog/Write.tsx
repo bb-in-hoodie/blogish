@@ -10,19 +10,24 @@ import Post, { TITLE_MAX_LENGTH } from '../../types/Post';
 import { createCategoryAPI, createPostAPI } from '../../api/BlogAPI';
 import AddableCategorySelection from './AddableCategorySelection';
 import '../../css/components/write.css';
+import { updatePostAPI } from '../../api/PostAPI';
 
 interface WriteProps {
   mode: WriteMode,
   categories: Category[],
-  initialCategory: Category | null,
-  selectedPost: Post | null,
+  initialCategory: Category | null
 }
 
 export default function Write({
-  mode, categories, initialCategory, selectedPost,
+  mode, categories, initialCategory,
 }: WriteProps): JSX.Element {
   const {
-    user, blog, updateCategories, setSelectedPost, setActiveCategory: setGlobalActiveCategory,
+    user,
+    blog,
+    updateCategories,
+    selectedPost,
+    setSelectedPost,
+    setActiveCategory: setGlobalActiveCategory,
   } = useContext(BlogContext);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -34,14 +39,19 @@ export default function Write({
 
   // initial category
   useEffect(() => {
-    if (activeCategory || categories?.length === 0) {
+    if (activeCategory || !categories || categories.length === 0) {
       return;
     }
 
-    const category = (!initialCategory || initialCategory?.id === ALL_CATEGORIES.id)
-      ? categories?.[0]
-      : initialCategory as Category;
-    setActiveCategory(category);
+    if (initialCategory && initialCategory.id !== ALL_CATEGORIES.id) {
+      setActiveCategory(initialCategory);
+    } else {
+      let category;
+      if (mode === 'EDIT') {
+        category = categories.find((c) => c.id === selectedPost?.categoryId);
+      }
+      setActiveCategory(category ?? categories[0]);
+    }
   }, [categories, initialCategory, activeCategory, setActiveCategory]);
 
   // user validation
@@ -51,6 +61,14 @@ export default function Write({
       history.push(`/blog/${blog?.id}`);
     }
   }, [user, blog, history]);
+
+  // fill in selected post's values on edit mode (category will be selected above)
+  useEffect(() => {
+    if (mode === 'EDIT' && selectedPost) {
+      setTitle(selectedPost.title);
+      setContent(selectedPost.content ?? '');
+    }
+  }, [mode, selectedPost]);
 
   // buttons
   const onCancelClicked = useCallback(() => {
@@ -96,9 +114,13 @@ export default function Write({
       setWaitingAPI(true);
 
       // create or edit a post
-      const result = mode === 'WRITE'
-        ? await createPostAPI(post)
-        : undefined; // TODO: edit API
+      let result;
+      if (mode === 'WRITE') {
+        result = await createPostAPI(post);
+      } else if (selectedPost?.id) {
+        result = await updatePostAPI({ ...post, id: selectedPost.id });
+      }
+
       if (result) {
         // select the new post and redirect to blog
         if (setSelectedPost && setGlobalActiveCategory) {
@@ -114,7 +136,7 @@ export default function Write({
       alert(alertText);
       setWaitingAPI(false);
     }
-  }, [curState, updateCategories, newCategoryName, mode, blog, history]);
+  }, [curState, updateCategories, newCategoryName, selectedPost, mode, blog, history]);
 
   const isSubmitDisabled = (curState === 'ADDING' && !newCategoryName)
                           || !activeCategory

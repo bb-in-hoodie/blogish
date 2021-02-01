@@ -16,6 +16,8 @@
 }
 
 .blog .post header.post_info {
+  position: relative;
+  padding-right: 3rem;
   margin-bottom: 2.5rem;
   font-size: 0;
   height: fit-content;
@@ -38,6 +40,49 @@
 }
 .blog .post header.post_info .updated_time {
   color: rgb(192, 192, 192);
+}
+
+.blog .post header.post_info .menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.blog .post header.post_info .menu .toggle {
+  background: none;
+  border: none;
+  color: rgb(200, 200, 200);
+}
+
+.blog .post header.post_info .menu .toggle:hover {
+  color: rgb(150, 150, 150);
+}
+
+.blog .post header.post_info .menu .toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.blog .post header.post_info .menu .dropdown-menu {
+  border-color: rgb(220, 220, 220);
+  border-radius: 0.75rem;
+  min-width: 4rem;
+}
+
+.blog .post header.post_info .menu .dropdown-item {
+  padding: 0.25rem 1.25rem;
+  color: rgb(150, 150, 150);
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.blog .post header.post_info .menu .dropdown-item:hover {
+  color: rgb(200, 200, 200);
+  background: none;
+}
+
+.blog .post header.post_info .menu .dropdown-item:focus {
+  outline: none;
 }
 
 .blog .post main.post_content {
