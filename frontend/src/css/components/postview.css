@@ -17,6 +17,7 @@
 
 .blog .post header.post_info {
   position: relative;
+  padding-right: 3rem;
   margin-bottom: 2.5rem;
   font-size: 0;
   height: fit-content;
