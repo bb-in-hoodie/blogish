@@ -38,14 +38,19 @@ export default function Write({
 
   // initial category
   useEffect(() => {
-    if (activeCategory || categories?.length === 0) {
+    if (activeCategory || !categories || categories.length === 0) {
       return;
     }
 
-    const category = (!initialCategory || initialCategory?.id === ALL_CATEGORIES.id)
-      ? categories?.[0]
-      : initialCategory as Category;
-    setActiveCategory(category);
+    if (initialCategory && initialCategory.id !== ALL_CATEGORIES.id) {
+      setActiveCategory(initialCategory);
+    } else {
+      let category;
+      if (mode === 'EDIT') {
+        category = categories.find((c) => c.id === selectedPost?.categoryId);
+      }
+      setActiveCategory(category ?? categories[0]);
+    }
   }, [categories, initialCategory, activeCategory, setActiveCategory]);
 
   // user validation
@@ -55,6 +60,14 @@ export default function Write({
       history.push(`/blog/${blog?.id}`);
     }
   }, [user, blog, history]);
+
+  // fill in selected post's values on edit mode (category will be selected above)
+  useEffect(() => {
+    if (mode === 'EDIT' && selectedPost) {
+      setTitle(selectedPost.title);
+      setContent(selectedPost.content ?? '');
+    }
+  }, [mode, selectedPost]);
 
   // buttons
   const onCancelClicked = useCallback(() => {

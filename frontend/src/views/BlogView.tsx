@@ -129,7 +129,7 @@ export default function BlogView(): JSX.Element {
             <Write
               mode="EDIT"
               categories={categories}
-              initialCategory={activeCategory}
+              initialCategory={null}
             />
           </Route>
           <Route path={path}>
