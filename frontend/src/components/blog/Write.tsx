@@ -10,6 +10,7 @@ import Post, { TITLE_MAX_LENGTH } from '../../types/Post';
 import { createCategoryAPI, createPostAPI } from '../../api/BlogAPI';
 import AddableCategorySelection from './AddableCategorySelection';
 import '../../css/components/write.css';
+import { updatePostAPI } from '../../api/PostAPI';
 
 interface WriteProps {
   mode: WriteMode,
@@ -113,9 +114,13 @@ export default function Write({
       setWaitingAPI(true);
 
       // create or edit a post
-      const result = mode === 'WRITE'
-        ? await createPostAPI(post)
-        : undefined; // TODO: edit API
+      let result;
+      if (mode === 'WRITE') {
+        result = await createPostAPI(post);
+      } else if (selectedPost?.id) {
+        result = await updatePostAPI({ ...post, id: selectedPost.id });
+      }
+
       if (result) {
         // select the new post and redirect to blog
         if (setSelectedPost && setGlobalActiveCategory) {
@@ -131,7 +136,7 @@ export default function Write({
       alert(alertText);
       setWaitingAPI(false);
     }
-  }, [curState, updateCategories, newCategoryName, mode, blog, history]);
+  }, [curState, updateCategories, newCategoryName, selectedPost, mode, blog, history]);
 
   const isSubmitDisabled = (curState === 'ADDING' && !newCategoryName)
                           || !activeCategory
