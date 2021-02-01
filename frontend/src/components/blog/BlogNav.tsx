@@ -6,9 +6,7 @@ import { format, isSameDay } from 'date-fns';
 import { ImPen } from 'react-icons/im';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import BlogContext from '../../contexts/BlogContext';
-import { postsOfBlogAPI } from '../../api/BlogAPI';
 import { postInfoAPI } from '../../api/PostAPI';
-import { postsOfCategoryAPI } from '../../api/CategoryAPI';
 import Category, { ALL_CATEGORIES } from '../../types/Category';
 import Post from '../../types/Post';
 import Paging from '../common/Paging';
@@ -21,8 +19,9 @@ interface BlogNavProps {
   setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
   selectedPost: Post | null,
   setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>,
-  waitingFetchingPost: boolean,
-  setWaitingFetchingPost: React.Dispatch<React.SetStateAction<boolean>>
+  waitingFetchingSinglePost: boolean,
+  setWaitingFetchingSinglePost: React.Dispatch<React.SetStateAction<boolean>>,
+  waitingFetchingPosts: boolean
 }
 
 function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: string) {
@@ -40,38 +39,22 @@ export default function BlogNav({
   setActiveCategory,
   selectedPost,
   setSelectedPost,
-  waitingFetchingPost,
-  setWaitingFetchingPost,
+  waitingFetchingSinglePost,
+  setWaitingFetchingSinglePost,
+  waitingFetchingPosts,
 }: BlogNavProps): JSX.Element {
   const {
-    user, blog, posts, setPosts,
+    user, blog, posts, getPosts,
   } = useContext(BlogContext);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
-  const [waitingGettingPosts, setWaitingGettingPosts] = useState(true);
   const currentDate = useRef(new Date());
   const { url } = useRouteMatch();
   const history = useHistory();
 
-  // fetch posts on category change
-  const getPosts = useCallback(async (category: Category = activeCategory) => {
-    if (!blog || !setPosts) {
-      return;
-    }
-
-    setPosts([]);
-    setWaitingGettingPosts(true);
-    if (category.id === ALL_CATEGORIES.id) {
-      if (blog) {
-        setPosts(await postsOfBlogAPI(blog?.id));
-      }
-    } else if (category.id) {
-      setPosts(await postsOfCategoryAPI(category.id));
-    }
-    setWaitingGettingPosts(false);
-  }, [blog, activeCategory, setPosts, setWaitingGettingPosts]);
-
   useEffect(() => {
-    getPosts();
+    if (getPosts) {
+      getPosts();
+    }
   }, [getPosts, activeCategory]);
 
   // select first post of posts
@@ -79,13 +62,13 @@ export default function BlogNav({
     if (postId) {
       // initialize
       setSelectedPost(null);
-      setWaitingFetchingPost(true);
+      setWaitingFetchingSinglePost(true);
 
       // API request
       setSelectedPost(await postInfoAPI(postId));
-      setWaitingFetchingPost(false);
+      setWaitingFetchingSinglePost(false);
     }
-  }, [setSelectedPost, setWaitingFetchingPost]);
+  }, [setSelectedPost, setWaitingFetchingSinglePost]);
 
   const fetchPostOnKeyDown = (code: string, postId?: number) => {
     if (code === 'Enter' || code === 'Space') {
@@ -95,10 +78,10 @@ export default function BlogNav({
 
   useEffect(() => {
     // fetch the first post if selectedPost is null
-    if (posts.length > 0 && !selectedPost && !waitingFetchingPost) {
+    if (posts.length > 0 && !selectedPost && !waitingFetchingSinglePost) {
       fetchPost(posts[0].id);
     }
-  }, [posts, fetchPost, selectedPost, waitingFetchingPost]);
+  }, [posts, fetchPost, selectedPost, waitingFetchingSinglePost]);
 
   // write button
   const onWriteClicked = () => {
@@ -112,7 +95,6 @@ export default function BlogNav({
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
         categorySelectionType={user?.userId === blog?.owner.userId ? 'EDITABLE' : 'READONLY'}
-        getPosts={getPosts}
       />
       {posts.length > 0
         ? (
@@ -141,8 +123,8 @@ export default function BlogNav({
         )
         : (
           <section className="empty_post_list">
-            {waitingGettingPosts && <Spinner />}
-            {!waitingGettingPosts && (activeCategory.id === ALL_CATEGORIES.id
+            {waitingFetchingPosts && <Spinner />}
+            {!waitingFetchingPosts && (activeCategory.id === ALL_CATEGORIES.id
               ? <span>아직 작성된 글이 없습니다.</span>
               : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
           </section>

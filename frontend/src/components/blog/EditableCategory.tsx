@@ -15,8 +15,7 @@ interface EditableCategoryProps {
   targetCategory: Category | null,
   setTargetCategory: React.Dispatch<React.SetStateAction<Category | null>>,
   categorySelectionState: CategorySelectionState,
-  setCategorySelectionState: (nextState: CategorySelectionState) => void,
-  getPosts: (category?: Category) => Promise<void>
+  setCategorySelectionState: (nextState: CategorySelectionState) => void
 }
 
 const INPUT_MIN_WIDTH = 20;
@@ -27,12 +26,11 @@ export default function EditableCategory({
   setTargetCategory,
   categorySelectionState,
   setCategorySelectionState,
-  getPosts,
 }: EditableCategoryProps): JSX.Element {
   const [newName, setNewName] = useState(category.name);
   const [isEditingThis, setIsEditingThis] = useState(false);
   const {
-    updateCategories, setActiveCategory, setSelectedPost, setPosts,
+    updateCategories, setActiveCategory, setSelectedPost, setPosts, getPosts,
   } = useContext(BlogContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -88,7 +86,7 @@ export default function EditableCategory({
         setCategorySelectionState('IDLE');
 
         // initialize and re-fetch categories
-        if (setActiveCategory && setSelectedPost && updateCategories && setPosts) {
+        if (setActiveCategory && setSelectedPost && updateCategories && setPosts && getPosts) {
           setPosts([]);
           setSelectedPost(null);
           setActiveCategory(ALL_CATEGORIES);

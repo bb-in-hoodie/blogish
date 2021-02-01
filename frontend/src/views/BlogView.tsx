@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Redirect,
   Route, Switch, useHistory, useParams, useRouteMatch,
 } from 'react-router-dom';
-import { blogInfoAPI, categoriesOfBlogAPI } from '../api/BlogAPI';
+import { blogInfoAPI, categoriesOfBlogAPI, postsOfBlogAPI } from '../api/BlogAPI';
 import useUser from '../hooks/useUser';
 import Blog, { WriteMode } from '../types/Blog';
 import Post from '../types/Post';
@@ -13,6 +13,7 @@ import PostView from '../components/blog/PostView';
 import '../css/blog.css';
 import Write from '../components/blog/Write';
 import BlogContext from '../contexts/BlogContext';
+import { postsOfCategoryAPI } from '../api/CategoryAPI';
 
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
@@ -22,7 +23,8 @@ export default function BlogView(): JSX.Element {
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES);
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [waitingFetchingPost, setWaitingFetchingPost] = useState(false);
+  const [waitingFetchingSinglePost, setWaitingFetchingSinglePost] = useState(false);
+  const [waitingFetchingPosts, setWaitingFetchingPosts] = useState(true);
   const [writeMode] = useState<WriteMode>('WRITE');
   const { path, url } = useRouteMatch();
   const { blogId } = useParams() as { blogId: string };
@@ -53,6 +55,24 @@ export default function BlogView(): JSX.Element {
     updateBlogAndCategories();
   }, [blogId, history]);
 
+  // fetch posts on category change
+  const getPosts = useCallback(async (category: Category = activeCategory) => {
+    if (!blog || !setPosts) {
+      return;
+    }
+
+    setPosts([]);
+    setWaitingFetchingPosts(true);
+    if (category.id === ALL_CATEGORIES.id) {
+      if (blog) {
+        setPosts(await postsOfBlogAPI(blog?.id));
+      }
+    } else if (category.id) {
+      setPosts(await postsOfCategoryAPI(category.id));
+    }
+    setWaitingFetchingPosts(false);
+  }, [blog, activeCategory, setPosts, setWaitingFetchingPosts]);
+
   // context
   const blogContext = {
     user,
@@ -62,6 +82,7 @@ export default function BlogView(): JSX.Element {
     setSelectedPost,
     posts,
     setPosts,
+    getPosts,
   };
 
   return (
@@ -91,10 +112,11 @@ export default function BlogView(): JSX.Element {
               setActiveCategory={setActiveCategory}
               selectedPost={selectedPost}
               setSelectedPost={setSelectedPost}
-              waitingFetchingPost={waitingFetchingPost}
-              setWaitingFetchingPost={setWaitingFetchingPost}
+              waitingFetchingSinglePost={waitingFetchingSinglePost}
+              setWaitingFetchingSinglePost={setWaitingFetchingSinglePost}
+              waitingFetchingPosts={waitingFetchingPosts}
             />
-            <PostView selectedPost={selectedPost} waitingFetchingPost={waitingFetchingPost} />
+            <PostView selectedPost={selectedPost} waitingFetchingSinglePost={waitingFetchingSinglePost} />
           </Route>
           <Route exact path={`${path}/post`}>
             <Write

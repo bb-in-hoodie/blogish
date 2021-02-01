@@ -4,13 +4,14 @@ import {
 } from 'reactstrap';
 import { FiMoreVertical } from 'react-icons/fi';
 import { format } from 'date-fns';
+import { deletePostAPI } from '../../api/PostAPI';
 import Post from '../../types/Post';
 import '../../css/components/postview.css';
 import BlogContext from '../../contexts/BlogContext';
 
 interface PostViewProps {
   selectedPost: Post | null
-  waitingFetchingPost: boolean
+  waitingFetchingSinglePost: boolean
 }
 
 function formatPostDateTime(datetime: string) {
@@ -19,16 +20,28 @@ function formatPostDateTime(datetime: string) {
 }
 
 export default function PostView({
-  selectedPost, waitingFetchingPost,
+  selectedPost, waitingFetchingSinglePost,
 }: PostViewProps): JSX.Element {
-  const { user, blog } = useContext(BlogContext);
+  const {
+    user, blog, setSelectedPost, getPosts,
+  } = useContext(BlogContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
 
+  const onDeleteClicked = async () => {
+    // eslint-disable-next-line no-restricted-globals
+    const confirmed = confirm('정말로 게시글을 삭제하시겠습니까?');
+    if (confirmed && selectedPost?.id && setSelectedPost && getPosts) {
+      await deletePostAPI(selectedPost?.id);
+      await getPosts();
+      setSelectedPost(null);
+    }
+  };
+
   return (
     <>
-      {(selectedPost || waitingFetchingPost) && (
-        <article className={`post${waitingFetchingPost ? ' spinner' : ''}`}>
+      {(selectedPost || waitingFetchingSinglePost) && (
+        <article className={`post${waitingFetchingSinglePost ? ' spinner' : ''}`}>
           {selectedPost && (
             <>
               <header className="post_info">
@@ -58,7 +71,7 @@ export default function PostView({
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem>EDIT</DropdownItem>
-                      <DropdownItem>DELETE</DropdownItem>
+                      <DropdownItem onClick={onDeleteClicked}>DELETE</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 )}
@@ -70,7 +83,7 @@ export default function PostView({
               </main>
             </>
           )}
-          {waitingFetchingPost && <Spinner />}
+          {waitingFetchingSinglePost && <Spinner />}
         </article>
       )}
     </>
