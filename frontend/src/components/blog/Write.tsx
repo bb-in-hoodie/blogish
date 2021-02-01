@@ -14,15 +14,19 @@ import '../../css/components/write.css';
 interface WriteProps {
   mode: WriteMode,
   categories: Category[],
-  initialCategory: Category | null,
-  selectedPost: Post | null,
+  initialCategory: Category | null
 }
 
 export default function Write({
-  mode, categories, initialCategory, selectedPost,
+  mode, categories, initialCategory,
 }: WriteProps): JSX.Element {
   const {
-    user, blog, updateCategories, setSelectedPost, setActiveCategory: setGlobalActiveCategory,
+    user,
+    blog,
+    updateCategories,
+    selectedPost,
+    setSelectedPost,
+    setActiveCategory: setGlobalActiveCategory,
   } = useContext(BlogContext);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');

@@ -1,17 +1,16 @@
 import React, { useContext, useState } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Spinner,
 } from 'reactstrap';
 import { FiMoreVertical } from 'react-icons/fi';
 import { format } from 'date-fns';
 import { deletePostAPI } from '../../api/PostAPI';
-import Post from '../../types/Post';
-import '../../css/components/postview.css';
 import BlogContext from '../../contexts/BlogContext';
+import '../../css/components/postview.css';
 
 interface PostViewProps {
-  selectedPost: Post | null
-  waitingFetchingSinglePost: boolean
+  waitingFetchingSinglePost: boolean,
 }
 
 function formatPostDateTime(datetime: string) {
@@ -19,14 +18,18 @@ function formatPostDateTime(datetime: string) {
   return format(date, 'yyyy.MM.dd HH:mm');
 }
 
-export default function PostView({
-  selectedPost, waitingFetchingSinglePost,
-}: PostViewProps): JSX.Element {
+export default function PostView({ waitingFetchingSinglePost }: PostViewProps): JSX.Element {
   const {
-    user, blog, setSelectedPost, getPosts,
+    user, blog, getPosts, selectedPost, setSelectedPost,
   } = useContext(BlogContext);
+  const { url } = useRouteMatch();
+  const history = useHistory();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
+
+  const onEditClicked = () => {
+    history.push(`${url}/edit`);
+  };
 
   const onDeleteClicked = async () => {
     // eslint-disable-next-line no-restricted-globals
@@ -70,7 +73,7 @@ export default function PostView({
                       <FiMoreVertical />
                     </DropdownToggle>
                     <DropdownMenu right>
-                      <DropdownItem>EDIT</DropdownItem>
+                      <DropdownItem onClick={onEditClicked}>EDIT</DropdownItem>
                       <DropdownItem onClick={onDeleteClicked}>DELETE</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>

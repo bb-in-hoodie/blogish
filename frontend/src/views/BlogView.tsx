@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import { blogInfoAPI, categoriesOfBlogAPI, postsOfBlogAPI } from '../api/BlogAPI';
 import useUser from '../hooks/useUser';
-import Blog, { WriteMode } from '../types/Blog';
+import Blog from '../types/Blog';
 import Post from '../types/Post';
 import Category, { ALL_CATEGORIES } from '../types/Category';
 import BlogNav from '../components/blog/BlogNav';
@@ -25,7 +25,6 @@ export default function BlogView(): JSX.Element {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [waitingFetchingSinglePost, setWaitingFetchingSinglePost] = useState(false);
   const [waitingFetchingPosts, setWaitingFetchingPosts] = useState(true);
-  const [writeMode] = useState<WriteMode>('WRITE');
   const { path, url } = useRouteMatch();
   const { blogId } = useParams() as { blogId: string };
 
@@ -79,10 +78,11 @@ export default function BlogView(): JSX.Element {
     blog,
     updateCategories,
     setActiveCategory,
-    setSelectedPost,
     posts,
     setPosts,
     getPosts,
+    selectedPost,
+    setSelectedPost,
   };
 
   return (
@@ -110,20 +110,26 @@ export default function BlogView(): JSX.Element {
               categories={categories}
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
-              selectedPost={selectedPost}
-              setSelectedPost={setSelectedPost}
               waitingFetchingSinglePost={waitingFetchingSinglePost}
               setWaitingFetchingSinglePost={setWaitingFetchingSinglePost}
               waitingFetchingPosts={waitingFetchingPosts}
             />
-            <PostView selectedPost={selectedPost} waitingFetchingSinglePost={waitingFetchingSinglePost} />
+            <PostView
+              waitingFetchingSinglePost={waitingFetchingSinglePost}
+            />
           </Route>
           <Route exact path={`${path}/post`}>
             <Write
-              mode={writeMode}
+              mode="WRITE"
               categories={categories}
               initialCategory={activeCategory}
-              selectedPost={selectedPost}
+            />
+          </Route>
+          <Route exact path={`${path}/edit`}>
+            <Write
+              mode="EDIT"
+              categories={categories}
+              initialCategory={activeCategory}
             />
           </Route>
           <Route path={path}>

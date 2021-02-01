@@ -17,11 +17,9 @@ interface BlogNavProps {
   categories: Category[],
   activeCategory: Category,
   setActiveCategory: React.Dispatch<React.SetStateAction<Category>>,
-  selectedPost: Post | null,
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>,
   waitingFetchingSinglePost: boolean,
   setWaitingFetchingSinglePost: React.Dispatch<React.SetStateAction<boolean>>,
-  waitingFetchingPosts: boolean
+  waitingFetchingPosts: boolean,
 }
 
 function formatDateTime(currentDate: React.MutableRefObject<Date>, datetime?: string) {
@@ -37,14 +35,12 @@ export default function BlogNav({
   categories,
   activeCategory,
   setActiveCategory,
-  selectedPost,
-  setSelectedPost,
   waitingFetchingSinglePost,
   setWaitingFetchingSinglePost,
   waitingFetchingPosts,
 }: BlogNavProps): JSX.Element {
   const {
-    user, blog, posts, getPosts,
+    user, blog, posts, getPosts, selectedPost, setSelectedPost,
   } = useContext(BlogContext);
   const [pagedPosts, setPagedPosts] = useState<Post[]>([]);
   const currentDate = useRef(new Date());
@@ -59,7 +55,7 @@ export default function BlogNav({
 
   // select first post of posts
   const fetchPost = useCallback(async (postId?: number) => {
-    if (postId) {
+    if (postId && setSelectedPost) {
       // initialize
       setSelectedPost(null);
       setWaitingFetchingSinglePost(true);
