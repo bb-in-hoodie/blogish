@@ -17,6 +17,14 @@ export function createBlogAPI(blog: BlogRequestBody): Promise<Blog> {
   return axios.post(`${url}`, blog).then((resp) => resp.data);
 }
 
+export function updateBlogAPI(blogId: number, blog: BlogRequestBody): Promise<Blog> {
+  return axios.patch(`${url}/${blogId}`, blog).then((resp) => resp.data);
+}
+
+export function deleteBlogAPI(blogId: number, userId: string, password: string): Promise<number> {
+  return axios.post(`${url}/${blogId}/delete`, { userId, password }).then((resp) => resp.data);
+}
+
 export function blogInfoAPI(blogId: number): Promise<Blog> {
   return axios.get(`${url}/${blogId}`).then((resp) => resp.data);
 }
