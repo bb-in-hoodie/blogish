@@ -39,6 +39,10 @@ export default function CreateBlogModal({
   const toggleCreateModalOpen = () => setCreateModalOpen((open) => !open);
 
   async function createBlog() {
+    if (title.length === 0) {
+      return;
+    }
+
     try {
       await createBlogAPI({ title, description, userId: user.userId });
       setUpdateToggle((toggle) => !toggle);
@@ -49,6 +53,12 @@ export default function CreateBlogModal({
       } else {
         alert('블로그를 생성하는 과정에서 에러가 발생했습니다.');
       }
+    }
+  }
+
+  function onKeyDownOnForm(e: React.KeyboardEvent) {
+    if (e.key === 'Enter') {
+      createBlog();
     }
   }
 
@@ -77,6 +87,7 @@ export default function CreateBlogModal({
             type="text"
             value={title}
             onChange={(e) => onInputChange(e, TITLE_MAX_LENGTH, setTitle)}
+            onKeyDown={(e) => onKeyDownOnForm(e)}
           />
           <span className="input_len">
             {title.length}
@@ -91,6 +102,7 @@ export default function CreateBlogModal({
             type="text"
             value={description}
             onChange={(e) => onInputChange(e, DESCRIPTION_MAX_LENGTH, setDescription)}
+            onKeyDown={(e) => onKeyDownOnForm(e)}
           />
           <span className="input_len">
             {description.length}
