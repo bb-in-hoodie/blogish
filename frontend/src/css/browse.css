@@ -11,6 +11,10 @@
   font-weight: 700;
 }
 
+.browse main .nav-tabs .nav-link {
+  cursor: pointer;
+}
+
 .browse section {
   padding-top: 2rem;
   padding-bottom: 4rem;
