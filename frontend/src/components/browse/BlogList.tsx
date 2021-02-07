@@ -3,17 +3,19 @@ import React, {
 } from 'react';
 import { Input, Button } from 'reactstrap';
 import { debounce } from 'lodash';
-import '../../css/components/bloglist.css';
 import BlogCard from './BlogCard';
 import Blog from '../../types/Blog';
 import { BrowseTab } from '../../views/Browse';
 import { blogsOfOthersAPI, blogsOfUserAPI } from '../../api/BlogAPI';
 import User from '../../types/User';
+import '../../css/components/bloglist.css';
 
 type BlogListProps = {
   user: User;
   activeTab: BrowseTab;
   setCreateModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBlogToDelete: React.Dispatch<React.SetStateAction<Blog | null>>;
   updateToggle: boolean;
 };
 
@@ -21,6 +23,8 @@ export default function BlogList({
   user,
   activeTab,
   setCreateModalOpen,
+  setDeleteModalOpen,
+  setBlogToDelete,
   updateToggle,
 }: BlogListProps): JSX.Element {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -54,7 +58,9 @@ export default function BlogList({
     setFilteredBlogs(
       newKeyword
         ? blogs.filter(
-          (blog) => blog.title.includes(newKeyword) || blog.description.includes(newKeyword) || blog.owner?.nickname.includes(newKeyword),
+          (blog) => blog.title.includes(newKeyword)
+                    || blog.description.includes(newKeyword)
+                    || blog.owner?.nickname.includes(newKeyword),
         )
         : blogs,
     );
@@ -84,10 +90,10 @@ export default function BlogList({
       {filteredBlogs.map((blog) => (
         <BlogCard
           key={blog.id}
-          id={blog.id}
-          title={blog.title}
-          description={blog.description}
-          owner={blog.owner}
+          blog={blog}
+          user={user}
+          setDeleteModalOpen={setDeleteModalOpen}
+          setBlogToDelete={setBlogToDelete}
         />
       ))}
     </section>

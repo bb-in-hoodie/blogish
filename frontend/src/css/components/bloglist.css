@@ -1,15 +1,15 @@
-.blog_list header {
+.browse .blog_list header {
   display: flex;
   font-size: 1rem;
   font-weight: 400;
   padding: 0 0 10px 0;
 }
 
-.blog_list header input {
+.browse .blog_list header input {
   width: 280px;
 }
 
-.blog_list header button {
+.browse .blog_list header button {
   margin-left: auto;
   width: 80px;
 }
