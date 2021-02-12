@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader,
 } from 'reactstrap';
@@ -12,8 +13,9 @@ type DeleteBlogModalProps = {
   deleteModalOpen: boolean;
   setDeleteModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   blogToDelete: Blog | null,
-  setBlogToDelete: React.Dispatch<React.SetStateAction<Blog | null>>;
-  setUpdateToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  setBlogToDelete: React.Dispatch<React.SetStateAction<Blog | null>> | null;
+  setUpdateToggle: React.Dispatch<React.SetStateAction<boolean>> | null;
+  redirectTo: string | null
 };
 
 export default function DeleteBlogModal({
@@ -23,7 +25,9 @@ export default function DeleteBlogModal({
   blogToDelete,
   setBlogToDelete,
   setUpdateToggle,
+  redirectTo,
 }: DeleteBlogModalProps): JSX.Element {
+  const history = useHistory();
   const [password, setPassword] = useState('');
   const toggleDeleteModalOpen = () => setDeleteModalOpen((open) => !open);
 
@@ -34,8 +38,15 @@ export default function DeleteBlogModal({
 
     try {
       await deleteBlogAPI(blogToDelete.id, user.userId, password);
-      setUpdateToggle((toggle) => !toggle);
-      setDeleteModalOpen(false);
+      if (setUpdateToggle) {
+        setUpdateToggle((toggle) => !toggle);
+      }
+
+      if (redirectTo) {
+        history.push('/browse');
+      } else {
+        setDeleteModalOpen(false);
+      }
     } catch (e) {
       alert('블로그를 삭제하는 과정에서 에러가 발생했습니다. 비밀번호를 다시 확인해주세요.');
     }
@@ -50,7 +61,9 @@ export default function DeleteBlogModal({
   function onModalClosed() {
     // initalize
     setPassword('');
-    setBlogToDelete(null);
+    if (setBlogToDelete) {
+      setBlogToDelete(null);
+    }
   }
 
   return (

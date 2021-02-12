@@ -5,14 +5,19 @@ import {
 import { FiMoreVertical } from 'react-icons/fi';
 import BlogContext from '../../contexts/BlogContext';
 import '../../css/components/blogheader.css';
+import DeleteBlogModal from '../browse/DeleteBlogModal';
 
 export default function BlogHeader(): JSX.Element {
+  // header
   const { user, blog } = useContext(BlogContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
 
+  // modals
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  // click events
   const onEditClicked = () => null;
-  const onDeleteClicked = () => null;
 
   return (
     <header className="main_header">
@@ -39,11 +44,23 @@ export default function BlogHeader(): JSX.Element {
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem onClick={onEditClicked}>EDIT</DropdownItem>
-              <DropdownItem onClick={onDeleteClicked}>DELETE</DropdownItem>
+              <DropdownItem onClick={() => setDeleteModalOpen(true)}>DELETE</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         )}
       </div>
+
+      {blog && user && (
+        <DeleteBlogModal
+          user={user}
+          deleteModalOpen={deleteModalOpen}
+          setDeleteModalOpen={setDeleteModalOpen}
+          blogToDelete={blog}
+          setBlogToDelete={null}
+          setUpdateToggle={null}
+          redirectTo="/browse"
+        />
+      )}
     </header>
   );
 }

@@ -66,6 +66,7 @@ export default function Browse(): JSX.Element {
         blogToDelete={blogToDelete}
         setBlogToDelete={setBlogToDelete}
         setUpdateToggle={setUpdateToggle}
+        redirectTo={null}
       />
     </div>
   );
