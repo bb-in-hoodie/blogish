@@ -108,9 +108,15 @@ public class BlogService {
                 throw new BadRequestException("There is no blog with such id.");
             }
 
+            UserBody userBody = userService.getUser(blog.getOwnerId());
+
+            // check if any blog already exist with the same title owned by the same user
+            if (blogRepository.countByTitleAndOwnerId(userBody.getUserId(), blog.getTitle()) > 0) {
+                throw new BadRequestException("A blog owned by the user with the same title exists.");
+            }
+
             // return a updated blog
             if (blogRepository.update(blog) > 0) {
-                UserBody userBody = userService.getUser(blog.getOwnerId());
                 return BlogResponseBody.create(blog, userBody);
             } else {
                 throw new InternalServerException("Failed to update the blog.");

@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import {
   Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader,
 } from 'reactstrap';
-import { createBlogAPI } from '../../api/BlogAPI';
+import { updateBlogAPI } from '../../api/BlogAPI';
 import User from '../../types/User';
-import { BLOG_DESCRIPTION_MAX_LENGTH, BLOG_TITLE_MAX_LENGTH } from '../../types/Blog';
+import Blog, { BLOG_DESCRIPTION_MAX_LENGTH, BLOG_TITLE_MAX_LENGTH } from '../../types/Blog';
 import '../../css/components/createblogmodal.css';
 
-type CreateBlogModalProps = {
+type EditeBlogModalProps = {
   user: User;
-  createModalOpen: boolean;
-  setCreateModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setUpdateToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  blog: Blog;
+  editModalOpen: boolean;
+  setEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateBlog: () => Promise<void>;
 };
 
 function onInputChange(
@@ -25,57 +26,58 @@ function onInputChange(
   }
 }
 
-export default function CreateBlogModal({
+export default function EditBlogModal({
   user,
-  createModalOpen,
-  setCreateModalOpen,
-  setUpdateToggle,
-}: CreateBlogModalProps): JSX.Element {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  blog,
+  editModalOpen,
+  setEditModalOpen,
+  updateBlog,
+}: EditeBlogModalProps): JSX.Element {
+  const [title, setTitle] = useState(blog.title ?? '');
+  const [description, setDescription] = useState(blog.description ?? '');
 
-  const toggleCreateModalOpen = () => setCreateModalOpen((open) => !open);
+  const toggleCreateModalOpen = () => setEditModalOpen((open) => !open);
 
-  async function createBlog() {
+  async function editBlog() {
     if (title.length === 0) {
       return;
     }
 
     try {
-      await createBlogAPI({ title, description, userId: user.userId });
-      setUpdateToggle((toggle) => !toggle);
-      setCreateModalOpen(false);
+      await updateBlogAPI(blog.id, { title, description, userId: user.userId });
+      await updateBlog();
+      setEditModalOpen(false);
     } catch (e) {
       if (e.response.status === 400) { // bad request
         alert('이미 같은 이름의 블로그를 사용하고 있습니다.');
       } else {
-        alert('블로그를 생성하는 과정에서 에러가 발생했습니다.');
+        alert('블로그를 수정하는 과정에서 에러가 발생했습니다.');
       }
     }
   }
 
   function onKeyDownOnForm(e: React.KeyboardEvent) {
     if (e.key === 'Enter') {
-      createBlog();
+      editBlog();
     }
   }
 
   function onModalClosed() {
     // initalize
-    setTitle('');
-    setDescription('');
+    setTitle(blog.title ?? '');
+    setDescription(blog.description ?? '');
   }
 
   return (
     <Modal
       modalClassName="create_modal"
-      isOpen={createModalOpen}
+      isOpen={editModalOpen}
       toggle={toggleCreateModalOpen}
       onClosed={onModalClosed}
       centered
     >
       <ModalHeader>
-        Create a blog
+        Edit the blog information
       </ModalHeader>
       <ModalBody>
         <FormGroup>
@@ -110,13 +112,13 @@ export default function CreateBlogModal({
         </FormGroup>
       </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={() => setCreateModalOpen(false)}>Cancel</Button>
+        <Button color="secondary" onClick={() => setEditModalOpen(false)}>Cancel</Button>
         <Button
           color="primary"
           disabled={title.length === 0}
-          onClick={() => createBlog()}
+          onClick={() => editBlog()}
         >
-          Create
+          Edit
         </Button>
       </ModalFooter>
     </Modal>

@@ -8,12 +8,13 @@ import useUser from '../hooks/useUser';
 import Blog from '../types/Blog';
 import Post from '../types/Post';
 import Category, { ALL_CATEGORIES } from '../types/Category';
+import { postsOfCategoryAPI } from '../api/CategoryAPI';
 import BlogNav from '../components/blog/BlogNav';
 import PostView from '../components/blog/PostView';
-import '../css/blog.css';
 import Write from '../components/blog/Write';
 import BlogContext from '../contexts/BlogContext';
-import { postsOfCategoryAPI } from '../api/CategoryAPI';
+import BlogHeader from '../components/blog/BlogHeader';
+import '../css/blog.css';
 
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
@@ -76,6 +77,7 @@ export default function BlogView(): JSX.Element {
   const blogContext = {
     user,
     blog,
+    updateBlog,
     updateCategories,
     setActiveCategory,
     posts,
@@ -88,22 +90,7 @@ export default function BlogView(): JSX.Element {
   return (
     <BlogContext.Provider value={blogContext}>
       <div className="blog">
-        <header className="main_header">
-          <div className="user_info">
-            { user.nickname }
-          </div>
-          <div className="blog_info">
-            <h2>{ blog?.title }</h2>
-            {blog?.description && <h5 className="description">{ blog?.description }</h5>}
-            {blog?.owner.nickname && (
-            <span className="nickname">
-              @
-              { blog?.owner.nickname }
-            </span>
-          )}
-          </div>
-        </header>
-
+        <BlogHeader />
         <Switch>
           <Route exact strict path={path}>
             <BlogNav

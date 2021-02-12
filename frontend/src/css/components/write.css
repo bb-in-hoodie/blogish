@@ -10,7 +10,8 @@
   color: rgb(150, 150, 150);
 }
 
-#input_title, #input_content {
+.blog .write .input_wrapper #input_title,
+.blog .write .input_wrapper #input_content {
   border: 1px dashed rgb(200, 200, 200);
 }
 

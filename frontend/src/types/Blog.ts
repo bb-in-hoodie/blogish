@@ -15,3 +15,6 @@ export default interface Blog {
 }
 
 export type WriteMode = 'WRITE' | 'EDIT';
+
+export const BLOG_TITLE_MAX_LENGTH = 45;
+export const BLOG_DESCRIPTION_MAX_LENGTH = 100;

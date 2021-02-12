@@ -32,3 +32,14 @@
   font-weight: 400;
   color: rgb(89, 141, 145);
 }
+
+.card .icon.delete {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  color: rgb(200, 200, 200);
+}
+
+.card .icon.delete:hover {
+  color: rgb(150, 150, 150);
+}
