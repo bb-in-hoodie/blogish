@@ -12,6 +12,7 @@
 }
 
 .blog .main_header .blog_info {
+  position: relative;
   padding: 6rem 4rem;
   margin: 0rem -4rem 1rem -4rem;
   border-radius: 0.25rem;
@@ -35,4 +36,48 @@
   font-size: 0.8rem;
   font-weight: 400;
   color: rgb(89, 141, 145);
+}
+
+.blog .main_header .blog_info .menu {
+  position: absolute;
+  top: 1rem;
+  right: 0.75rem;
+}
+
+.blog .main_header .blog_info .menu .toggle {
+  background: none;
+  border: none;
+  color: rgb(150, 150, 150);
+}
+
+.blog .main_header .blog_info .menu .toggle:hover {
+  color: rgb(180, 180, 180);
+}
+
+.blog .main_header .blog_info .menu .toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.blog .main_header .blog_info .menu .dropdown-menu {
+  border: none;
+  border-radius: 0.75rem;
+  background-color: rgb(150, 150, 150);
+  min-width: 4rem;
+}
+
+.blog .main_header .blog_info .menu .dropdown-item {
+  padding: 0.25rem 1.25rem;
+  color: rgb(200, 200, 200);
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.blog .main_header .blog_info .menu .dropdown-item:hover {
+  color: rgb(220, 220, 220);
+  background: none;
+}
+
+.blog .main_header .blog_info .menu .dropdown-item:focus {
+  outline: none;
 }

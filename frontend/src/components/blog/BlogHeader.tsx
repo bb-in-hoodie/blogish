@@ -1,9 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import {
+  Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
+} from 'reactstrap';
+import { FiMoreVertical } from 'react-icons/fi';
 import BlogContext from '../../contexts/BlogContext';
 import '../../css/components/blogheader.css';
 
 export default function BlogHeader(): JSX.Element {
   const { user, blog } = useContext(BlogContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => setIsMenuOpen((opened) => !opened);
+
+  const onEditClicked = () => null;
+  const onDeleteClicked = () => null;
 
   return (
     <header className="main_header">
@@ -18,6 +27,21 @@ export default function BlogHeader(): JSX.Element {
             @
             { blog?.owner.nickname ?? '' }
           </span>
+        )}
+        {user?.userId === blog?.owner.userId && (
+          <Dropdown
+            className="menu"
+            isOpen={isMenuOpen}
+            toggle={toggleMenu}
+          >
+            <DropdownToggle className="toggle">
+              <FiMoreVertical />
+            </DropdownToggle>
+            <DropdownMenu right>
+              <DropdownItem onClick={onEditClicked}>EDIT</DropdownItem>
+              <DropdownItem onClick={onDeleteClicked}>DELETE</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         )}
       </div>
     </header>
