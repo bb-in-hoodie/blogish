@@ -4,20 +4,19 @@ import {
 } from 'reactstrap';
 import { FiMoreVertical } from 'react-icons/fi';
 import BlogContext from '../../contexts/BlogContext';
-import '../../css/components/blogheader.css';
 import DeleteBlogModal from '../browse/DeleteBlogModal';
+import EditBlogModal from './EditBlogModal';
+import '../../css/components/blogheader.css';
 
 export default function BlogHeader(): JSX.Element {
   // header
-  const { user, blog } = useContext(BlogContext);
+  const { user, blog, updateBlog } = useContext(BlogContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
 
   // modals
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  // click events
-  const onEditClicked = () => null;
 
   return (
     <header className="main_header">
@@ -43,23 +42,32 @@ export default function BlogHeader(): JSX.Element {
               <FiMoreVertical />
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem onClick={onEditClicked}>EDIT</DropdownItem>
+              <DropdownItem onClick={() => setEditModalOpen(true)}>EDIT</DropdownItem>
               <DropdownItem onClick={() => setDeleteModalOpen(true)}>DELETE</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         )}
       </div>
 
-      {blog && user && (
-        <DeleteBlogModal
-          user={user}
-          deleteModalOpen={deleteModalOpen}
-          setDeleteModalOpen={setDeleteModalOpen}
-          blogToDelete={blog}
-          setBlogToDelete={null}
-          setUpdateToggle={null}
-          redirectTo="/browse"
-        />
+      {blog && user && updateBlog && (
+        <>
+          <EditBlogModal
+            user={user}
+            blog={blog}
+            editModalOpen={editModalOpen}
+            setEditModalOpen={setEditModalOpen}
+            updateBlog={updateBlog}
+          />
+          <DeleteBlogModal
+            user={user}
+            deleteModalOpen={deleteModalOpen}
+            setDeleteModalOpen={setDeleteModalOpen}
+            blogToDelete={blog}
+            setBlogToDelete={null}
+            setUpdateToggle={null}
+            redirectTo="/browse"
+          />
+        </>
       )}
     </header>
   );

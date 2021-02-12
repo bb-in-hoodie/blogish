@@ -7,6 +7,7 @@ import User from '../types/User';
 interface BlogContextType {
   user?: User,
   blog?: Blog | null,
+  updateBlog?: () => Promise<void>,
   updateCategories?: () => Promise<void>,
   setActiveCategory?: React.Dispatch<React.SetStateAction<Category>>,
   posts: Post[],

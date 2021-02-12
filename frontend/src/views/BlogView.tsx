@@ -8,13 +8,13 @@ import useUser from '../hooks/useUser';
 import Blog from '../types/Blog';
 import Post from '../types/Post';
 import Category, { ALL_CATEGORIES } from '../types/Category';
+import { postsOfCategoryAPI } from '../api/CategoryAPI';
 import BlogNav from '../components/blog/BlogNav';
 import PostView from '../components/blog/PostView';
-import '../css/blog.css';
 import Write from '../components/blog/Write';
 import BlogContext from '../contexts/BlogContext';
-import { postsOfCategoryAPI } from '../api/CategoryAPI';
 import BlogHeader from '../components/blog/BlogHeader';
+import '../css/blog.css';
 
 export default function BlogView(): JSX.Element {
   const user = useUser(true);
@@ -77,6 +77,7 @@ export default function BlogView(): JSX.Element {
   const blogContext = {
     user,
     blog,
+    updateBlog,
     updateCategories,
     setActiveCategory,
     posts,
