@@ -9,6 +9,7 @@ import Blog from '../types/Blog';
 import Post from '../types/Post';
 import Category, { ALL_CATEGORIES } from '../types/Category';
 import { postsOfCategoryAPI } from '../api/CategoryAPI';
+import UserHeader from '../components/common/UserHeader';
 import BlogNav from '../components/blog/BlogNav';
 import PostView from '../components/blog/PostView';
 import Write from '../components/blog/Write';
@@ -90,6 +91,7 @@ export default function BlogView(): JSX.Element {
   return (
     <BlogContext.Provider value={blogContext}>
       <div className="blog">
+        <UserHeader user={user} isBrowseEnabled />
         <BlogHeader />
         <Switch>
           <Route exact strict path={path}>

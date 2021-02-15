@@ -1,4 +1,6 @@
-import React, { useState, SetStateAction, Dispatch } from 'react';
+import React, {
+  useState, SetStateAction, Dispatch, useEffect,
+} from 'react';
 import {
   Form, FormGroup, Label, Input, Button,
 } from 'reactstrap';
@@ -9,6 +11,7 @@ import { assignUser } from '../redux/userSlice';
 import { loginAPI } from '../api/UserAPI';
 import { LoginResult } from '../types/User';
 import '../css/main.css';
+import useUser from '../hooks/useUser';
 
 async function onLoginClick(
   userId: string,
@@ -40,16 +43,25 @@ async function onLoginClick(
 }
 
 export default function Main(): JSX.Element {
-  // user info
+  const user = useUser();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
-
-  // redux
   const dispatch = useDispatch();
-
-  // routing
   const history = useHistory();
+  const isLoginDisabled = !userId || !password || waitingAPI;
+
+  useEffect(() => {
+    if (user.userId) {
+      history.push('/browse');
+    }
+  }, [user]);
+
+  function onKeyDownOnForm(e: React.KeyboardEvent) {
+    if (!isLoginDisabled && e.key === 'Enter') {
+      onLoginClick(userId, password, setWaitingAPI, history, dispatch);
+    }
+  }
 
   return (
     <div className="main">
@@ -65,6 +77,7 @@ export default function Main(): JSX.Element {
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
+              onKeyDown={onKeyDownOnForm}
             />
           </FormGroup>
           <FormGroup className="formgroup_password">
@@ -74,6 +87,7 @@ export default function Main(): JSX.Element {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={onKeyDownOnForm}
             />
           </FormGroup>
           <div className="login_btn_area">
@@ -87,7 +101,7 @@ export default function Main(): JSX.Element {
             <Button
               color="primary"
               className="login_btn"
-              disabled={!userId || !password || waitingAPI}
+              disabled={isLoginDisabled}
               onClick={() => onLoginClick(userId, password, setWaitingAPI, history, dispatch)}
             >
               Login

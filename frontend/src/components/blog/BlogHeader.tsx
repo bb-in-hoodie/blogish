@@ -20,9 +20,6 @@ export default function BlogHeader(): JSX.Element {
 
   return (
     <header className="main_header">
-      <div className="user_info">
-        { user?.nickname ?? '' }
-      </div>
       <div className="blog_info">
         <h2>{ blog?.title }</h2>
         {blog?.description && <h5 className="description">{ blog?.description }</h5>}
@@ -37,6 +34,7 @@ export default function BlogHeader(): JSX.Element {
             className="menu"
             isOpen={isMenuOpen}
             toggle={toggleMenu}
+            direction="up"
           >
             <DropdownToggle className="toggle">
               <FiMoreVertical />
