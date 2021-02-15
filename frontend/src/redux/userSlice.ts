@@ -7,13 +7,15 @@ type UserInfoState = {
   }
 };
 
+export const EMPTY_USER_INFO = {
+  userId: '',
+  nickname: '',
+};
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    info: {
-      userId: '',
-      nickname: '',
-    },
+    info: { ...EMPTY_USER_INFO },
   },
   reducers: {
     assignUser: (state, action) => {

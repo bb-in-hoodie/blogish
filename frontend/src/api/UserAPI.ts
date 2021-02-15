@@ -18,3 +18,7 @@ export function sessionAPI(): Promise<LoginResult> {
 export function loginAPI(userId: string, password: string): Promise<LoginResult> {
   return axios.post(`${url}/login`, { userId, password }).then((resp) => resp.data);
 }
+
+export function logoutAPI(): Promise<boolean> {
+  return axios.get(`${url}/logout`).then((resp) => resp.data);
+}
