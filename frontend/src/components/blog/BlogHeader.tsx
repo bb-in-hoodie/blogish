@@ -34,6 +34,7 @@ export default function BlogHeader(): JSX.Element {
             className="menu"
             isOpen={isMenuOpen}
             toggle={toggleMenu}
+            direction="up"
           >
             <DropdownToggle className="toggle">
               <FiMoreVertical />

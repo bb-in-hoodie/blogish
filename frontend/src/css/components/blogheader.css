@@ -32,7 +32,7 @@
 
 .blog .main_header .blog_info .menu {
   position: absolute;
-  top: 1rem;
+  bottom: 1rem;
   right: 0.75rem;
 }
 
@@ -53,20 +53,20 @@
 
 .blog .main_header .blog_info .menu .dropdown-menu {
   border: none;
-  border-radius: 0.75rem;
+  border-radius: 0.25rem;
   background-color: rgb(150, 150, 150);
   min-width: 4rem;
 }
 
 .blog .main_header .blog_info .menu .dropdown-item {
   padding: 0.25rem 1.25rem;
-  color: rgb(200, 200, 200);
+  color: rgb(220, 220, 220);
   font-size: 0.85rem;
   text-align: right;
 }
 
 .blog .main_header .blog_info .menu .dropdown-item:hover {
-  color: rgb(220, 220, 220);
+  color: rgb(180, 180, 180);
   background: none;
 }
 
