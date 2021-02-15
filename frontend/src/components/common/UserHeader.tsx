@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
@@ -7,10 +8,16 @@ import '../../css/components/userheader.css';
 
 type UserHeaderProps = {
   user?: User;
+  isBrowseEnabled: boolean;
 };
-export default function UserHeader({ user }: UserHeaderProps): JSX.Element {
+export default function UserHeader({ user, isBrowseEnabled }: UserHeaderProps): JSX.Element {
+  const history = useHistory();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
+
+  const onBrowseClicked = () => {
+    history.push('/browse');
+  };
 
   return (
     <div className="user_header">
@@ -26,7 +33,7 @@ export default function UserHeader({ user }: UserHeaderProps): JSX.Element {
           { user?.nickname ?? '' }
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem onClick={() => null}>BROWSE</DropdownItem>
+          {isBrowseEnabled && <DropdownItem onClick={onBrowseClicked}>BROWSE</DropdownItem>}
           <DropdownItem onClick={() => null}>LOGOUT</DropdownItem>
         </DropdownMenu>
       </Dropdown>
