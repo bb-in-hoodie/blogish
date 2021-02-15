@@ -1,4 +1,6 @@
-import React, { useState, SetStateAction, Dispatch } from 'react';
+import React, {
+  useState, SetStateAction, Dispatch, useEffect,
+} from 'react';
 import {
   Form, FormGroup, Label, Input, Button,
 } from 'reactstrap';
@@ -9,6 +11,7 @@ import { assignUser } from '../redux/userSlice';
 import { loginAPI } from '../api/UserAPI';
 import { LoginResult } from '../types/User';
 import '../css/main.css';
+import useUser from '../hooks/useUser';
 
 async function onLoginClick(
   userId: string,
@@ -40,12 +43,19 @@ async function onLoginClick(
 }
 
 export default function Main(): JSX.Element {
+  const user = useUser();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const isLoginDisabled = !userId || !password || waitingAPI;
+
+  useEffect(() => {
+    if (user.userId) {
+      history.push('/browse');
+    }
+  }, [user]);
 
   function onKeyDownOnForm(e: React.KeyboardEvent) {
     if (!isLoginDisabled && e.key === 'Enter') {
