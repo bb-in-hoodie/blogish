@@ -1,0 +1,9 @@
+.user_header {
+  position: fixed;
+  top: 0.5rem;
+  right: 3rem;
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgb(150, 150, 150);
+}

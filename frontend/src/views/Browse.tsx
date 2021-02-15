@@ -4,6 +4,7 @@ import {
 } from 'reactstrap';
 import Blog from '../types/Blog';
 import useUser from '../hooks/useUser';
+import UserHeader from '../components/common/UserHeader';
 import BlogList from '../components/browse/BlogList';
 import CreateBlogModal from '../components/browse/CreateBlogModal';
 import DeleteBlogModal from '../components/browse/DeleteBlogModal';
@@ -22,6 +23,7 @@ export default function Browse(): JSX.Element {
 
   return (
     <div className="browse">
+      <UserHeader user={user} />
       <header>
         BROWSE
       </header>
