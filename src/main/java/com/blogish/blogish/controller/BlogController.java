@@ -71,7 +71,7 @@ public class BlogController {
             Blog blog = Blog.fetch(blogResp);
             blog.setTitle(blogReq.getTitle());
             blog.setDescription(blogReq.getDescription());
-            BlogResponseBody updatedBlog = blogService.updateInfo(blog);
+            BlogResponseBody updatedBlog = blogService.updateInfo(blogId, blog);
 
             return new ResponseEntity(updatedBlog, HttpStatus.OK);
         } catch (BadRequestException e) {

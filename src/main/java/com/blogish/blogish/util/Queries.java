@@ -12,6 +12,7 @@ public class Queries {
     public static String SELECT_BLOG_COUNT = "SELECT count(*) FROM blog WHERE id = :blogId";
     public static String SELECT_BLOG_COUNT_BY_TITLE_AND_USER_ID = "SELECT count(*) FROM blog_user WHERE title = :title AND user_id = :userId";
     public static String SELECT_BLOG = "SELECT * FROM blog WHERE id = :blogId";
+    public static String SELECT_BLOG_BY_TITLE_AND_USER_ID = "SELECT * FROM blog_user WHERE title = :title AND user_id = :userId";
     public static String SELECT_BLOGS_BY_USER_ID = "SELECT * FROM blog_user WHERE user_id = :userId";
     public static String SELECT_BLOGS_NOT_OWNED_BY = "SELECT * FROM blog_user WHERE user_id != :userId LIMIT :size";
     public static String DELETE_BLOG = "DELETE FROM blog WHERE id = :blogId";
