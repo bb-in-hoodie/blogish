@@ -7,7 +7,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
 import { joinAPI, idValidateAPI } from '../api/UserAPI';
-import User from '../types/User';
+import User, { USER_ID_MAX_LENGTH, USER_NICKNAME_MAX_LENGTH } from '../types/User';
 import '../css/join.css';
 
 async function onJoinClick(
@@ -91,6 +91,7 @@ export default function Join(): JSX.Element {
               <Input
                 id="input_id"
                 type="text"
+                maxLength={USER_ID_MAX_LENGTH}
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
               />
@@ -122,6 +123,7 @@ export default function Join(): JSX.Element {
             <Input
               id="input_nickname"
               type="text"
+              maxLength={USER_NICKNAME_MAX_LENGTH}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
             />

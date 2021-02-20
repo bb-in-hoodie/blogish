@@ -23,7 +23,7 @@ export default function Browse(): JSX.Element {
 
   return (
     <div className="browse">
-      <UserHeader user={user} isBrowseEnabled={false} isEditEnabled />
+      <UserHeader user={user} isBrowseEnabled={false} isEditProfileEnabled />
       <header>
         BROWSE
       </header>

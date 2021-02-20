@@ -15,6 +15,10 @@ export function sessionAPI(): Promise<LoginResult> {
   return axios.get(`${url}/session`).then((resp) => resp.data);
 }
 
+export function editUserAPI(user: User): Promise<User> {
+  return axios.post(`${url}/update`, user).then((resp) => resp.data);
+}
+
 export function loginAPI(userId: string, password: string): Promise<LoginResult> {
   return axios.post(`${url}/login`, { userId, password }).then((resp) => resp.data);
 }

@@ -8,28 +8,39 @@ import { assignUser, EMPTY_USER_INFO } from '../../redux/userSlice';
 import { logoutAPI } from '../../api/UserAPI';
 import User from '../../types/User';
 import '../../css/components/userheader.css';
+import EditProfileModal from '../browse/EditProfileModal';
 
 type UserHeaderProps = {
   user?: User;
   isBrowseEnabled: boolean;
-  isEditEnabled: boolean;
+  isEditProfileEnabled: boolean;
 };
 
 export default function UserHeader({
   user,
   isBrowseEnabled,
-  isEditEnabled,
+  isEditProfileEnabled,
 }: UserHeaderProps): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
 
   const onBrowseClicked = () => {
     history.push('/browse');
   };
 
+  const onEditProfileClicked = () => {
+    setEditProfileModalOpen(true);
+  };
+
   const onLogoutClicked = async () => {
+    // eslint-disable-next-line no-restricted-globals
+    if (!confirm('로그아웃 하시겠습니까?')) {
+      return;
+    }
+
     try {
       const result = await logoutAPI();
       if (result) {
@@ -58,10 +69,19 @@ export default function UserHeader({
         </DropdownToggle>
         <DropdownMenu right>
           {isBrowseEnabled && <DropdownItem onClick={onBrowseClicked}>BROWSE</DropdownItem>}
-          {isEditEnabled && <DropdownItem onClick={onBrowseClicked}>EDIT PROFILE</DropdownItem>}
+          {isEditProfileEnabled && <DropdownItem onClick={onEditProfileClicked}>EDIT PROFILE</DropdownItem>}
           <DropdownItem onClick={onLogoutClicked}>LOGOUT</DropdownItem>
         </DropdownMenu>
       </Dropdown>
+
+      {user && isEditProfileEnabled
+      && (
+        <EditProfileModal
+          user={user}
+          editProfileModalOpen={editProfileModalOpen}
+          setEditProfileModalOpen={setEditProfileModalOpen}
+        />
+      )}
     </div>
   );
 }
