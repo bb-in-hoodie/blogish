@@ -6,6 +6,7 @@ public class Queries {
     public static String SELECT_USER = "SELECT * FROM user WHERE id = :id";
     public static String SELECT_USER_BY_USER_ID = "SELECT * FROM user WHERE user_id = :userId";
     public static String SELECT_USER_PASSWORD_BY_USER_ID = "SELECT password FROM user WHERE user_id = :userId";
+    public static String UPDATE_USER_NICKNAME = "UPDATE user SET nickname = :nickname WHERE user_id = :userId";
     public static String UPDATE_USER_DELETED = "UPDATE user SET deleted = :deleted WHERE user_id = :userId AND deleted = false";
 
     // blog

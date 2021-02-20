@@ -39,6 +39,21 @@ public class UserService {
     }
 
     @Transactional
+    public int updateUser(User user) throws InternalServerException {
+        try {
+            if (userRepository.countById(user.getUserId()) == 0) {
+                throw new BadRequestException("Invalid userId");
+            } else {
+                return userRepository.setNickname(user.getUserId(), user.getNickname());
+            }
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
+        }
+    }
+
+    @Transactional
     public int getUserCount(String userId) throws InternalServerException {
         try {
             return userRepository.countById(userId);

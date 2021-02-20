@@ -52,8 +52,36 @@ public class UserController {
     @GetMapping("/validate")
     public ResponseEntity<?> validate(@RequestParam(defaultValue = "") String userId) {
         try {
-            if (userId.equals("")) return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+            if (userId.equals("")) {
+                return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+            }
+
             return new ResponseEntity(userService.getUserCount(userId) == 0, HttpStatus.OK);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@RequestBody User user) {
+        // input validation
+        if (user.getUserId() == null || user.getUserId().equals("")) {
+            return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+        } else if (user.getNickname() == null || user.getNickname().equals("")) {
+            return new ResponseEntity("nickname is required.", HttpStatus.BAD_REQUEST);
+        }
+
+        // try updating
+        try {
+            int result = userService.updateUser(user);
+            if (result > 0) {
+                UserBody userBody = userService.getUser(user.getUserId());
+                return new ResponseEntity(userBody, HttpStatus.OK);
+            } else {
+                return new ResponseEntity("Failed to update the user information.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
