@@ -91,7 +91,7 @@ export default function BlogView(): JSX.Element {
   return (
     <BlogContext.Provider value={blogContext}>
       <div className="blog">
-        <UserHeader user={user} isBrowseEnabled />
+        <UserHeader user={user} isBrowseEnabled isEditEnabled={false} />
         <BlogHeader />
         <Switch>
           <Route exact strict path={path}>

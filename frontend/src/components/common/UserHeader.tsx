@@ -12,8 +12,14 @@ import '../../css/components/userheader.css';
 type UserHeaderProps = {
   user?: User;
   isBrowseEnabled: boolean;
+  isEditEnabled: boolean;
 };
-export default function UserHeader({ user, isBrowseEnabled }: UserHeaderProps): JSX.Element {
+
+export default function UserHeader({
+  user,
+  isBrowseEnabled,
+  isEditEnabled,
+}: UserHeaderProps): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,6 +58,7 @@ export default function UserHeader({ user, isBrowseEnabled }: UserHeaderProps): 
         </DropdownToggle>
         <DropdownMenu right>
           {isBrowseEnabled && <DropdownItem onClick={onBrowseClicked}>BROWSE</DropdownItem>}
+          {isEditEnabled && <DropdownItem onClick={onBrowseClicked}>EDIT PROFILE</DropdownItem>}
           <DropdownItem onClick={onLogoutClicked}>LOGOUT</DropdownItem>
         </DropdownMenu>
       </Dropdown>
