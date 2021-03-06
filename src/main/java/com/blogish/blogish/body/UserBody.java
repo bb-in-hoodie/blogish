@@ -15,7 +15,4 @@ public class UserBody {
 
     @NonNull
     private String userId;
-
-    @Builder.Default
-    private boolean deleted = false;
 }

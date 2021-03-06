@@ -56,6 +56,13 @@ public class BlogRepository {
         return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG_COUNT_BY_TITLE_AND_USER_ID, params, Integer.class);
     }
 
+    public Blog selectByTitleAndOwnerId(String userId, String title) throws DataAccessException, NullPointerException {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("title", title);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_BLOG_BY_TITLE_AND_USER_ID, params, blogMapper);
+    }
+
     public List<Blog> selectAllByUserId(String userId) {
         MapSqlParameterSource param = new MapSqlParameterSource("userId", userId);
         return namedParameterJdbcTemplate.query(SELECT_BLOGS_BY_USER_ID, param, blogMapper);

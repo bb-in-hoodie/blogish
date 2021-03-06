@@ -52,8 +52,36 @@ public class UserController {
     @GetMapping("/validate")
     public ResponseEntity<?> validate(@RequestParam(defaultValue = "") String userId) {
         try {
-            if (userId.equals("")) return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+            if (userId.equals("")) {
+                return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+            }
+
             return new ResponseEntity(userService.getUserCount(userId) == 0, HttpStatus.OK);
+        } catch (InternalServerException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@RequestBody User user) {
+        // input validation
+        if (user.getUserId() == null || user.getUserId().equals("")) {
+            return new ResponseEntity("userId is required.", HttpStatus.BAD_REQUEST);
+        } else if (user.getNickname() == null || user.getNickname().equals("")) {
+            return new ResponseEntity("nickname is required.", HttpStatus.BAD_REQUEST);
+        }
+
+        // try updating
+        try {
+            int result = userService.updateUser(user);
+            if (result > 0) {
+                UserBody userBody = userService.getUser(user.getUserId());
+                return new ResponseEntity(userBody, HttpStatus.OK);
+            } else {
+                return new ResponseEntity("Failed to update the user information.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (BadRequestException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -63,11 +91,12 @@ public class UserController {
     public ResponseEntity<?> session(HttpServletRequest request) {
         try {
             // look for a user stored in session
-            UserBody userBody = (UserBody)getSessionValue(request, SESSION_KEY_USER);
-            return new ResponseEntity(new LoginResultBody(true, userBody), HttpStatus.OK);
-        } catch (NullPointerException e) {
-            // if there is no user found on session, return false wrapped in LoginResultBody
-            return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
+            Object userBody = getSessionValue(request, SESSION_KEY_USER);
+            if (userBody == null) {
+                // if there is no user found on session, return false wrapped in LoginResultBody
+                return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
+            }
+            return new ResponseEntity(new LoginResultBody(true, (UserBody)userBody), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -79,10 +108,6 @@ public class UserController {
             // check if the user exist in the first place
             UserBody userBody = userService.getUser(body.get("userId"));
             if (userBody != null) {
-                // if the user is deleted, return an error
-                if (userBody.isDeleted())
-                    return new ResponseEntity("It is a deleted user.", HttpStatus.BAD_REQUEST);
-
                 // if the user exists, get password of the user and match it with the input
                 String password = userService.getPassword(body.get("userId"));
                 if (bcryptEncoder.matches(body.get("password"), password)) {
@@ -116,20 +141,28 @@ public class UserController {
     @PostMapping("/delete")
     public ResponseEntity<?> delete(@RequestBody Map<String, String> body, HttpServletRequest request) {
         try {
-            // validate password before deleting a user
+            // validate input
             String userId = body.get("userId");
-            if (bcryptEncoder.matches(body.get("password"), userService.getPassword(userId))) {
-                if (userService.deleteUser(userId) == 1) {
-                    return new ResponseEntity(true, HttpStatus.OK);
-                } else if (userService.deleteUser(userId) > 1){
-                    // in case of multiple rows updated
-                    return new ResponseEntity("There were duplicated users with same userId.", HttpStatus.INTERNAL_SERVER_ERROR);
+            String password = body.get("password");
+            if (userId == null || userId.length() == 0 || password == null || password.length() == 0) {
+                return new ResponseEntity("Both userId and password is required.", HttpStatus.BAD_REQUEST);
+            }
+
+            // validate user
+            if(userService.getUserCount(userId) != 1) {
+                return new ResponseEntity("Failed to find the user.", HttpStatus.BAD_REQUEST);
+            }
+
+            // validate password
+            if (bcryptEncoder.matches(password, userService.getPassword(userId))) {
+                if (userService.deleteUser(userId) > 0) {
+                    removeSessionValue(request, SESSION_KEY_USER);
+                    return new ResponseEntity(userId, HttpStatus.OK);
                 } else {
-                    // in case of no row updated
-                    return new ResponseEntity("There is no such user with the userId.", HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity("Failed to delete the user.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } else {
-                return new ResponseEntity(false, HttpStatus.OK);
+                return new ResponseEntity("Wrong password", HttpStatus.BAD_REQUEST);
             }
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -101,7 +101,7 @@ public class BlogService {
     }
 
     @Transactional
-    public BlogResponseBody updateInfo(Blog blog) throws BadRequestException, InternalServerException {
+    public BlogResponseBody updateInfo(long blogId, Blog blog) throws BadRequestException, InternalServerException {
         try {
             // check if a blog with the id exist
             if (blogRepository.countByBlogId(blog.getId()) <= 0) {
@@ -112,7 +112,10 @@ public class BlogService {
 
             // check if any blog already exist with the same title owned by the same user
             if (blogRepository.countByTitleAndOwnerId(userBody.getUserId(), blog.getTitle()) > 0) {
-                throw new BadRequestException("A blog owned by the user with the same title exists.");
+                Blog blogWithSameTitle = blogRepository.selectByTitleAndOwnerId(userBody.getUserId(), blog.getTitle());
+                if (blogWithSameTitle.getId() != blogId) {
+                    throw new BadRequestException("A blog owned by the user with the same title exists.");
+                }
             }
 
             // return a updated blog

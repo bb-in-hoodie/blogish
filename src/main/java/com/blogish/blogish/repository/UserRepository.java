@@ -56,10 +56,15 @@ public class UserRepository {
         return namedParameterJdbcTemplate.queryForObject(SELECT_USER_PASSWORD_BY_USER_ID, params, String.class);
     }
 
-    public int setDeleted(String userId, boolean deleted) throws DataAccessException {
+    public int setNickname(String userId, String nickname) throws DataAccessException {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId)
-                .addValue("deleted", deleted);
-        return namedParameterJdbcTemplate.update(UPDATE_USER_DELETED, params);
+                .addValue("nickname", nickname);
+        return namedParameterJdbcTemplate.update(UPDATE_USER_NICKNAME, params);
+    }
+
+    public int delete(String userId) throws DataAccessException {
+        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+        return namedParameterJdbcTemplate.update(DELETE_USER, params);
     }
 }

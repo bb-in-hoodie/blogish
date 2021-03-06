@@ -1,0 +1,14 @@
+.edit_profile_modal .modal-header {
+  border-width: 0;
+}
+
+.edit_profile_modal .modal-footer {
+  border-width: 0;
+  justify-content: space-between;
+}
+
+.edit_profile_modal .input_len {
+  float: right;
+  font-size: 0.75rem;
+  color: rgb(165, 165, 165);
+}

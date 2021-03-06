@@ -39,6 +39,21 @@ public class UserService {
     }
 
     @Transactional
+    public int updateUser(User user) throws InternalServerException {
+        try {
+            if (userRepository.countById(user.getUserId()) == 0) {
+                throw new BadRequestException("Invalid userId");
+            } else {
+                return userRepository.setNickname(user.getUserId(), user.getNickname());
+            }
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
+        }
+    }
+
+    @Transactional
     public int getUserCount(String userId) throws InternalServerException {
         try {
             return userRepository.countById(userId);
@@ -55,7 +70,6 @@ public class UserService {
                     .id(user.getId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
-                    .deleted(user.isDeleted())
                     .build();
         } catch (IncorrectResultSizeDataAccessException e) {
             return null;
@@ -72,7 +86,6 @@ public class UserService {
                     .id(user.getId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
-                    .deleted(user.isDeleted())
                     .build();
         } catch (IncorrectResultSizeDataAccessException e) {
             return null;
@@ -95,7 +108,7 @@ public class UserService {
     @Transactional
     public int deleteUser(String userId) throws BadRequestException, InternalServerException{
         try {
-            return userRepository.setDeleted(userId, true);
+            return userRepository.delete(userId);
         } catch (DataAccessException e) {
             throw new InternalServerException(e.getMessage());
         }

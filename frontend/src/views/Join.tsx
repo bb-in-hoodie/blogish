@@ -7,7 +7,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
 import { joinAPI, idValidateAPI } from '../api/UserAPI';
-import User from '../types/User';
+import User, { USER_ID_MAX_LENGTH, USER_NICKNAME_MAX_LENGTH } from '../types/User';
 import '../css/join.css';
 
 async function onJoinClick(
@@ -70,6 +70,7 @@ export default function Join(): JSX.Element {
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [waitingAPI, setWaitingAPI] = useState(false);
+  const isJoinEnabled = userId && isValidId && password && nickname && !waitingAPI;
 
   const history = useHistory();
 
@@ -77,6 +78,12 @@ export default function Join(): JSX.Element {
   useEffect(() => {
     setIsValidId(null);
   }, [userId]);
+
+  function onKeyDownOnForm(e: React.KeyboardEvent) {
+    if (isJoinEnabled && e.key === 'Enter') {
+      onJoinClick(waitingAPI, setWaitingAPI, { userId, password, nickname }, history);
+    }
+  }
 
   return (
     <div className="join">
@@ -91,8 +98,10 @@ export default function Join(): JSX.Element {
               <Input
                 id="input_id"
                 type="text"
+                maxLength={USER_ID_MAX_LENGTH}
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
+                onKeyDown={onKeyDownOnForm}
               />
               <Button
                 color="info"
@@ -115,6 +124,7 @@ export default function Join(): JSX.Element {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={onKeyDownOnForm}
             />
           </FormGroup>
           <FormGroup className="formgroup_nickname">
@@ -122,8 +132,10 @@ export default function Join(): JSX.Element {
             <Input
               id="input_nickname"
               type="text"
+              maxLength={USER_NICKNAME_MAX_LENGTH}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
+              onKeyDown={onKeyDownOnForm}
             />
           </FormGroup>
           <div className="submit_btn_area">
@@ -135,9 +147,14 @@ export default function Join(): JSX.Element {
             </Button>
             <Button
               color="success"
-              disabled={!userId || !isValidId || !password || !nickname || waitingAPI}
+              disabled={!isJoinEnabled}
               className="join_btn"
-              onClick={() => onJoinClick(waitingAPI, setWaitingAPI, { userId, password, nickname }, history)}
+              onClick={() => onJoinClick(
+                waitingAPI,
+                setWaitingAPI,
+                { userId, password, nickname },
+                history,
+              )}
             >
               Join
             </Button>
