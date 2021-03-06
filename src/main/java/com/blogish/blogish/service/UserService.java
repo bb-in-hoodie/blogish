@@ -70,7 +70,6 @@ public class UserService {
                     .id(user.getId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
-                    .deleted(user.isDeleted())
                     .build();
         } catch (IncorrectResultSizeDataAccessException e) {
             return null;
@@ -87,7 +86,6 @@ public class UserService {
                     .id(user.getId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
-                    .deleted(user.isDeleted())
                     .build();
         } catch (IncorrectResultSizeDataAccessException e) {
             return null;
@@ -110,7 +108,7 @@ public class UserService {
     @Transactional
     public int deleteUser(String userId) throws BadRequestException, InternalServerException{
         try {
-            return userRepository.setDeleted(userId, true);
+            return userRepository.delete(userId);
         } catch (DataAccessException e) {
             throw new InternalServerException(e.getMessage());
         }

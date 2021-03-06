@@ -19,7 +19,4 @@ public class User {
 
     @Builder.Default
     private String password = null;
-
-    @Builder.Default
-    private boolean deleted = false;
 }
