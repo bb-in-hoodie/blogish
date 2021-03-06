@@ -91,11 +91,12 @@ public class UserController {
     public ResponseEntity<?> session(HttpServletRequest request) {
         try {
             // look for a user stored in session
-            UserBody userBody = (UserBody)getSessionValue(request, SESSION_KEY_USER);
-            return new ResponseEntity(new LoginResultBody(true, userBody), HttpStatus.OK);
-        } catch (NullPointerException e) {
-            // if there is no user found on session, return false wrapped in LoginResultBody
-            return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
+            Object userBody = getSessionValue(request, SESSION_KEY_USER);
+            if (userBody == null) {
+                // if there is no user found on session, return false wrapped in LoginResultBody
+                return new ResponseEntity(new LoginResultBody(false), HttpStatus.OK);
+            }
+            return new ResponseEntity(new LoginResultBody(true, (UserBody)userBody), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

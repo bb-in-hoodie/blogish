@@ -144,7 +144,7 @@ public class BlogController {
     }
 
     @GetMapping("/others/{userId}")
-    public ResponseEntity<?> getBlogsNotOwnedBy(@PathVariable("userId") String userId, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<?> getBlogsNotOwnedBy(@PathVariable("userId") String userId, @RequestParam(defaultValue = "100") int size) {
         try {
             // size validation
             if (size <= 0) {
