@@ -7,24 +7,28 @@ import {
 import { assignUser, EMPTY_USER_INFO } from '../../redux/userSlice';
 import { logoutAPI } from '../../api/UserAPI';
 import User from '../../types/User';
-import '../../css/components/userheader.css';
 import EditProfileModal from '../browse/EditProfileModal';
+import DeleteProfileModal from '../browse/DeleteProfileModal';
+import '../../css/components/userheader.css';
 
 type UserHeaderProps = {
   user?: User;
   isBrowseEnabled: boolean;
   isEditProfileEnabled: boolean;
+  isDeleteProfileEnabled: boolean;
 };
 
 export default function UserHeader({
   user,
   isBrowseEnabled,
   isEditProfileEnabled,
+  isDeleteProfileEnabled,
 }: UserHeaderProps): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+  const [deleteProfileModalOpen, setDeleteProfileModalOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((opened) => !opened);
 
   const onBrowseClicked = () => {
@@ -33,6 +37,10 @@ export default function UserHeader({
 
   const onEditProfileClicked = () => {
     setEditProfileModalOpen(true);
+  };
+
+  const onDeleteProfileClicked = () => {
+    setDeleteProfileModalOpen(true);
   };
 
   const onLogoutClicked = async () => {
@@ -69,7 +77,10 @@ export default function UserHeader({
         </DropdownToggle>
         <DropdownMenu right>
           {isBrowseEnabled && <DropdownItem onClick={onBrowseClicked}>BROWSE</DropdownItem>}
-          {isEditProfileEnabled && <DropdownItem onClick={onEditProfileClicked}>EDIT PROFILE</DropdownItem>}
+          {isEditProfileEnabled
+          && <DropdownItem onClick={onEditProfileClicked}>EDIT</DropdownItem>}
+          {isDeleteProfileEnabled
+          && <DropdownItem onClick={onDeleteProfileClicked}>DELETE</DropdownItem>}
           <DropdownItem onClick={onLogoutClicked}>LOGOUT</DropdownItem>
         </DropdownMenu>
       </Dropdown>
@@ -80,6 +91,15 @@ export default function UserHeader({
           user={user}
           editProfileModalOpen={editProfileModalOpen}
           setEditProfileModalOpen={setEditProfileModalOpen}
+        />
+      )}
+
+      {user && isDeleteProfileEnabled
+      && (
+        <DeleteProfileModal
+          user={user}
+          deleteProfileModalOpen={deleteProfileModalOpen}
+          setDeleteProfileModalOpen={setDeleteProfileModalOpen}
         />
       )}
     </div>

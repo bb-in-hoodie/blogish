@@ -157,12 +157,12 @@ public class UserController {
             if (bcryptEncoder.matches(password, userService.getPassword(userId))) {
                 if (userService.deleteUser(userId) > 0) {
                     removeSessionValue(request, SESSION_KEY_USER);
-                    return new ResponseEntity(true, HttpStatus.OK);
+                    return new ResponseEntity(userId, HttpStatus.OK);
                 } else {
                     return new ResponseEntity("Failed to delete the user.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } else {
-                return new ResponseEntity(false, HttpStatus.OK);
+                return new ResponseEntity("Wrong password", HttpStatus.BAD_REQUEST);
             }
         } catch (BadRequestException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);

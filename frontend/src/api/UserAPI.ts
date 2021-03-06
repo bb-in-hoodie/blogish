@@ -1,5 +1,5 @@
 import axios from 'axios';
-import User, { LoginResult } from '../types/User';
+import User, { LoginResult, UserToDelete } from '../types/User';
 
 const url = '/api/users';
 
@@ -25,4 +25,8 @@ export function loginAPI(userId: string, password: string): Promise<LoginResult>
 
 export function logoutAPI(): Promise<boolean> {
   return axios.get(`${url}/logout`).then((resp) => resp.data);
+}
+
+export function deleteUserAPI(userToDelete: UserToDelete): Promise<string> {
+  return axios.post(`${url}/delete`, userToDelete).then((resp) => resp.data);
 }
