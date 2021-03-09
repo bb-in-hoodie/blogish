@@ -15,16 +15,25 @@
     padding-bottom: 1rem;
 }
 
-.join .formgroup_id span {
+.join .input_counter {
+    font-size: 0.8rem;
+    color: rgb(150, 150, 150);
+}
+
+.join .validity {
     font-size: 0.8rem;
 }
 
-.join .valid {
-    color: green;
+.join .validity.valid {
+    color: rgb(87, 179, 87);
 }
 
-.join .invalid {
-    color: red;
+.join .validity.invalid {
+    color: rgb(224, 106, 106);
+}
+
+.join .validity.unchecked {
+    color: rgb(150, 150, 150);
 }
 
 .join .input_with_button {
