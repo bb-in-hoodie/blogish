@@ -44,7 +44,7 @@ export default function BlogList({
         setBlogs(await blogsOfOthersAPI(user.userId));
       }
     } catch (e) {
-      alert('블로그 목록을 불러오는데 실패했습니다.');
+      alert('Failed to fetch blog list.');
     }
   }, [activeTab, user, updateToggle]);
 

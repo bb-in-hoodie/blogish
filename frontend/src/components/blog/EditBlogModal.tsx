@@ -48,10 +48,10 @@ export default function EditBlogModal({
       await updateBlog();
       setEditModalOpen(false);
     } catch (e) {
-      if (e.response.status === 400) { // bad request
-        alert('이미 같은 이름의 블로그를 사용하고 있습니다.');
+      if (e.response.status === 400) {
+        alert('You already have a blog with the same title.');
       } else {
-        alert('블로그를 수정하는 과정에서 에러가 발생했습니다.');
+        alert('An error occurred while editing the blog information.');
       }
     }
   }

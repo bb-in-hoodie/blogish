@@ -33,7 +33,7 @@ export default function PostView({ waitingFetchingSinglePost }: PostViewProps): 
 
   const onDeleteClicked = async () => {
     // eslint-disable-next-line no-restricted-globals
-    const confirmed = confirm('정말로 게시글을 삭제하시겠습니까?');
+    const confirmed = confirm('Are you sure you want to delete the post?');
     if (confirmed && selectedPost?.id && setSelectedPost && getPosts) {
       await deletePostAPI(selectedPost?.id);
       await getPosts();

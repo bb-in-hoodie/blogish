@@ -48,7 +48,7 @@ export default function DeleteBlogModal({
         setDeleteModalOpen(false);
       }
     } catch (e) {
-      alert('블로그를 삭제하는 과정에서 에러가 발생했습니다. 비밀번호를 다시 확인해주세요.');
+      alert('An error occurred while deleting the blog. Please double check the password.');
     }
   }
 
