@@ -27,10 +27,10 @@ async function onLoginClick(
     result = await loginAPI(userId, password); // response [succeded: userBody] [failed: false]
 
     if (!result?.succeeded) {
-      alert('ID 혹은 Password가 유효하지 않습니다.');
+      alert('Either ID or password is not valid.');
     }
   } catch (e) {
-    alert('로그인 과정에서 에러가 발생했습니다.');
+    alert('An error occurred during login procedure.');
   } finally {
     setWaitingAPI(false);
 

@@ -49,7 +49,7 @@ export default function BlogView(): JSX.Element {
         await updateBlog();
         await updateCategories();
       } catch (e) {
-        alert('블로그 정보를 불러오는데 실패했습니다.');
+        alert('Failed to load blog information.');
         history.push('/browse');
       }
     };

@@ -35,12 +35,12 @@ async function onJoinClick(
 
   try {
     user = await joinAPI(newUser) as User;
-    alert(`${user.nickname}님의 회원가입을 성공하였습니다.
-메인 페이지로 돌아갑니다.`);
+    alert(`Welcome, ${user.nickname}.
+Please login and create your first blog.`);
   } catch {
-    alert('회원가입 과정에서 에러가 발생했습니다.');
+    alert('Failed to join.');
   } finally {
-    // 회원가입에 성공했으면 메인 페이지로 이동, 아니면 waitingAPI 해제
+    // go back to the main page on success or release waitingAPI
     if (user) {
       history.push('/');
     } else {
@@ -62,14 +62,14 @@ async function onCheckClick(
     const isValid = await idValidateAPI(userId);
     setUserIdUniqueness(isValid ? 'UNIQUE' : 'NOT_UNIQUE');
   } catch {
-    alert('ID 검증 과정에서 에러가 발생했습니다.');
+    alert('Failed to validate the ID.');
   } finally {
     setWaitingAPI(false);
   }
 }
 
 function onCancelClick(history: History) {
-  if (window.confirm('회원가입을 중단하시겠습니까?')) {
+  if (window.confirm('Are you sure you want to exit?')) {
     history.push('/');
   }
 }
@@ -173,21 +173,21 @@ export default function Join(): JSX.Element {
               </Button>
             </div>
             {userIdUniqueness === 'UNIQUE'
-            && <span className="validity valid">사용할 수 있는 ID입니다.</span>}
+            && <span className="validity valid">It&apos;s a valid ID.</span>}
             {userIdUniqueness === 'NOT_UNIQUE'
-            && <span className="validity invalid">이미 사용 중인 ID입니다.</span>}
+            && <span className="validity invalid">It&apos;s an occupied ID.</span>}
             {userIdUniqueness === 'UNCHECKED' && userIdValidity === 'VALID'
-            && <span className="validity unchecked">유효한 ID입니다. 중복 확인을 해주세요.</span>}
+            && <span className="validity unchecked">The ID is valid. Please check for duplication.</span>}
             {userIdUniqueness === 'UNCHECKED' && userIdValidity === 'INVALID'
             && (
               <span className="validity invalid">
-                ID는 영어, 숫자, 기호(-, _)만을 허용하며,
-                {' '}
+                English characters, numbers and dashes are allowed (
                 {USER_ID_MIN_LENGTH}
-                자 이상
+                {' '}
+                ≤ length ≤
                 {' '}
                 {USER_ID_MAX_LENGTH}
-                자 이하여야 합니다.
+                ).
               </span>
             )}
           </FormGroup>
@@ -219,17 +219,17 @@ export default function Join(): JSX.Element {
               onKeyDown={onKeyDownOnForm}
             />
             {passwordValidity === 'VALID'
-            && <span className="validity valid">사용할 수 있는 비밀번호입니다.</span>}
+            && <span className="validity valid">It&apos;s a valid password.</span>}
             {passwordValidity === 'INVALID'
             && (
               <span className="validity invalid">
-                비밀번호는 영어, 숫자, 기호(-, _)만을 허용하며,
-                {' '}
+                English characters, numbers and dashes are allowed (
                 {USER_PASSWORD_MIN_LENGTH}
-                자 이상
+                {' '}
+                ≤ length ≤
                 {' '}
                 {USER_PASSWORD_MAX_LENGTH}
-                자 이하여야 합니다.
+                ).
               </span>
             )}
           </FormGroup>
@@ -261,17 +261,17 @@ export default function Join(): JSX.Element {
               onKeyDown={onKeyDownOnForm}
             />
             {nicknameValidity === 'VALID'
-            && <span className="validity valid">사용할 수 있는 닉네임입니다.</span>}
+            && <span className="validity valid">It&apos;s a valid nickname.</span>}
             {nicknameValidity === 'INVALID'
             && (
               <span className="validity invalid">
-                닉네임은 영어, 숫자, 기호(-, _)만을 허용하며,
-                {' '}
+                English characters, numbers and dashes are allowed (
                 {USER_NICKNAME_MIN_LENGTH}
-                자 이상
+                {' '}
+                ≤ length ≤
                 {' '}
                 {USER_NICKNAME_MAX_LENGTH}
-                자 이하여야 합니다.
+                ).
               </span>
             )}
           </FormGroup>

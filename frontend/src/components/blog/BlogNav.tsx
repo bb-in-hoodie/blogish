@@ -121,8 +121,8 @@ export default function BlogNav({
           <section className="empty_post_list">
             {waitingFetchingPosts && <Spinner />}
             {!waitingFetchingPosts && (activeCategory.id === ALL_CATEGORIES.id
-              ? <span>아직 작성된 글이 없습니다.</span>
-              : <span>이 카테고리에 작성된 글이 없습니다.</span>)}
+              ? <span>There is no post available.</span>
+              : <span>There is no post written in this category.</span>)}
           </section>
         )}
       {user?.userId === blog?.owner.userId

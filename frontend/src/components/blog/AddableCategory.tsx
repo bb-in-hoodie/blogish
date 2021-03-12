@@ -60,7 +60,7 @@ export default function AddableCategory({
         await updateCategories();
       }
     } catch {
-      alert('카테고리를 생성하는 과정에서 에러가 발생했습니다.');
+      alert('An error occurred while creating the category.');
     }
   };
 

@@ -57,7 +57,7 @@ export default function Write({
   // user validation
   useEffect(() => {
     if (user && blog && user.userId !== blog.owner.userId) {
-      alert('포스트 작성은 블로그 주인만 할 수 있습니다.');
+      alert('Only the blog owner can write a post.');
       history.push(`/blog/${blog?.id}`);
     }
   }, [user, blog, history]);
@@ -93,7 +93,7 @@ export default function Write({
           await updateCategories();
         }
       } catch (e) {
-        alert('새로운 카테고리를 생성하는 과정에서 에러가 발생했습니다.');
+        alert('An error occurred while creating a new category.');
         return;
       }
     }
@@ -132,7 +132,7 @@ export default function Write({
         throw new Error('Invalid result.');
       }
     } catch (e) {
-      const alertText = mode === 'WRITE' ? '게시글 작성에 실패했습니다.' : '게시글 수정에 실패했습니다.';
+      const alertText = mode === 'WRITE' ? 'Failed to write a post.' : 'Failed to edit the post.';
       alert(alertText);
       setWaitingAPI(false);
     }

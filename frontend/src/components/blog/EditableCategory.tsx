@@ -67,7 +67,7 @@ export default function EditableCategory({
         await updateCategories();
       }
     } catch {
-      alert('카테고리를 수정하는 과정에서 에러가 발생했습니다.');
+      alert('An error occurred while editing the category.');
     }
   };
 
@@ -78,7 +78,7 @@ export default function EditableCategory({
     }
 
     // eslint-disable-next-line no-restricted-globals
-    const confirmed = confirm('카테고리를 삭제하면 해당 카테고리의 게시글도 모두 삭제됩니다. 삭제하시겠습니까?');
+    const confirmed = confirm('All posts in the category will also be deleted. Are you sure you want to proceed?');
     if (confirmed) {
       try {
         await deleteCategoryAPI(category.id as number);
@@ -94,7 +94,7 @@ export default function EditableCategory({
           await getPosts(ALL_CATEGORIES);
         }
       } catch {
-        alert('카테고리를 삭제하는 과정에서 에러가 발생했습니다.');
+        alert('An error occurred while deleting the category.');
       }
     }
   };

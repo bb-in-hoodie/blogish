@@ -45,7 +45,7 @@ export default function UserHeader({
 
   const onLogoutClicked = async () => {
     // eslint-disable-next-line no-restricted-globals
-    if (!confirm('로그아웃 하시겠습니까?')) {
+    if (!confirm('Do you want to logout?')) {
       return;
     }
 
@@ -55,10 +55,10 @@ export default function UserHeader({
         dispatch(assignUser({ ...EMPTY_USER_INFO }));
         history.push('/');
       } else {
-        alert('로그아웃에 실패했습니다.');
+        alert('Failed to logout.');
       }
     } catch (e) {
-      alert('로그아웃을 하는 중 에러가 발생했습니다.');
+      alert('An error occurred during logout.');
     }
   };
 

@@ -58,7 +58,7 @@ export default function EditProfileModal({
       dispatch(assignUser(editedUser));
       setEditProfileModalOpen(false);
     } catch (e) {
-      alert('프로필을 수정하는 과정에서 에러가 발생했습니다.');
+      alert('An error occurred while editing the profile.');
     }
   }
 
@@ -96,17 +96,17 @@ export default function EditProfileModal({
               {USER_NICKNAME_MAX_LENGTH}
             </span>
             {nicknameValidity === 'VALID'
-            && <span className="validity valid">사용할 수 있는 닉네임입니다.</span>}
+            && <span className="validity valid">It&apos;a valid nickname.</span>}
             {nicknameValidity === 'INVALID'
             && (
               <span className="validity invalid">
-                닉네임은 영어, 숫자, 기호(-, _)만을 허용하며,
-                {' '}
+                English characters, numbers and dashes are allowed (
                 {USER_NICKNAME_MIN_LENGTH}
-                자 이상
+                {' '}
+                ≤ length ≤
                 {' '}
                 {USER_NICKNAME_MAX_LENGTH}
-                자 이하여야 합니다.
+                ).
               </span>
             )}
           </footer>

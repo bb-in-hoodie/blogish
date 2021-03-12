@@ -45,7 +45,7 @@ export default function DeleteProfileModal({
         history.push('/');
       }
     } catch (e) {
-      alert('프로필을 제거하는 과정에서 에러가 발생했습니다. 비밀번호를 다시 확인해주세요.');
+      alert('An error occurred while deleting the profile. Please double check the password.');
     }
   }
 
