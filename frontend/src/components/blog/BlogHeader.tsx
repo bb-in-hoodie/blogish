@@ -20,7 +20,7 @@ export default function BlogHeader(): JSX.Element {
 
   return (
     <header className="main_header">
-      <div className="blog_info">
+      <div className="blog_info narrow">
         <h2>{ blog?.title }</h2>
         {blog?.description && <h5 className="description">{ blog?.description }</h5>}
         {blog?.owner.nickname && (

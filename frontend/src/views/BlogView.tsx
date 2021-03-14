@@ -98,38 +98,40 @@ export default function BlogView(): JSX.Element {
           isDeleteProfileEnabled={false}
         />
         <BlogHeader />
-        <Switch>
-          <Route exact strict path={path}>
-            <BlogNav
-              categories={categories}
-              activeCategory={activeCategory}
-              setActiveCategory={setActiveCategory}
-              waitingFetchingSinglePost={waitingFetchingSinglePost}
-              setWaitingFetchingSinglePost={setWaitingFetchingSinglePost}
-              waitingFetchingPosts={waitingFetchingPosts}
-            />
-            <PostView
-              waitingFetchingSinglePost={waitingFetchingSinglePost}
-            />
-          </Route>
-          <Route exact path={`${path}/post`}>
-            <Write
-              mode="WRITE"
-              categories={categories}
-              initialCategory={activeCategory}
-            />
-          </Route>
-          <Route exact path={`${path}/edit`}>
-            <Write
-              mode="EDIT"
-              categories={categories}
-              initialCategory={null}
-            />
-          </Route>
-          <Route path={path}>
-            <Redirect to={url.replace(/(.*)\/$/, '$1')} />
-          </Route>
-        </Switch>
+        <section className="blog_context narrow">
+          <Switch>
+            <Route exact strict path={path}>
+              <BlogNav
+                categories={categories}
+                activeCategory={activeCategory}
+                setActiveCategory={setActiveCategory}
+                waitingFetchingSinglePost={waitingFetchingSinglePost}
+                setWaitingFetchingSinglePost={setWaitingFetchingSinglePost}
+                waitingFetchingPosts={waitingFetchingPosts}
+              />
+              <PostView
+                waitingFetchingSinglePost={waitingFetchingSinglePost}
+              />
+            </Route>
+            <Route exact path={`${path}/post`}>
+              <Write
+                mode="WRITE"
+                categories={categories}
+                initialCategory={activeCategory}
+              />
+            </Route>
+            <Route exact path={`${path}/edit`}>
+              <Write
+                mode="EDIT"
+                categories={categories}
+                initialCategory={null}
+              />
+            </Route>
+            <Route path={path}>
+              <Redirect to={url.replace(/(.*)\/$/, '$1')} />
+            </Route>
+          </Switch>
+        </section>
       </div>
     </BlogContext.Provider>
   );
