@@ -1,14 +1,14 @@
 .blog header.main_header {
-  padding-top: 2rem;
+  margin-top: 2rem;
   font-size: 0;
+  background-color: rgb(225, 225, 225);
 }
 
 .blog .main_header .blog_info {
   position: relative;
-  padding: 6rem 4rem;
-  margin: 0rem -4rem 1rem -4rem;
-  border-radius: 0.25rem;
-  background-color: rgb(200, 200, 200);
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  margin: 0 auto 0.8rem auto;
 }
 
 .blog .main_header .blog_info h2 {
@@ -32,8 +32,9 @@
 
 .blog .main_header .blog_info .menu {
   position: absolute;
-  bottom: 1rem;
-  right: 0.75rem;
+  padding-right: inherit;
+  bottom: 1.5rem;
+  right: 0rem;
 }
 
 .blog .main_header .blog_info .menu .toggle {

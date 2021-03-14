@@ -1,10 +1,15 @@
-.blog {
-  padding: 0 4rem 5rem 4rem;
-  min-width: 480px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
 .blog .hidden {
   display: none;
+}
+
+.blog .narrow {
+  padding-left: 4rem;
+  padding-right: 4rem;
+  min-width: 640px;
+  max-width: 920px;
+}
+
+.blog .blog_context {
+  padding-bottom: 5rem;
+  margin: 0 auto;
 }
