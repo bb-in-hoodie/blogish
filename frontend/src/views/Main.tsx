@@ -66,7 +66,7 @@ export default function Main(): JSX.Element {
   return (
     <div className="main">
       <header>
-        LOGIN
+        BLOGISH
       </header>
       <main>
         <Form>
