@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  blogish-mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - "./deploy/db/init.sql:/docker-entrypoint-initdb.d/init.sql" # create tables on start
+      - "blogish-db:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: blogish
+      MYSQL_ROOT_PASSWORD: blogish-pw
+
+  blogish-server:
+    build:
+      context: ./
+    restart: always
+    depends_on:
+      - blogish-mysql
+
+  blogish-client:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80"
+    restart: always
+    depends_on:
+      - blogish-server
+
+volumes:
+  blogish-db:
