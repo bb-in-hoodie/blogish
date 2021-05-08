@@ -19,7 +19,7 @@ It's a **blog-like toy project** where you can create an account, get a new blog
 
 ### Using Docker Compose
 ```bash
-$ git clone https://github.com/BlackBindy/blogish.git
+$ git clone https://github.com/bb-in-hoodie/blogish.git
 $ cd blogish
 $ docker-compose up
 
