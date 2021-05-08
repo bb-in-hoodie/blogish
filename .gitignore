@@ -1,0 +1,37 @@
+### Gradle ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### VS Code ###
+.vscode/
+
+### Webpack ###
+node_modules
+
+### macOS ###
+.DS_Store
+
+# all hidden files and directories
+/**/.*
+
+/**/bower_components/
+/**/npm-debug.log
+
+/**/plato_out/
+
+# except .gitignore file
+!/.gitignore
+!/**/.eslintrc.*
+
+# logs
+/**/*.log

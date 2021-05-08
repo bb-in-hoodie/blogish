@@ -1,0 +1,45 @@
+.card {
+  padding: 1.5rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgb(200, 200, 200) !important;
+  cursor: pointer;
+}
+
+.card:first-child {
+  margin-top: 0;
+}
+
+.card h4 {
+  font-weight: 400;
+  margin-bottom: 0;
+  color: rgb(80, 80, 80);
+}
+
+.card span {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgb(150, 150, 150);
+}
+
+.card .user_info {
+  margin-top: -1.2rem;
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgb(89, 141, 145);
+}
+
+.card .icon.delete {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  color: rgb(200, 200, 200);
+}
+
+.card .icon.delete:hover {
+  color: rgb(150, 150, 150);
+}

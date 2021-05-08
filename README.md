@@ -1,41 +1,71 @@
 # Blogish
-## Introduction
-'블로그인 척하는' 연습용 블로그 프로젝트입니다. Front-end, server, DB 등 FE와 BE 파트를 모두 아우르는, 종합적인 웹 기술을 익히는 것을 목표로 기획하였습니다. 회원 관리, 게시글 조작하기, 덧글 등의 기본 기능을 담습니다.
+It's a **blog-like toy project** where you can create an account, get a new blog, write a post, and browse others' blogs. The main goal for me was to get familiar with **React, Spring** and how to compose and connect all the microservices including FE, API server and DB.
+
 <br>
 
-## Specs
-### Front-end
-- React
-- Typescript
-- Bootstrap (Reactstrap)
+## Demo
+**You can watch full GIF demos on our [GitHub Wiki](https://github.com/BlackBindy/blogish/wiki).**
 
-### Back-end
-- Spring / Spring Boot
-- MySQL
+![Blogish demo sneak peek](https://user-images.githubusercontent.com/12558317/116883905-150e5c80-ac61-11eb-9658-02550c9a001e.gif)
 
-### Additional specs (future plans)
-- Docker
+<br>
+
+## How to run?
+### Prerequisites
+- [Docker (Compose)](https://www.docker.com/)
+
+
+<br>
+
+### Using Docker Compose
+```bash
+$ git clone https://github.com/BlackBindy/blogish.git
+$ cd blogish
+$ docker-compose up
+
+# now you can access Blogish on your browser through http://localhost:3000
+```
+
+<br>
+
+### Microservices
+- blogish-client
+  - front-end service (React)
+  - build the front-end project with npm
+  - serve the static files with NGINX
+- blogish-server
+  - web API service (Spring)
+  - build and serve the back-end project with JDK
+- blogish-mysql
+  - DB service (mysql)
+
+<br>
+
+### Why don't you publish it on AWS or something?
+Blogish has User CRUD features while its security is not guaranteed. That's why I don't serve it remotely and offers you a docker-compose file to make you run it locally.
+
 <br>
 
 ## Features
-### User
-- 회원 가입/탈퇴
-- 로그인/로그아웃
+- User
+- Blog
+- Post
+- Category
 
-### Blog
-- 블로그 생성/수정/삭제
-- 블로그 목록 조회
+<br>
 
-### Post
-- 게시글 작성/수정/삭제
-- 카테고리
-- 게시글 열람
-- 게시글 목록 조회
+## Used skills
+### Front-end
+- React
+- Typescript
+- Reactstrap
+- NGINX
 
-### Additional features (future plans)
-- 덧글
-- 블로그 검색 (타인의 블로그 포함 전체 검색)
-- 게시글 검색
-- 이미지 삽입
-- 마크다운 지원
-- HTML 지원
+### Back-end
+- Spring (boot) w/ Java
+- MySQL
+
+### Containerization
+- Docker (Compose)
+
+<br>

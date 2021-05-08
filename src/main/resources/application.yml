@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    jdbc-url: jdbc:mysql://blogish-mysql:3306/blogish?useUnicode=true&charaterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: blogish-pw
+
+server:
+  servlet:
+    context-path: /api

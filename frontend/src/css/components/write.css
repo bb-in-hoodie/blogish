@@ -1,0 +1,75 @@
+.blog .write .input_wrapper {
+  margin-top: 2.5rem;
+  padding: 3.5rem 2rem;
+  border-radius: 0.75rem;
+  border: solid 1px rgb(200, 200, 200);
+}
+
+.blog .write .input_wrapper section label {
+  font-size: 0.9rem;
+  color: rgb(150, 150, 150);
+}
+
+.blog .write .input_wrapper #input_title,
+.blog .write .input_wrapper #input_content {
+  border: 1px dashed rgb(200, 200, 200);
+}
+
+.blog .write .input_wrapper section.content textarea {
+  min-height: 10rem;
+}
+
+.blog .write .input_wrapper section:not(:last-child) {
+  margin-bottom: 2.5rem;
+}
+
+.blog .write .input_wrapper section:last-child {
+  margin-bottom: 0.4rem;
+}
+
+.blog .write .input_wrapper .limit {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: rgb(190, 190, 190);
+}
+
+.blog .write footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.6rem;
+}
+
+.blog .write footer button{
+  min-width: 6rem;
+  border-radius: 0.4rem;
+}
+
+.blog .write footer button.cancel{
+  border-color: rgb(150, 150, 150);
+  background-color: rgb(150, 150, 150);
+}
+
+.blog .write footer button.cancel:hover{
+  border-color: rgb(100, 100, 100);
+  background-color: rgb(100, 100, 100);
+}
+
+.blog .write footer button.cancel:disabled{
+  border-color: rgb(200, 200, 200);
+  background-color: rgb(200, 200, 200);
+}
+
+.blog .write footer button.submit{
+  border-color:rgb(89, 141, 145);
+  background-color: rgb(89, 141, 145);
+}
+
+.blog .write footer button.submit:hover{
+  border-color: rgb(67, 105, 109);
+  background-color: rgb(67, 105, 109);
+}
+
+.blog .write footer button.submit:disabled{
+  border-color: rgb(150, 171, 173);
+  background-color: rgb(150, 171, 173);
+}

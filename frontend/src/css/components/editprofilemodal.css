@@ -1,0 +1,25 @@
+.edit_profile_modal .modal-header {
+  border-width: 0;
+}
+
+.edit_profile_modal .modal-footer {
+  border-width: 0;
+  justify-content: space-between;
+}
+
+.edit_profile_modal .input_validator {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  font-size: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.edit_profile_modal .input_validator span {
+  display: inline-block;
+  color: rgb(165, 165, 165);
+}
+
+.edit_profile_modal .input_validator .validity.invalid {
+  color: rgb(224, 106, 106);
+}

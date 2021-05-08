@@ -1,0 +1,90 @@
+.blog nav {
+  margin-bottom: 2rem;
+  border-radius: 0.75rem;
+}
+
+.blog nav .category_selection {
+  padding: 1rem 0.2rem;
+}
+
+.blog nav .post_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 14.5rem;
+  padding: 1rem 0.2rem 0.6rem 0.2rem;
+  border-radius: 0.75rem;
+  border: solid 1px rgb(200, 200, 200);
+}
+
+.blog nav .post_list ul {
+  margin: 0;
+  padding: 0;
+}
+
+.blog nav .post_list li {
+  list-style: none;
+  padding: 0.1rem 1rem;
+  margin-bottom: 0.3rem;
+  cursor: pointer;
+}
+
+.blog nav .post_list li .title {
+  display: inline-block;
+  width: calc(100% - 6rem);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: rgb(100, 100, 100);
+}
+
+.blog nav .post_list li .created_time {
+  float: right;
+  text-align: right;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: rgb(120, 120, 120);
+}
+
+.blog nav .post_list li:hover span {
+  color: rgb(32, 32, 32);
+}
+
+.blog nav .post_list li.selected span {
+  color: rgb(112, 166, 170);
+}
+
+.blog nav .post_list li.selected:hover span {
+  color: rgb(50, 102, 105);
+}
+
+.blog nav .empty_post_list {
+  display: flex;
+  min-height: 14.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: solid 1px rgb(200, 200, 200);
+  color: rgb(200, 200, 200);
+}
+
+.blog nav .post_button {
+  position: fixed;
+  display: flex;
+  right: 2rem;
+  bottom: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.blog nav .post_button svg{
+  width: 1.5rem;
+  height: 1.5rem;
+  align-self: center;
+}

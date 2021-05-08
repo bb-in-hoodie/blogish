@@ -1,0 +1,40 @@
+.paging {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.8rem !important;
+}
+
+.paging button {
+  border: 0;
+  background: none;
+  font-size: 0.85rem;
+  padding: 0 0.4rem;
+}
+
+.paging button:focus {
+  outline: 0;
+}
+
+.paging button.arrow {
+  color: rgb(100, 100, 100);
+}
+
+.paging button.arrow:hover {
+  color: rgb(20, 20, 20);
+}
+
+.paging button.arrow:disabled {
+  color: rgb(220, 220, 220);
+}
+
+.paging button.page_number {
+  color: rgb(150, 150, 150);
+}
+
+.paging button.page_number.selected {
+  color: rgb(112, 166, 170);
+}
+
+.paging button.page_number:hover {
+  color: rgb(80, 80, 80);
+}

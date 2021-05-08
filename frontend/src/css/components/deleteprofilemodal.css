@@ -1,0 +1,8 @@
+.delete_profile_modal .modal-header {
+  border-width: 0;
+}
+
+.delete_profile_modal .modal-footer {
+  border-width: 0;
+  justify-content: space-between;
+}
