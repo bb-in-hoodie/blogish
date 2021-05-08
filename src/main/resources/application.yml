@@ -1,8 +1,8 @@
 spring:
   datasource:
-    jdbc-url: jdbc:mysql://localhost:3306/blogish_db?useUnicode=true&charaterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: blogish
-    password: blog1234BLOG!@#$
+    jdbc-url: jdbc:mysql://blogish-mysql:3306/blogish?useUnicode=true&charaterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: blogish-pw
 
 server:
   servlet:
